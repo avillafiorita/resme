@@ -1,0 +1,137 @@
+{
+ "basics": {
+   "name": "<%= data.basics.first_name %> <%= data.basics.middle_name %><%= data.basics.last_name %>",
+   "label": "<%= data.basics.title %>",
+   "picture": "<%= data.basics.picture %>",
+   "email": "<%= e = data.contacts.select { |x| x.label == "email" }.first; e.value if e %>",
+   "phone": "<%= p = data.contacts.select { |x| x.label == "mobile" }.first; p.value if p %>",
+   "website": "<%= w = data.web_presence.select { |x| x.label == "website" }.first; w.value if w %>",
+   "summary": "<%= data.summary.gsub("\n", "\\n") %>",
+   "location": {
+     "address": "<%= data.addresses[0].street %>",
+     "postalCode": "<%= data.addresses[0].zip_code %>",
+     "city": "<%= data.addresses[0].city %>",
+     "countryCode": "<%= data.addresses[0].country %>",
+     "region": "<%= data.addresses[0].region %>"
+   },
+   "profiles": [
+   <% sequence = data.web_presence || []; sequence.each_with_index do |profile, index| %>
+   {
+     "network": "<%= profile.label %>",
+     <%# "username": "", %>
+     "url": "<%= profile.value %>"
+   }
+   <%= "," unless index == sequence.size - 1 %>
+   <% end %>
+   ]
+ },
+ "work": [
+   <% sequence = data.work || []; sequence.each_with_index do |job, index| %>
+   {
+     "company": "<%= job.who %>",
+     "position": "<%= job.role %>",
+     "website": "<%= job.website %>",
+     "startDate": "<%= job.from %>",
+     "endDate": "<%= job.till %>",
+     "summary": "<%= job.summary.gsub("\n", "\\n") %>"
+     <%# "highlights": [ "Started the company" ] %>
+   }
+   <%= "," unless index == sequence.size - 1 %>
+   <% end %>
+ ],
+ "volunteer": [
+   <% sequence = data.volunteer || []; sequence.each_with_index do |job, index| %>
+   {
+     "organization": "<%= job.who %>",
+     "position": "<%= job.role %>",
+     "website": "<%= job.website %>",
+     "startDate": "<%= job.from %>",
+     "endDate": "<%= job.till %>",
+     "summary": "<%= job.summary.gsub("\n", "\\n") %>"
+     <%# "highlights": [ "Started the company" ] %>
+    }
+    <%= "," unless index == sequence.size - 1 %>
+    <% end %>
+ ],
+ "education": [
+    <% sequence = data.education.select { |x| x.publish }; sequence.each_with_index do |edu, index| %>
+    {
+         "institution": "<%= edu.school %>",
+         "area": "<%= edu.topic %>",
+         "studyType": "<%= edu.degree %>",
+         "startDate": "<%= edu.from %>",
+         "endDate": "<%= edu.till %>",
+         "gpa": "<%= edu.score %>"
+         <%# "courses": [ "DB1101 - Basic SQL" ] %>
+    }
+    <%= "," unless index == sequence.size - 1 %>
+    <% end %>
+ ],
+ "awards": [
+   <% sequence = data.awards || []; sequence.each_with_index do |award, index| %>
+   {
+     "title": "<%= award.title %>",
+     "date": "<%= award.date %>",
+     "awarder": "<%= award.who %>"
+     "summary": "<%= award.summary.gsub("\n", "\\n") %>"
+   }
+   <%= "," unless index == sequence.size - 1 %>
+   <% end %>
+ ],
+ "publications": [
+   <% squence = data.publications || []; sequence.each_with_index do |pub, index| %>
+   {
+     "name": "<%= pub.title %>",
+     "publisher": "<%= pub.publisher %>",
+     "releaseDate": "<%= pub.date %>",
+     "website": "<%= pub.url %>",
+     "summary": "<%= pub.summary.gsub("\n", "\\n") %>"
+   }
+   <%= "," unless index == sequence.size - 1 %>
+   <% end %>
+ ],
+ "skills": [
+   <% sequence = data.skills || []; sequence.each_with_index do |skill, index| %>
+   {
+     "name": "<%= skill.name %>",
+     "level": "<%= skill.level %>"
+     <%# "keywords": [...] %>
+   }
+   <%= "," unless index == sequence.size - 1 %>
+   <% end %>
+ ],
+ "languages": [
+    <% data.languages.mother_tongues.each do |mt| %>
+    {
+      "name": "<%= mt.language%>",
+      "level": "Native speaker"
+    }
+    <%= "," unless data.languages.foreign == nil %>
+    <% end %>
+    <% sequence = data.languages.foreign || []; sequence.each_with_index do |lang, index| %>
+    {
+      "name": "<%= lang.language%>",
+      "level": "<%= lang.level %>"
+    }
+    <%= "," unless index == sequence.size - 1 %>
+    <% end %>
+ ],
+ "interests": [
+    <% sequence = data.interests || []; sequence.each_with_index do |interest, index| %>
+    {
+      "name": "<%= interest.name %>",
+      <%# "keywords": [...] %>
+    },
+    <%= "," unless index == sequence.size - 1 %>
+    <% end %>
+ ],
+ "references": [
+  <% sequence = data.references || []; sequence.each_with_index do |reference, index| %>
+  {
+   "name": "<%= reference.name %>",
+   "reference": "<%= reference.reference %>"
+  }
+  <%= "," unless index == sequence.size - 1 %>
+  <% end %>
+ ]
+}

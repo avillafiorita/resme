@@ -1,0 +1,405 @@
+<%
+email = data.contacts.select { |x| x.label == "email" }.first
+phones = data.contacts.select { |x|
+  ["phone", "mobile", "cell"].include?(x.label)
+}
+messaging = data.contacts.select { |x|
+  ["skype", "gtalk", "telegram", "whatsup"].include?(x.label)
+}
+address = data.addresses.select { |x| x.label == "home" }.first
+
+# make a period (2015, 2015-10, 2015-01-01 into the date attributes day, month, year"
+def period_tod period
+    el = period.to_s.split("-")
+    fields = ["year=\"%d\"", "month=\"--%02d\"", "day=\"---%02d\""]
+    el.each_with_index.map { |x, i| fields[i] % x.to_i }.join(" ")
+end
+
+
+%><?xml version="1.0" encoding="UTF-8"?>
+<SkillsPassport xmlns="http://europass.cedefop.europa.eu/Europass" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://europass.cedefop.europa.eu/Europass http://europass.cedefop.europa.eu/xml/v3.3.0/EuropassSchema.xsd" locale="en">
+<DocumentInfo>
+    <DocumentType>ECV</DocumentType>
+    <Bundle></Bundle>
+    <CreationDate><%= DateTime.now.iso8601 %></CreationDate>
+    <LastUpdateDate><%= DateTime.now.iso8601 %></LastUpdateDate>
+    <XSDVersion>V3.3</XSDVersion>
+    <Generator>resume.rb</Generator>
+    <Comment></Comment>
+    <Copyright>© European Communities | http://europass.cedefop.europa.eu</Copyright>
+    <EuropassLogo>false</EuropassLogo>
+</DocumentInfo>
+<!-- <PrintingPreferences> </PrintingPreferences> -->
+<LearnerInfo>
+    <Identification>
+        <PersonName>
+            <Title>
+                <Code>dr</Code>
+                <Label><%= data.basics.title %></Label>
+            </Title>
+            <FirstName><%= data.basics.first_name %></FirstName>
+            <Surname><%= data.basics.last_name %></Surname>
+        </PersonName>
+        <ContactInfo>
+            <Address>
+                <Contact>
+                    <AddressLine><%= address.street %></AddressLine>
+                    <PostalCode><%= address.zip_code %></PostalCode>
+                    <Municipality><%= address.city %></Municipality>
+                    <Country>
+                        <Code><%= address.country[0..1].upcase %></Code>
+                        <Label><%= address.country %></Label>
+                    </Country>
+                </Contact>
+            </Address>
+            <Email>
+                <Contact><%= email.value %></Contact>
+            </Email>
+            <TelephoneList>
+                <% phones.each do |phone| %>
+                    <Telephone>
+                        <Contact><%= phone.value %></Contact>
+                        <Use>
+                            <Code><%= phone.label %></Code>
+                            <Label><%= phone.value %></Label>
+                        </Use>
+                    </Telephone>
+                <% end %>
+            </TelephoneList>
+            <WebsiteList>
+                <% data.web_presence.each do |web| %>
+                    <Website>
+                        <Contact><%= web.value %></Contact>
+                        <Use>
+                            <!-- <Code><%= web.label %></Code> -->
+                            <Label><%= web.label.capitalize %></Label>
+                        </Use>
+                    </Website>
+                <% end %>
+            </WebsiteList>
+            <InstantMessagingList>
+                <% messaging.each do |im| %>
+                    <InstantMessaging>
+                        <Contact><%= im.value %></Contact>
+                        <Use>
+                            <!-- <Code><%= im.label %></Code> -->
+                            <Label><%= im.label.capitalize %></Label>
+                        </Use>
+                    </InstantMessaging>
+                <% end %>
+            </InstantMessagingList>
+            <ContactMethodList>
+                <!-- other contacts not defined above -->
+            </ContactMethodList>
+        </ContactInfo>
+        <Demographics>
+            <Birthdate day="---<%= "%02d" % data.basics.birthdate.day %>" month="--<%= "%02d" % data.basics.birthdate.month %>" year="<%= data.basics.birthdate.year %>" />
+            <% if data.gender %>
+                <Gender>
+                    <Code><%= data.gender %></Code>
+                    <Label><%= data.gender == "M" ? "Male" : "Female" %></Label>
+                </Gender>
+            <% end %>
+            <NationalityList>
+                <Nationality>
+                    <Label><%= data.basics.nationality %></Label>
+                </Nationality>
+            </NationalityList>
+            <!--
+                 <Photo>
+                 <MimeType>image/jpeg</MimeType>
+                 <Data></Data>
+                 <MetadataList>
+                 <Metadata key="photo-dimensions" value="100x110"/>
+                 </MetadataList>
+                 </Photo>
+                 <Signature>
+                 <MimeType>image/jpeg</MimeType>
+                 <Data></Data>
+                 <MetadataList>
+                 <Metadata key="signature-dimensions" value="250x150" />
+                 </MetadataList>
+                 </Signature>
+               -->
+        </Demographics>
+    </Identification>
+    <Headline>
+        <Description><Label><%= data.summary %></Label></Description>
+    </Headline>
+    <WorkExperienceList>
+        <% data.work.each do |pos| %>
+        <WorkExperience>
+            <Period>
+                <From <%= period_tod pos.from %>/>
+                <% if pos["till"] and pos.till != "" %>
+                <To <%= period_tod pos.from %>/>
+                <% else %>
+                <Current>true</Current>
+                <% end %>
+            </Period>
+            <!-- 
+            <Documentation>
+                <ReferenceTo idref="ATT_1"/>
+            </Documentation>
+            -->
+            <Position>
+                <Label><%= pos.role %></Label>
+            </Position>
+            <Activities>
+                <%= pos.summary %>
+            </Activities>
+            <Employer>
+                <Name><%= pos["who"] ? pos.who : "" %></Name>
+                <% if pos["address"] %>
+                <ContactInfo>
+                    <Address>
+                        <Contact>
+                            <AddressLine><%= pos.address %></AddressLine>
+                            <!-- <Country>
+                                <Code></Code>
+                                <Label></Label>
+                                </Country> -->
+                        </Contact>
+                    </Address>
+                    <Website>
+                        <Contact><%= pos.website %></Contact>
+                    </Website>
+                </ContactInfo>
+                <!--
+                  <Sector>
+                    <Code></Code>
+                    <Label></Label>
+                  </Sector>
+                -->
+               <% end %>
+            </Employer>
+        </WorkExperience>
+        <% end %>
+        <% data.teaching.each do |pos| %>
+            <WorkExperience>
+                <Period>
+                    <From <%= period_tod pos.from %>/>
+                    <% if pos["till"] and pos.till != "" %>
+                        <To <%= period_tod pos.from %>/>
+                    <% else %>
+                        <Current>true</Current>
+                    <% end %>
+                </Period>
+                <!-- 
+                     <Documentation>
+                     <ReferenceTo idref="ATT_1"/>
+                     </Documentation>
+                   -->
+                <Position>
+                    <Label><%= pos.role %></Label>
+                </Position>
+                <Activities>
+                    <%= pos.summary %>
+                </Activities>
+                <Employer>
+                    <Name><%= pos.who + (pos["school"] ? pos.school : "") %></Name>
+                    <% if pos["address"] %>
+                        <ContactInfo>
+                            <Address>
+                                <Contact>
+                                    <AddressLine><%= pos.address %></AddressLine>
+                                    <!-- <Country>
+                                         <Code></Code>
+                                         <Label></Label>
+                                         </Country> -->
+                                </Contact>
+                            </Address>
+                            <Website>
+                                <Contact><%= pos["website"] %></Contact>
+                            </Website>
+                        </ContactInfo>
+                        <!--
+                             <Sector>
+                             <Code></Code>
+                             <Label></Label>
+                             </Sector>
+                           -->
+                    <% end %>
+                </Employer>
+            </WorkExperience>
+        <% end %>
+    </WorkExperienceList>
+    <EducationList>
+        <% data.education.select { |x| x.publish }.each do |edu| %>
+         <Education>
+             <Period>
+                 <From <%= period_tod edu.from %>/>
+                 <To <%= period_tod edu.till %>/>
+             </Period>
+             <!-- 
+                  <Documentation>
+                  <ReferenceTo idref="ATT_1"/>
+                  <ReferenceTo idref="ATT_2"/>
+                  </Documentation>
+                -->
+             <Title><%= edu.degree %></Title>
+             <Activities></Activities>
+             <Organisation>
+                 <Name><%= edu["school"] %></Name>
+                 <ContactInfo>
+                     <Address>
+                         <Contact>
+                             <AddressLine><%= edu.address %></AddressLine>
+                             <!-- <Country>
+                                  <Code>US</Code>
+                                  <Label>United States</Label>
+                                  </Country>
+                                -->
+                         </Contact>
+                     </Address>
+                 </ContactInfo>
+             </Organisation>
+         </Education>
+        <% end %>
+    </EducationList>
+    <Skills>
+        <% if data.languages %>
+        <Linguistic>
+            <% if data.mother_tongues %>
+            <MotherTongueList>
+                <% data.mother_tongues.each do |mt| %>
+                <MotherTongue>
+                    <Description>
+                        <Code><%= mt.code %></Code>
+                        <Label><% mt.language %></Label>
+                    </Description>
+                </MotherTongue>
+                <% end %>
+            </MotherTongueList>
+            <% end %>
+            <% if data.foreign %>
+            <ForeignLanguageList>
+                <% data.foreign.each do |language| %>
+                <ForeignLanguage>
+                    <Description>
+                        <Code><%= language.code %></Code><Label><%= language.language %></Label>
+                    </Description>
+                    <ProficiencyLevel>
+                        <Listening>
+                            <%= language.listening %>
+                        </Listening>
+                        <Reading>
+                            <%= language.reading %>
+                        </Reading>
+                        <SpokenInteraction>
+                            <%= language.spoken_interaction %>
+                        </SpokenInteraction>
+                        <SpokenProduction>
+                            <%= language.spoken_production %>
+                        </SpokenProduction>
+                        <Writing>
+                            <%= language.writing %>
+                        </Writing>
+                    </ProficiencyLevel>
+                </ForeignLanguage>
+                <% end %>
+            </ForeignLanguageList>
+            <% end %>
+        </Linguistic>
+        <% end %>
+        <!--
+        <Communication>
+            <Description></Description>
+            <Documentation></Documentation>
+        </Communication>
+        <Organisational>
+            <Description></Description>
+            <Documentation></Documentation>
+        </Organisational>
+        <JobRelated>
+            <Description></Description>
+            <Documentation></Documentation>
+        </JobRelated>
+        <Computer>
+            <Description></Description>
+            <ProficiencyLevel></ProficiencyLevel>
+            <VerifiedBy>
+                <Certificate><Title></Title></Certificate>
+            </VerifiedBy>
+            <Documentation></Documentation>
+        </Computer>
+        -->
+        <% if data.driving %>
+        <Driving>
+            <Description>
+                <% data.driving.each do |license| %>
+                <Licence><%= license.license %></Licence>
+                <% end %>
+            </Description>
+        </Driving>
+        <% end %>
+        <Other>
+            <Description>
+                <% [[:volunteer, "Volunteering Work"], [:interests]
+                <% if data.volunteer %>
+                <p><b>Volunteering Work</b></p>
+                <% data.volunteer.each do |v| %>
+                    
+                <% end %>
+                <% end %>
+            </Description>
+        </Other>
+    </Skills>
+    <AchievementList>
+        <% data.awards.each do |award| %>
+            <Achievement>
+                <Title>
+                    <Label><%= award.title %></Label>
+                </Title>
+                <Description>
+                    <%= award.summary %> 
+                    (<%= achievement.who %>, <%= achievement.where %>, <%= achievement.date %>)
+                </Description>
+            </Achievement>
+        <% end %>
+        <% data.achievements.each do |achievement| %>
+            <Achievement>
+                <Title>
+                    <Label><%= achievement.title %></Label>
+                </Title>
+                <Description>
+                    <%= achievement.summary %> 
+                    (<%= achievement.who %>, <%= achievement.where %>, <%= achievement.date %>)
+                </Description>
+            </Achievement>
+        <% end %>
+        <% if data.projects %>
+            <Achievement>
+                <Title>
+                    <Code>projects</Code>
+                    <Label>Projects</Label>
+                </Title>
+                <Description>
+                    <%= data.projects.each.map { |x|
+                        "#{x.name} (#{x.who}): #{x.role} (#{x.from}--#{x.till})"
+                    }.join("; ") %>
+                </Description>
+            </Achievement>
+        <% end %>
+        <% if data.publications %>
+        <Achievement>
+            <Title>
+                <Code>publications</Code>
+                <Label>Publications</Label>
+            </Title>
+            <Description>
+                <%= data.publications.each.map { |x|
+                    [x.title, x.authors, x.publisher, x.date].join(", ")
+                }.join("; ") %>
+            </Description>
+        </Achievement>
+        <% end %>
+    </AchievementList>
+    <Documentation>
+    </Documentation>
+</LearnerInfo>
+<!--
+<AttachmentList>
+</AttachmentList>
+-->
+</SkillsPassport>

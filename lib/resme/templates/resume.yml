@@ -1,0 +1,240 @@
+# Basic template for a resume to be processed by RESME (rubygems.org/gems/resme)
+#
+# The standard templates support dates written in one of the following formats:
+#
+# - a ruby date (e.g., YYYY-MM-DD)
+# - YYYY-MM
+# - YYYY
+#
+# Notice that you can add your own keywords, if you want (but you need to modify
+# the ERB templates to actually output them).
+
+---
+
+# Basic information about you
+# gender and birthdate are used only in the Europass format
+# marital_status is currently not used
+basics:
+  first_name:
+  last_name:
+  title:
+  picture:
+  birthdate:
+  nationality:
+  marital_status:
+  gender:
+
+# how to get in contact with you
+# one or more entries: each entry has a label and value.
+# you can use it for email, whatsup, mobile, ...
+# mobile and email are two good starting points
+contacts:
+  - label:
+    value:
+
+# this is a list of addresses
+# one or more entries
+# the label specifies the type of address (home, work, ...)
+# most resumes will have one address
+addresses:
+  - label:
+    street:
+    zip_code:
+    city:
+    country:
+
+# this is your presence on the net
+# one or more entries: each entry has a label and value.
+# you can use it for, e.g., twitter, facebook, github, telegram, ...
+web_presence:
+  - label: 
+    value: 
+
+# what you are looking for and/or a summary of who you are
+# if multiline entry don't forget to use ">-" or "|-" (see
+# the YML documentation for more information)
+summary: 
+
+#
+# THE FOLLOWING FIELDS ARE ALL OPTIONAL
+#
+# IF YOU DO NOT WANT TO SPECIFY SOME OF THEM, SIMPLY DELETE THEM FROM
+# THIS FILE.
+#
+# YOU CAN ALSO SPLIT ENTRIES IN MULTIPLE FILES, IF YOU PREFER TO DO SO.
+#
+
+# work experience
+work:
+  - who:
+    website:
+    address:
+    till:
+    from:
+    role:
+    summary:
+    details:
+
+# teaching experience
+teaching:
+  - who:
+    address:
+    school:
+    role:
+    subject:
+    till:
+    from:
+    summary:
+    details:
+
+# the projects you have worked on
+projects:
+  - name: 
+    size:
+    who:
+    role:
+    from:
+    till:
+    summary:
+
+# other experiences
+other:
+  - who:
+    till:
+    from:
+    role:
+    summary:
+
+# participation to committees (e.g. program committees in conferences)
+committees:
+  - who:
+    role:
+    editions:
+    url:
+
+# work as volunteer 
+volunteer:
+  - who:
+    till: 
+    from:
+    role:
+    summary:
+
+# mobility programs and other similar initiatives (e.g., erasmus grants)
+visits:
+  - who:
+    address:
+    role:
+    till:
+    from:
+    summary:
+
+# education and degrees
+# the 'publish' flag specifies whether the entry has to be published or not
+education:
+  - degree:
+    topic:
+    school:
+    address:
+    till:
+    from:
+    publish:
+
+# publications
+publications:
+  - title:
+    authors:
+    publisher:
+    date: 
+    url:
+
+# invited talks
+talks:
+  - title:
+    venue:
+    date:
+
+# any award
+awards:
+  - title:
+    who:
+    where:
+    date:
+    summary:
+    
+# any interesting achievement you want to highlight?
+achievements:
+  - title:
+    who:
+    where:
+    date:
+    summary:
+
+# did you develop (or participate to the development) of any software
+# system you want to publicize in your resume?
+software:
+   - title:
+     url:
+     role:
+     language:
+     license:
+     summary:
+
+# what are your skills?
+skills:
+  - name:
+    level:
+    summary:
+
+# linguistic competences
+# if it is irrelevant for the job, delete this section
+#
+# the structure is strongly inspired by the EUROPASS standard:
+# first the list of mother tongues and then all the other languages
+# you have some profiency with.
+#
+# For the proficiency level, you can use the "level" keyword, whose
+# value is a string (e.g., "EXCELLENT", "INTERMEDIATE").  The level is
+# outputted in the markdown and json templates.
+#
+# The Europass format requires to specify more information, that is,
+# your proficiency in five different areas.  Profiency is from A1 to
+# C2; the areas include understanding, speaking, writing. See the
+# documentation of the Europass format for more details.
+
+languages:
+  mother_tongues:
+    - code: 
+      language:
+
+  foreign:
+    - code:
+      language:
+      level:
+      listening:
+      reading:
+      spoken_interaction:
+      spoken_production:
+      writing:
+
+# do you have a driving license? if so, specify the type
+# (this also comes from the Europass standard)
+# if it is irrelevant for the job, delete this section
+driving:
+  - license: 
+
+# do you have any interests?
+# if it is irrelevant for the job, delete this section
+interests:
+  - name:
+    level:
+    summary:
+  
+# do you have any references?
+# if it is irrelevant for the job, delete this section
+references:
+  - name:
+    contact:
+    reference:
+
+    
