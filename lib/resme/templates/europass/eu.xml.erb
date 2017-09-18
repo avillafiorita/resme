@@ -335,12 +335,16 @@ end
         <% end %>
         <Other>
             <Description>
-                <% [[:volunteer, "Volunteering Work"], [:interests]
-                <% if data.volunteer %>
-                <p><b>Volunteering Work</b></p>
-                <% data.volunteer.each do |v| %>
-                    
-                <% end %>
+                <% [[:volunteer, "Volunteering Work"]].each do |item| %>
+                    <% if data.send(item[0]) %>
+                        <p><b><%= item[1] </b></p>
+                        <% data.send(item[0]).each do |el| %>
+                            <p><% el.role %>
+                                <%= el.who %>
+                                (<%= el.from %> -- <%= el.till %>)
+                                <%= el.summary %></p>
+                        <% end %>
+                    <% end %>
                 <% end %>
             </Description>
         </Other>
