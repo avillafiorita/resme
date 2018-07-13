@@ -75,12 +75,22 @@ class Hash
 
     # error: nil value
     if self.has_key? key and self[key] == nil
-      $stderr.puts "WARNING!! The value of key '#{key}' is nil in the following entry."
-      # $stderr.puts self.to_s
-      self.keys.each do |k|
-        $stderr.puts "  #{k}: #{self[k]}"
+      $stderr.puts "WARNING!! The value of key '#{key}' is nil."
+
+      # we put a bit of info about the top level structure of a resume to avoid extra-long error messages
+      # I don't want to print detailed information about top-level entries missing in the resume
+      top_level_entries = [
+        "contacts", "addresses", "web_presence", "summary", "work", "teaching", "projects", "other",
+        "committees", "volunteer", "visits", "education", "publications", "talks", "awards", "achievements",
+        "software", "skills", "languages", "driving", "interests", "references"]
+      if not top_level_entries.include?(key) then
+        $stderr.puts "Offending entry:"
+        # $stderr.puts self.to_s
+        self.keys.each do |k|
+          $stderr.puts "\t#{k}: #{self[k]}"
+        end
+        $stderr.puts ""
       end
-      $stderr.puts ""
     end
 
     return self[key] if self.has_key? key
