@@ -1,113 +1,111 @@
 # <%= data.basics.first_name + " " + data.basics.last_name %>, <%= data.basics.title %>
-<% address = data.addresses.map { |x| ["**" + x.label + "**", x.street, x.zip_code.to_s + " " + x.city] }.flatten
-presence = data.contacts.map { |x| x.label + ": **" + x.value + "**" } + data.web_presence.map { |x| "<" + x.value + ">" }
-
-def self.max(x,y)
-    x>y ? x : y
-end 
-%><% (0..self.max(address.size, presence.size)).each do |i| %>
-<%= "|%-34s | %38s |" % [address[i] || "", presence[i] || ""] %><% end %>
+<%
+addresses = data.addresses.map { |x| "**#{x.label}**: #{x.street}, #{x.zip_code} #{x.city}" }
+presence = data.contacts.map { |x| "**#{x.label}:** #{x.value}" } + data.web_presence.map { |x| "<" + x.value + ">" }
+%>
+<%= presence.map { |x| "* #{x}" }.join("\n") %>
+<%= addresses.map { |x| "* #{x}" }.join("\n") %>
 
 ## Summary
 <% reflow(data.summary, 78).each do |string| %>
-    <%= string %><% end %>
+<%= string %><% end %>
 
 <% if data.skills %>## Skills
 
 <% (data.skills || []).each do |item| %>
-    - <%= item.name %> <%= item.level %>
-<% end %><% end %>
+- <%= item.name %> <%= item.level %>
+<% end %>
 
-<% if data.experience %>## Experience
+<% end %><% if data.experience %>## Experience
 <% (data.work || []).each do |exp| %>
-    - **<%= clean((exp.role ? exp.role + ", " : "") + " " + (exp.who || "") ) %>**
-      <%= exp.from %> -- <%= exp.till ? exp.till : "today  " %>
-      <% reflow(exp.summary, 72).each do |string| %>
-      <%= string %><% end %>
+- **<%= clean((exp.role ? exp.role + ", " : "") + " " + (exp.who || "") ) %>**
+  <%= exp.from %> -- <%= exp.till ? exp.till : "today  " %>
+  <% reflow(exp.summary, 72).each do |string| %>
+  <%= string %><% end %>
 <% end %><% end %>
 
 <% if data.teaching %>## Teaching
 <% (data.teaching || []).each do |item| %>
-    - **<%= item.role %>, <%= item.who %>**
-      <%= item.from %> -- <%= item.till ? item.till : "today  " %>
-      <%= item.subject %>  <%= ("(" + item["school"] + ")") if item["school"]  %>
+- **<%= item.role %>, <%= item.who %>**
+    <%= item.from %> -- <%= item.till ? item.till : "today  " %>
+    <%= item.subject %>  <%= ("(" + item["school"] + ")") if item["school"]  %>
 <% end %><% end %>
 
 <% if data.projects %>## Projects
 <% (data.projects || []).each do |item| %>
-    - <%= item.name %>, <%= item.role %>
-      <%= item.from %> -- <%= item.till %> <% reflow(item.summary, 72).each do |line| %>
-      <%= line %><% end %>
+- <%= item.name %>, <%= item.role %>
+  <%= item.from %> -- <%= item.till %> <% reflow(item.summary, 72).each do |line| %>
+  <%= line %><% end %>
 <% end %><% end %>
 
 <% if data.other %>## Other Initiatives
 <% (data.other || []).each do |item| %>
-    - <%= item.who %>, <%= item.role %>
-      <%= item.from %> -- <%= item.till %> <% reflow(item.summary, 72).each do |line| %>
-      <%= line %><% end %>
+- <%= item.who %>, <%= item.role %>
+  <%= item.from %> -- <%= item.till %> <% reflow(item.summary, 72).each do |line| %>
+  <%= line %><% end %>
 <% end %><% end %>
 
 <% if data.committees %>## Committees
 <% (data.committees || []).each do |item| %>
-    - <%= item.who %>, <%= item.role %> <%= item.editions %>
-      <%= item.url %>
+- <%= item.who %>, <%= item.role %> <%= item.editions %>
+  <%= item.url %>
 <% end %><% end %>
 
 <% if data.volunteer %>## Volunteer
 <% (data.volunteer || []).each do |item| %>
-    - <%= item.who %>, <%= item.role %>
-      <%= item.from %> -- <%= item.till %> <% reflow(item.summary, 72).each do |line| %>
-      <%= line %><% end %>
+- <%= item.who %>, <%= item.role %>
+  <%= item.from %> -- <%= item.till %> <% reflow(item.summary, 72).each do |line| %>
+  <%= line %><% end %>
 <% end %><% end %>
 
 <% if data.publications %>## Publications
 <% (data.publications || []).each do |item| %>
-    - <%= item.authors %>, *"<%= item.title %>"* <%= item.publisher %>, <%= item.date %>
+- <%= item.authors %>, *"<%= item.title %>"* <%= item.publisher %>, <%= item.date %>
 <% end %><% end %>
 
 <% if data.talks %>## Talks
 <% (data.talks || []).each do |item| %>
-    - *<%= item.title %>*
-      <%= item.venue %> (<%= item.date %>)
+- *<%= item.title %>*
+  <%= item.venue %> (<%= item.date %>)
 <% end %><% end %>
 
 <% if data.visits %>## Visits
 <% (data.visits || []).each do |item| %>
-    - **<%= item.role %> **<%= item.who %>, <%= item.address %>**
-      <%= item.from %> -- <%= item.till %><% reflow(item.summary, 72).each do |line| %>
-      <%= line %><% end %>
+- **<%= item.role %> **<%= item.who %>, <%= item.address %>**
+  <%= item.from %> -- <%= item.till %><% reflow(item.summary, 72).each do |line| %>
+  <%= line %><% end %>
 <% end %><% end %>
 
 <% if data.education %>## Education
 <% data.education.select { |x| x.publish }.each do |school| %>
-    <%= year(school["till"]) %>
-    : <%= school.degree if school.degree %> <%= school.school %>,
-      <%= school.address if school.address %>
+<%= year(school["till"]) %>
+: <%= school.degree if school.degree %> <%= school.school %>,
+  <%= school.address if school.address %>
 <% end %><% end %>
 
 <% if data.awards %>## Awards
 <% (data.awards || []).each do |item| %>
-    - <%= item.date %>, <%= item.who %> *<%= item.title %>*, <%= item.where %><% reflow(item.summary, 72).each do |line| %>
-      <%= line %><% end %>
+- <%= item.date %>, <%= item.who %> *<%= item.title %>*, <%= item.where %><% reflow(item.summary, 72).each do |line| %>
+  <%= line %><% end %>
 <% end %><% end %>
 
 <% if data.achievements %>
 ## Achievements
 <% (data.achievements || []).each do |item| %>
-    - <%= item.date %>, <%= item.who %> *<%= item.title %>*, <%= item.where %><% reflow(item.summary, 72).each do |line| %>
-      <%= line %><% end %>
+- <%= item.date %>, <%= item.who %> *<%= item.title %>*, <%= item.where %><% reflow(item.summary, 72).each do |line| %>
+  <%= line %><% end %>
 <% end %><% end %>
 
 <% if data.software %>## Software
 <% (data.software || []).each do |item| %>
-    - <%= item.title %> (<%= item.role %>)
-      <%= item.url %>
+- <%= item.title %> (<%= item.role %>)
+  <%= item.url %>
 <% end %><% end %>
 
 <% if data.interests %>## Interests
 <% (data.interests || []).each do |item| %>
-    - <%= item.name %> <%= item.level %><% reflow(item.summary, 72).each do |line| %>
-      <%= line %><% end %>
+- <%= item.name %> <%= item.level %><% reflow(item.summary, 72).each do |line| %>
+  <%= line %><% end %>
 <% end %><% end %>
 
 <% if data.languages %>## Languages
@@ -116,5 +114,5 @@ Mother Tongue(s): <%= data.languages.mother_tongues.map { |x| x.language }.join(
 <% end %>
 <% if data.languages.foreign %>Other Languages(s):
 <% data.languages.foreign.each do |x|  %>
-    - <%= x.language %>: <%= x.level %>
+- <%= x.language %>: <%= x.level %>
 <% end %><% end %><% end %>
