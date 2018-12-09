@@ -1,12 +1,16 @@
 #
 # Utility functions you might want to use in your ERB
-# template
+# templates
 #
 
 # remove spaces at the beginning of string
-# remove extra spaces and special chars with a single space
+# replace extra spaces and special chars with a single space
 def clean string
   string.gsub(/^[\t\n ]+/, "").gsub(/[\t\n ]+/, " ")
+end
+
+def full_name data
+  [data.basics["first_name"], data.basics["middle_name"], data.basics["last_name"]].join(" ")
 end
 
 # break a string into substrings of length chars breaking at spaces
@@ -20,22 +24,84 @@ end
 # special cases: if one line is longer than chars characters, then
 # break at the first space after chars
 #
-def reflow string, chars
+def reflow_to_array string, chars
   if string.length < chars
     return [clean(string)]
   else
     chars.downto(0).each do |index|
       if string[index] == " " or string[index] == "\n" or string[index] == "\t"
-        return [clean(string[0..index-1])] + reflow(string[index+1..-1], chars)
+        return [clean(string[0..index-1])] + reflow_to_array(string[index+1..-1], chars)
       end
     end
     chars.upto(string.length).each do |index|
       if string[index] == " " or string[index] == "\n" or string[index] == "\t"
-        return [clean(string[0..index-1])] + reflow(string[index+1..-1], chars)
+        return [clean(string[0..index-1])] + reflow_to_array(string[index+1..-1], chars)
       end
     end
     return [clean(string)]
   end
+end
+
+def reflow_to_string string, chars, indentation = ""
+  array = reflow_to_array string, chars
+  output = ""
+  array.each do |line|
+    output << indentation + line + "\n"
+  end
+  output
+end
+
+# manage dates of an entry flexibly supporting the following formats:
+#
+# - from - till (with `from` or `till` possibly partial or empty)
+# - date (possibly partial)
+#
+# abstract dates at the year level, taking care of periods if from and
+# till are in two different years
+def period entry
+  if entry["date"] then
+    "#{year entry.date}"
+  else
+    from_year = entry["from"] ? year(entry.from.to_s) : nil
+    till_year = entry["till"] ? year(entry.till.to_s) : nil
+
+    if from_year and till_year and from_year == till_year then
+      from_year
+    else
+      "#{from_year} -- #{till_year ? till_year : "today"}"
+    end
+  end
+end
+
+# make an entry into an item of a list
+# - first argument, entry, is a hash containing the symbols specified in header and
+#   the following fields: summary and then from, till, or date
+# - second argument, header, is an array of symbols, whose values, comma-separated will generate the
+#   header line
+#
+# The output is along the lines of:
+#
+# - value of key1, value of key2
+#   period
+#   reflowed summary
+def itemize entry, header = ["role", "who", "address"]
+<<EOS
+- #{clean header.map { |x| entry[x] }.join(", ")}
+  #{period entry}
+#{reflow_to_string entry["summary"], 72, "  "}
+EOS
+end
+
+# generate a list of org-mode properties from item and exclude summary from the list
+def propertify item, indentation=""
+  output = ":PROPERTIES:\n"
+  item.each do |k, v|
+    if not ["summary", "details"].include? k
+      output << ":#{k.upcase}: #{v}\n"
+    end
+  end
+  output << ":END:"
+  output.gsub!(/^/, indentation)
 end
 
 # Utility function for managing dates (2015-01-01) and partial dates (2015-05)
@@ -75,7 +141,7 @@ class Hash
 
     # error: nil value
     if self.has_key? key and self[key] == nil
-      $stderr.puts "WARNING!! The value of key '#{key}' is nil."
+      $stderr.puts "[W] The value of key '#{key}' is nil in the following entry:"
 
       # we put a bit of info about the top level structure of a resume to avoid extra-long error messages
       # I don't want to print detailed information about top-level entries missing in the resume
@@ -84,10 +150,9 @@ class Hash
         "committees", "volunteer", "visits", "education", "publications", "talks", "awards", "achievements",
         "software", "skills", "languages", "driving", "interests", "references"]
       if not top_level_entries.include?(key) then
-        $stderr.puts "Offending entry:"
         # $stderr.puts self.to_s
         self.keys.each do |k|
-          $stderr.puts "\t#{k}: #{self[k]}"
+          $stderr.puts "  #{k}: #{self[k]}"
         end
         $stderr.puts ""
       end
@@ -100,7 +165,7 @@ class Hash
     # the actual mileage might vary
 
     # more error reporting: key not found
-    $stderr.puts "ERROR!! Key '#{key}' not found in the following entry."
+    $stderr.puts "[E] Key '#{key}' not found in the following entry:"
     # $stderr.puts self.to_s
     self.keys.each do |k|
       $stderr.puts "  #{k}: #{self[k]}"

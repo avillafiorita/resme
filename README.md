@@ -1,22 +1,18 @@
 # RESME - A Resume Generator
 
 Keep your resume in YAML and output it in various formats, including
-markdown, json, and the Europass XML format.
+org-mode, markdown, json, and the Europass XML format.
 
-Interesting features:
-
-- the rendering engine is based on ERB.  This simplifies the creation
-  of new output formats (and extending/modifying the YML structure to
-  one's needs).
-- no gem/cli application I am aware of outputs in the Europass format
-
+The rendering engine is based on ERB.  This simplifies the creation of
+new output formats (and extending/modifying the YML structure to
+one's needs).
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'resme'
+    gem 'resme'
 ```
 
 And then execute:
@@ -36,11 +32,14 @@ Start with:
 whih generates a YML template for your resume in the current
 directory.  Comments in the YML file should help you fill the various
 entries.  Notice that most entries are optional and you can remove
-sectins hich are not relevant for your resume.
+sections which are not relevant for your resume.
 
-Once you have started filling you resume, you can then generate a
-resume using the existing templates or by writing your own template
-(see below).
+You can then generate a resume using one of the existing templates or
+by writing your own template (see below).
+
+To generate a resume in Markdown using the provided template:
+
+   $ resme org [-o output_filename] file.yml ... 
 
 To generate a resume in Markdown using the provided template:
 
@@ -50,7 +49,7 @@ To generate a resume in the Europass XML format using the provided template:
 
    $ resme europass [-o output_filename] file.yml ...
 
-To generate a resume in the Json format (https://jsonresume.org/):
+To generate a resume in the JSON format (https://jsonresume.org/):
 
    $ resme json [-o output_filename] file.yaml ...
 
@@ -63,6 +62,15 @@ Remarks:
 * the output filename is optional.  If you do not specify one, the resume is
   generated to `resume-YYYY.MM.DD.format`, where `YYYY-MM-DD` is today's date
   and `format` is the chosen output format
+
+## Checking validity
+
+Use the `check` command to verify whether your YAML file conforms with
+the intended syntax.
+
+```ruby
+resme check resume.yaml
+```
 
 ## Dates in the resume
 
@@ -79,9 +87,11 @@ irrelevant).
 
 ## Creating your own templates
 
-The resumes are generated from the YML matter using ERB templates,
-similar to what Jekyll and Middleman do with data files.  (See,
-e.g., [data files](https://middlemanapp.com/advanced/data-files/.)
+The resumes are generated from the YML matter using ERB templates.
+The output formats should support different backends (OrgMode and
+Markdown easily allow for generation of PDFs, HTML, and ODT to mention
+a few).
+
 You can define your own templates if you wish to do so.
 
 All the data in the resume is made available in the `data` variable.
@@ -104,12 +114,16 @@ Some functions can be used in the templates to better control the output.
 String manipulation functions:
 
 * `clean string` removes any space at the beginning of `string`
-* `reflow string, n` makes `string` into an array of strings of
-  length lower or equal to `n` (useful if you are outputing a txt format,
-  for instance.
+* `reflow string, n` makes `string` into an array of strings of length
+  lower or equal to `n` (useful if you are outputting a textual
+  format, for instance.
 
 Dates manipulation functions:
 
+* `period` generates a string recapping a period.  The function
+  abstracts different syntax you can use for entries (i.e., `date` or
+  `from` and `till`) and different values for the entries (e.g., a
+  missing value for `till`)
 * `year string`, `month string`, `day string` return, respectively the
   year, month and day from strings in the format `YYYY-MM-DD`s
 * `has_month input` returns true if `input` has a month, that is, it is
@@ -117,7 +131,7 @@ Dates manipulation functions:
 * `has_day input` returns true if `input` has a day, that is, it is
   a date or it is in the form `YYYY-MM-DD`
 
-You can find some templates in `lib/resme/templates`.  These might be
+You can find the templates in `lib/resme/templates`.  These might be
 good starting points if you want to develop your own.
 
 ## Contributing your templates
@@ -154,17 +168,25 @@ In `doc/todo.org` ... guess what is my preferred editor!
 
 ## Bugs
  
-There are slight differences in the information outputted in the
-various formats.  For instance, gender and birthdate are used in the
-Europass format, but not in the Markdown format.  This is in part due
-to the different standards and in part due to personal choices (here
-"personal choices" could be also read "bug").
+There are still slight differences in the syntax of entries and in the
+way in which the information is formatted in various output formats.
+For instance, gender and birthdate are used in the Europass format,
+but not in the Markdown format.  This is in part due to the different
+standards and in part due to personal preferences.
 
-Entries are not sorted by date before outputting them.  Make sure you
-put them in the order you want them to appear in your resume.
+**Entries are not sorted by date before outputting them.  Make sure you
+put them in the order you want them to appear in your resume.**
 
-Unkown number of unkown bugs.
+Unknown number of unknown bugs.
 
 ## Release History
 
-* **0.1** is th first release
+* **0.3** introduces output to org-mode, introduces references for the
+  CV, improves output to JSON, adds a `check` command, removes useless
+  blank lines in the output, supports `-%>` in the ERB templates,
+  fixes various typos in the documentation, introduces various new
+  formatting functions, to simplify template generation
+* **0.2** improves output of volunteering activities and other
+  information in the Europass and **significantly improves error and
+  warning reporting**
+* **0.1** is the first release

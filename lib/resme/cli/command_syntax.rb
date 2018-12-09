@@ -97,6 +97,26 @@ EOS
       return { :help => [opts, :help, help] }
     end
 
+    def self.check_opts
+      opts = Slop::Options.new
+      opts.banner = "check -- Check whether a YAML file conforms with the RESME syntax"
+      help = <<EOS
+NAME
+   #{opts.banner}
+
+SYNOPSYS
+   #{opts.to_s}
+
+DESCRIPTION
+   Check whether a YAML file conforms with the RESME syntax.
+
+
+EXAMPLES
+   resme file.yml
+EOS
+       return { :check => [opts, :check, help] } 
+    end
+
     def self.init_opts
       opts = Slop::Options.new
       opts.banner = "init [-o output_filename]"
@@ -111,7 +131,7 @@ SYNOPSYS
 
 DESCRIPTION
 
-   Generate a YML template for your resume in the current directory.
+   Generate a YAML template for your resume in the current directory.
 
 EXAMPLES
        
@@ -135,13 +155,35 @@ SYNOPSYS
 
 DESCRIPTION
 
-   Generate a markdown resume from the YML input files.
+   Generate a markdown resume from the YAML input files.
 
 EXAMPLES
        
    resme md -o r.md resume.yml
 EOS
       return { md: [opts, :md, help] }
+    end    
+
+    def self.org_opts
+      opts = Slop::Options.new
+      opts.banner = "org [-o output_filename] file.yml ..."
+      opts.string "-o", "--output", "Output filename"
+      help = <<EOS
+NAME
+   #{opts.banner}
+
+SYNOPSYS
+   #{opts.to_s}
+
+DESCRIPTION
+
+   Generate an org-mode resume from the YAML input files.
+
+EXAMPLES
+       
+   resme md -o r.md resume.yml
+EOS
+      return { org: [opts, :org, help] }
     end    
 
     def self.json_opts
@@ -157,7 +199,7 @@ SYNOPSYS
 
 DESCRIPTION
 
-   Generate a JSON resume from the YML input files.
+   Generate a JSON resume from the YAML input files.
 
 EXAMPLES
        
@@ -179,7 +221,7 @@ SYNOPSYS
 
 DESCRIPTION
 
-   Generate a Europass XML resume from the YML input files.
+   Generate a Europass XML resume from the YAML input files.
 
 EXAMPLES
        

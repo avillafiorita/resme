@@ -4,6 +4,8 @@ require 'fileutils'
 require 'date'
 require 'yaml'
 require 'erb'
+require 'json'
+require 'kwalify'
 
 module Resme
   module CommandSemantics
@@ -90,6 +92,32 @@ module Resme
     #
     # APP SPECIFIC COMMANDS
     #
+    def self.check opts, argv
+      schema = Kwalify::Yaml.load_file(File.join(File.dirname(__FILE__), "/../templates/schema.yml"))
+      ## or
+      # schema = YAML.load_file('schema.yaml')
+
+      ## create validator
+      validator = Kwalify::Validator.new(schema)
+
+      ## load document
+      document = Kwalify::Yaml.load_file(argv[0])
+      ## or
+      #document = YAML.load_file('document.yaml')
+
+      ## validate
+      errors = validator.validate(document)
+
+      ## show errors
+      if errors && !errors.empty?
+        for e in errors
+          puts "[#{e.path}] #{e.message}"
+        end
+      else
+        puts "The file #{argv[0]} validates."
+      end
+    end
+
     def self.init opts, argv
       output = opts[:output] || "resume.yml"
       force = opts[:force]
@@ -108,6 +136,14 @@ module Resme
     def self.md opts, argv
       output = opts[:output] || "resume-#{Date.today}.md"
       template = File.join(File.dirname(__FILE__), "/../templates/resume.md.erb")
+
+      render argv, template, output
+      puts "Resume generated in #{output}"
+    end
+
+    def self.org opts, argv
+      output = opts[:output] || "resume-#{Date.today}.org"
+      template = File.join(File.dirname(__FILE__), "/../templates/resume.org.erb")
 
       render argv, template, output
       puts "Resume generated in #{output}"
@@ -138,7 +174,10 @@ module Resme
         data = data.merge(YAML.load_file(file))
       end
       template = File.read(template_filename)
-      output = ERB.new(template).result(binding)
+      output = ERB.new(template, nil, '-').result(binding)
+      # it is difficult to write readable ERBs with no empty lines...
+      # we use gsub to replace multiple empty lines with \n\n in the final output
+      output.gsub!(/([\t ]*\n){3,}/, "\n\n")
       backup_and_write output_filename, output
     end
 
