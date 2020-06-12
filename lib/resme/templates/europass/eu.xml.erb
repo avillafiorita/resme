@@ -359,19 +359,19 @@ end
                     </Description>
                     <ProficiencyLevel>
                         <Listening>
-                            <%= language.listening %>
+                            <%= language.listening.upcase %>
                         </Listening>
                         <Reading>
-                            <%= language.reading %>
+                            <%= language.reading.upcase %>
                         </Reading>
                         <SpokenInteraction>
-                            <%= language.spoken_interaction %>
+                            <%= language.spoken_interaction.upcase %>
                         </SpokenInteraction>
                         <SpokenProduction>
-                            <%= language.spoken_production %>
+                            <%= language.spoken_production.upcase %>
                         </SpokenProduction>
                         <Writing>
-                            <%= language.writing %>
+                            <%= language.writing.upcase %>
                         </Writing>
                     </ProficiencyLevel>
                 </ForeignLanguage>
@@ -414,7 +414,11 @@ end
         <Other>
             <Description>
                 <% if data.interests and not data.interests.empty? %>
-                    <%= data.interests.map { |x| (x.name || "") + ": " + (x.level || "") + ", " + (x.summary || "") + "; " }.join(", ") %>
+                    &lt;ul&gt;
+                    <% data.interests.do |x| %>
+                    &lt;li&gt;<%= "#{x.name || ""}: #{x.level || ""}, #{x.summary || ""}; " %>&lt;/li&gt;
+                    <% end %>
+                    &lt;/ul&gt;
                 <% end %>
             </Description>
         </Other>
@@ -453,9 +457,11 @@ end
                     <Label>Projects</Label>
                 </Title>
                 <Description>
-                    <%= data.projects.each.map { |x|
-                        "#{x.name} (#{x.who}): #{x.role} (#{x.from}--#{x.till})"
-                    }.join("; ") %>
+                    &lt;ul&gt;
+                    <% data.projects.each do |x| %>
+                        &lt;/li&gt; <%= "#{x.name} (#{x.who}): #{x.role} (#{x.from}--#{x.till})" %> &lt;/li&gt;
+                    <% end %>
+                    &lt;/ul&gt;
                 </Description>
             </Achievement>
         <% end %>
@@ -466,9 +472,11 @@ end
                 <Label>Publications</Label>
             </Title>
             <Description>
-                <%= data.publications.each.map { |x|
-                    [x.title, x.authors, x.publisher, x.date].join(", ")
-                }.join("; ") %>
+                &lt;ul&gt;
+                <% data.publications.each do |x| %>
+                    &lt;li&gt; <%= "#{x.title}, #{x.authors}, #{x.publisher}, #{x.date}" %> &lt;/li&gt;
+                <% end %>
+                &lt;/ul&gt;
             </Description>
         </Achievement>
         <% end %>
