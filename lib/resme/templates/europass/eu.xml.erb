@@ -415,7 +415,7 @@ end
             <Description>
                 <% if data.interests and not data.interests.empty? %>
                     &lt;ul&gt;
-                    <% data.interests.do |x| %>
+                    <% data.interests do |x| %>
                     &lt;li&gt;<%= "#{x.name || ""}: #{x.level || ""}, #{x.summary || ""}; " %>&lt;/li&gt;
                     <% end %>
                     &lt;/ul&gt;
