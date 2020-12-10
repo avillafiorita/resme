@@ -1,5 +1,6 @@
-#+TITLE: <%= full_name data %>, <%= data.basics.title %>
-#+AUTHOR: <%= data.contacts.select { |x| x.label == "email" }.first.value %>
+#+TITLE: Curriculum Vitae
+#+AUTHOR: <%= full_name data %>, <%= data.basics.title %>
+#+EMAIL: <%= data.contacts.select { |x| x.label == "email" }.first.value %>
 #+DATE: <<%= Date.today %>>
 #+STARTUP: showall
 #+OPTIONS: toc:nil num:nil
@@ -40,7 +41,7 @@
 * Work Experience
 
 <% (data.work || []).each do |item| -%>
-** *<%= period item %>: <%= clean [item.role, item.who].join(", ") %>*
+** <%= period item %>: <%= clean [item.role, item.who].join(", ") %>
 <%= propertify item, "   " %>
 
 <%= reflow_to_string item["summary"], 72, "   " -%>
@@ -52,7 +53,7 @@
 * Teaching
 
 <% (data.teaching || []).each do |item| -%>
-** *<%= period item %>: <%= item.subject %>*
+** <%= period item %>: <%= item.subject %>
 <%= propertify item, "   " %>
 
    <%= [item["role"], item["school"], item["who"]].join(", ") %>
@@ -64,7 +65,7 @@
 * Projects
 
 <% (data.projects || []).each do |item| -%>
-** *<%= period item %>: <%= [item.name, item.role].join(", ") %>*
+** <%= period item %>: <%= [item.name, item.role].join(", ") %>
 <%= propertify item, "   " %>
 
 <%= reflow_to_string item["summary"], 72, "   " -%>
@@ -76,7 +77,7 @@
 * Other Initiatives
 
 <% (data.other || []).each do |item| -%>
-** *<%= period item %>: <%= [item["who"], item["role"]].join(", ") %>*
+** <%= period item %>: <%= [item["who"], item["role"]].join(", ") %>
 <%= propertify item, "   " %>
 
 <%= reflow_to_string item["summary"], 72, "   " -%>
@@ -150,7 +151,7 @@
 * <%= group.capitalize %>
 
 <% (group || []).each do |item| -%>
-** *<%= item.date %>: <%= [item.title, item.who, item.address].join(", ") %>*
+** <%= item.date %>: <%= [item.title, item.who, item.address].join(", ") %>
 <%= propertify item, "  " %>
 
 <%= reflow_to_string item.summary, 72, "  " -%>
