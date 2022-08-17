@@ -144,7 +144,13 @@ module Resme
     def self.generate(opts, argv)
       format = opts[:to] == "europass" ? "xml" : opts[:to]
       output = opts[:output] || "resume-#{Date.today}.#{format}"
-      template = File.join(File.dirname(__FILE__), "/../templates/resume.#{format}.erb")
+
+      if opts[:erb]
+        template = opts[:erb]
+      else
+        template = File.join(File.dirname(__FILE__), "/../templates/resume.#{format}.erb")
+      end
+
       skipped_sections = opts[:skip] || []
 
       if !File.exists?(template)
