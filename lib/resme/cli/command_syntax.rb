@@ -15,7 +15,7 @@ module Resme
 
     def self.version_opts
       opts = OptionParser.new do |opts|
-        opts.banner = "version -- print version information"
+        opts.banner = "version # print version information"
       end
       
       help = <<-EOS
@@ -44,7 +44,7 @@ module Resme
 
     def self.console_opts
       opts = OptionParser.new do |opts|
-        opts.banner = "console -- enter the console"
+        opts.banner = "console # enter the console"
       end
       
       help = <<-EOS
@@ -76,7 +76,7 @@ module Resme
 
     def self.man_opts
       opts = OptionParser.new do |opts|
-        opts.banner = "man -- print resme manual page"
+        opts.banner = "man # print resme manual page"
       end
       
       help = <<-EOS
@@ -104,7 +104,7 @@ module Resme
 
     def self.help_opts
       opts = OptionParser.new do |opts|
-        opts.banner = "help [command] -- print command usage"
+        opts.banner = "help [command] # print command usage"
       end
 
       help = <<-EOS
@@ -132,7 +132,7 @@ module Resme
 
     def self.init_opts
       opts = OptionParser.new do |opts|
-        opts.banner = "init [options] -- generate an empty resume.yml file"
+        opts.banner = "init [options] # generate an empty resume.yml file"
         opts.on("-o", "--output FILENAME", String, "Output filename")
         opts.on("-f", "--force", FalseClass, "Overwrite existing file (if present)")
       end
@@ -163,7 +163,7 @@ module Resme
 
     def self.check_opts
       opts = OptionParser.new do |opts|
-        opts.banner = "check resume.yml -- Check syntax of resume.yml"
+        opts.banner = "check resume.yml # Check syntax of resume.yml"
       end
 
       help = <<-EOS
@@ -191,7 +191,7 @@ module Resme
 
     def self.list_opts
       opts = OptionParser.new do |opts|
-        opts.banner = "list resume.yml -- List main sections in resume.yml"
+        opts.banner = "list resume.yml # List main sections in resume.yml"
       end
 
       help = <<-EOS
@@ -219,7 +219,7 @@ module Resme
 
     def self.generate_opts
       opts = OptionParser.new do |o|
-        o.banner = "generate [options] resume.yml ... -- output resume"
+        o.banner = "generate [options] resume.yml ... # output resume"
         o.on("-e", "--erb FILENAME", String, "Template to use")
         o.on("-t", "--to FORMAT", String, "Output format")
         o.on("-o", "--output FILENAME", String, "Output filename")
