@@ -30,7 +30,13 @@ module Resme
           # resme version
           resme version #{VERSION}
       EOS
-      { version: [opts, :version, help.gsub("        ", "")] }
+      {
+        version: {
+          name: :version,
+          options: opts,
+          help: help.gsub("        ", "")
+        }
+      }
     end
 
     def self.console_opts
@@ -53,7 +59,13 @@ module Resme
           resme:001> generate -t md
           resme:002>
       EOS
-      { console: [opts, :console, help.gsub("        ", "")] }
+      {
+        console: {
+          name: :console,
+          options: opts,
+          help: help.gsub("        ", "")
+        }
+      }
     end
 
     def self.man_opts
@@ -72,7 +84,13 @@ module Resme
         EXAMPLES
           resme man
       EOS
-      { man: [opts, :man, help.gsub("        ", "")] }
+      {
+        man: {
+          name: :man,
+          options: opts,
+          help: help.gsub("        ", "")
+        }
+      }
     end
 
     def self.help_opts
@@ -92,7 +110,13 @@ module Resme
           resme help
           resme help generate
       EOS
-      { help: [opts, :help, help.gsub("        ", "")] }
+      {
+        help: {
+          name: :help,
+          options: opts,
+          help: help.gsub("        ", "")
+        }
+      }
     end
 
     def self.init_opts
@@ -115,7 +139,13 @@ module Resme
           resme init -o r.yml
           resme init -o r.yml --force
       EOS
-      { init: [opts, :init, help.gsub("        ", "")] }
+      {
+        init: {
+          name: :init,
+          options: opts,
+          help: help.gsub("        ", "")
+        }
+      }
     end
 
     def self.check_opts
@@ -134,7 +164,13 @@ module Resme
         EXAMPLES
           resme check file.yml
       EOS
-      { check: [opts, :check, help.gsub("        ", "")] }
+      {
+        check: {
+          name: :check,
+          options: opts,
+          help: help.gsub("        ", "")
+        }
+      }
     end
 
     def self.generate_opts
@@ -156,7 +192,13 @@ module Resme
           resme generate -t org -o r.org resume.yml
           resme generate -t md -o r.md section-1.yml section-2.yml
       EOS
-      { generate: [opts, :generate, help.gsub("        ", "")] }
+      {
+        generate: {
+          name: :generate,
+          options: opts,
+          help: help.gsub("        ", "")
+        }
+      }
     end
   end
 end

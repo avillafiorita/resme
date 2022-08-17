@@ -29,12 +29,15 @@ module Resme
       all_commands = CommandSyntax.commands
       
       if argv != []
-        argv.map { |x| puts all_commands[x.to_sym][2] }
+        argv.map do |x|
+          puts all_commands[x.to_sym][:help]
+          puts "\n\n"
+        end
       else
         puts "#{APPNAME} command [options] [args]\n"
         puts "Available commands:\n"
         all_commands.each_key do |key|
-          puts "  #{all_commands[key][0].banner}"
+          puts "  #{all_commands[key][:options].banner}"
         end
       end
     end
@@ -63,8 +66,8 @@ module Resme
         command = argv[0]
         syntax_and_semantics = all_commands[command.to_sym]
         if syntax_and_semantics
-          opts = syntax_and_semantics[0]
-          function = syntax_and_semantics[1]
+          function = syntax_and_semantics[:name]
+          opts = syntax_and_semantics[:options]
           
           begin
             parser = Slop::Parser.new(opts)
