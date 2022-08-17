@@ -1,4 +1,5 @@
 <%
+require 'date'
 email = data.contacts.select { |x| x.label == "email" }.first
 phones = data.contacts.select { |x|
   ["phone", "mobile", "cell"].include?(x.label)
