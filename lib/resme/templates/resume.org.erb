@@ -76,7 +76,7 @@
 <% end -%>
 
 <% if data["other"] -%>
-* Other Initiatives
+* Other
 
 <% (data.other || []).each do |item| -%>
 ** <%= period item %>: <%= [item["who"], item["role"]].join(", ") %>

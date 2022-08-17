@@ -133,23 +133,26 @@ def has_day input
   end
 end
 
-# Access hash keys like they were class methods
-# hash["key"] -> hash.key
+# Access hash keys like they were class methods (hash["key"] -> hash.key) and
+# report errors if key is missing
 class Hash
   def method_missing(m)
     key = m.to_s
+
+    # we put a bit of info about the top level structure of a resume to avoid
+    # extra-long error messages I don't want to print detailed information
+    # about top-level entries missing in the resume
+    top_level_entries = %w[
+      contacts addresses web_presence summary work teaching projects other
+      committees volunteer visits education publications talks awards
+      achievements software skills languages driving interests references
+    ]
 
     # error: nil value
     if self.has_key? key and self[key] == nil
       $stderr.puts "[W] The value of key '#{key}' is nil in the following entry:"
 
-      # we put a bit of info about the top level structure of a resume to avoid extra-long error messages
-      # I don't want to print detailed information about top-level entries missing in the resume
-      top_level_entries = [
-        "contacts", "addresses", "web_presence", "summary", "work", "teaching", "projects", "other",
-        "committees", "volunteer", "visits", "education", "publications", "talks", "awards", "achievements",
-        "software", "skills", "languages", "driving", "interests", "references"]
-      if not top_level_entries.include?(key) then
+      unless top_level_entries.include?(key)
         # $stderr.puts self.to_s
         self.keys.each do |k|
           $stderr.puts "  #{k}: #{self[k]}"
@@ -160,18 +163,17 @@ class Hash
 
     return self[key] if self.has_key? key
 
-    # we get here if the key is not found
-    # we report an error, return "" and continue
-    # the actual mileage might vary
+    # we get here if the key is not found we report an error, return
+    # "" and continue the actual mileage might vary
 
-    # more error reporting: key not found
     $stderr.puts "[E] Key '#{key}' not found in the following entry:"
-    # $stderr.puts self.to_s
-    self.keys.each do |k|
-      $stderr.puts "  #{k}: #{self[k]}"
+    unless top_level_entries.include?(key)
+      self.keys.each do |k|
+        $stderr.puts "  #{k}: #{self[k]}"
+      end
+      $stderr.puts ""
     end
-    $stderr.puts ""
-
+    
     return ""
   end
 end
