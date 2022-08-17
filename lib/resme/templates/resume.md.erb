@@ -1,8 +1,8 @@
 # <%= full_name data %>, <%= data.basics&.title %>
 
 <%
-addresses = (data.addresses || []).map { |x| "**#{x.label}**: #{x.street}, #{x.zip_code} #{x.city}" }
-presence = (data.contacts || []).map { |x| "**#{x.label}:** #{x.value}" } + (data.web_presence || []).map { |x| "<" + x.value + ">" }
+addresses = (data["addresses"] || []).map { |x| "**#{x.label}**: #{x.street}, #{x.zip_code} #{x.city}" }
+presence = (data["contacts"] || []).map { |x| "**#{x.label}:** #{x.value}" } + (data["web_presence"] || []).map { |x| "<" + x.value + ">" }
 -%>
 <%= presence.map { |x| "* #{x}" }.join("\n") %>
 <%= addresses.map { |x| "* #{x}" }.join("\n") %>

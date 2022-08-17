@@ -1,12 +1,12 @@
 <%
-email = (data.contacts || []).select { |x| x.label == "email" }.first
-phones = (data.contacts || []).select { |x|
+email = (data["contacts"] || []).select { |x| x.label == "email" }.first
+phones = (data["contacts"] || []).select { |x|
   ["phone", "mobile", "cell"].include?(x.label)
 }
-messaging = (data.contacts || []).select { |x|
+messaging = (data["contacts"] || []).select { |x|
   ["skype", "gtalk", "telegram", "whatsup"].include?(x.label)
 }
-address = (data.addresses || []).select { |x| x.label == "home" }.first || {}
+address = (data["addresses"] || []).select { |x| x.label == "home" }.first || {}
 
 # make a period (2015, 2015-10, 2015-01-01 into the xml attributes day, month, year for a date tag
 def self.period_tod period
@@ -48,13 +48,13 @@ end
             <PostalCode><%= address.zip_code %></PostalCode>
             <Municipality><%= address.city %></Municipality>
             <Country>
-              <Code><%= address.country[0..1].upcase %></Code>
+              <Code><%= address.country[0..1]&.upcase %></Code>
               <Label><%= address.country %></Label>
             </Country>
           </Contact>
         </Address>
         <Email>
-          <Contact><%= email.value %></Contact>
+          <Contact><%= email&.value %></Contact>
         </Email>
         <% if phones %>
           <TelephoneList>
@@ -100,7 +100,7 @@ end
         </ContactMethodList>
       </ContactInfo>
       <Demographics>
-        <% if data.basics.birthdate and not data.basics.birthdate.empty? %>
+        <% if data.basics.birthdate %>
           <Birthdate day="---<%= "%02d" % data.basics.birthdate.day %>"
                      month="--<%= "%02d" % data.basics.birthdate.month %>"
                      year="<%= data.basics.birthdate.year %>" />
@@ -136,10 +136,10 @@ end
       </Demographics>
     </Identification>
     <Headline>
-      <Description><Label><%= data.summary %></Label></Description>
+      <Description><Label><%= data["summary"] %></Label></Description>
     </Headline>
     <WorkExperienceList>
-      <% (data.work || []).each do |pos| %>
+      <% (data["work"] || []).each do |pos| %>
         <WorkExperience>
           <Period>
             <From <%= self.period_tod pos.from %>/>
@@ -187,7 +187,7 @@ end
           </Employer>
         </WorkExperience>
       <% end %>
-      <% if data.teaching and not data.teaching.empty? %>
+      <% if data["teaching"] and not data.teaching.empty? %>
         <% data.teaching.each do |pos| %>
           <WorkExperience>
             <Period>
@@ -239,7 +239,7 @@ end
           </WorkExperience>
         <% end %>
       <% end %>
-      <% if data.volunteer and not data.volunteer.empty? %>
+      <% if data["volunteer"] and not data.volunteer.empty? %>
         <% data.volunteer.each do |pos| %>
           <WorkExperience>
             <% if pos["date"] %>
@@ -299,7 +299,7 @@ end
         <% end %>
       <% end %>
     </WorkExperienceList>
-    <% if data.education and not data.education.empty? %>
+    <% if data["education"] and not data.education.empty? %>
       <EducationList>
         <% data.education.select { |x| x.publish }.each do |edu| %>
           <Education>
@@ -339,7 +339,7 @@ end
       </EducationList>
     <% end %>
     <Skills>
-      <% if data.languages %>
+      <% if data["languages"] %>
         <Linguistic>
           <% if data.languages.mother_tongues and not data.languages.mother_tongues.empty? %>
             <MotherTongueList>
@@ -406,7 +406,7 @@ end
            <Documentation></Documentation>
            </Computer>
       -->
-      <% if data.driving and not data.driving.empty? %>
+      <% if data["driving"] and not data.driving.empty? %>
         <Driving>
           <Description>
             <% data.driving.each do |license| %>
@@ -417,7 +417,7 @@ end
       <% end %>
       <Other>
         <Description>
-          <% if data.interests and not data.interests.empty? %>
+          <% if data["interests"] and not data.interests.empty? %>
             &lt;ul&gt;
             <% data.interests do |x| %>
               &lt;li&gt;<%= "#{x.name || ""}: #{x.level || ""}, #{x.summary || ""}; " %>&lt;/li&gt;
@@ -428,7 +428,7 @@ end
       </Other>
     </Skills>
     <AchievementList>
-      <% if data.awards and not data.awards.empty? %>
+      <% if data["awards"] and not data.awards.empty? %>
         <% data.awards.each do |award| %>
           <Achievement>
             <Title>
@@ -441,7 +441,7 @@ end
           </Achievement>
         <% end %>
       <% end %>
-      <% if data.achievements and not data.achievements.empty? %>
+      <% if data["achievements"] and not data.achievements.empty? %>
         <% data.achievements.each do |achievement| %>
           <Achievement>
             <Title>
@@ -454,7 +454,7 @@ end
           </Achievement>
         <% end %>
       <% end %>
-      <% if data.projects and not data.projects.empty? %>
+      <% if data["projects"] and not data.projects.empty? %>
         <Achievement>
           <Title>
             <Code>projects</Code>
@@ -469,7 +469,7 @@ end
           </Description>
         </Achievement>
       <% end %>
-      <% if data.publications and not data.publications.empty? %>
+      <% if data["publications"] and not data.publications.empty? %>
         <Achievement>
           <Title>
             <Code>publications</Code>
