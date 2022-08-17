@@ -1,120 +1,98 @@
-require 'slop'
+require "slop"
 
 module Resme
   module CommandSyntax
-    # return a hash with all the commands and their options 
+    # Return a hash of hashes.  Each key is the name of a command and
+    # includes useful information, such as an Option object to
+    # parse options and a documentation string.
     def self.commands
-      h = Hash.new
-      self.methods.each do |method|
-        if method.to_s.include?("_opts") then
-          h = h.merge(eval(method.to_s))
-        end
+      cmd_spec = {}
+      methods.each do |method|
+        cmd_spec = cmd_spec.merge eval(method.to_s) if method.to_s.include?("_opts")
       end
-      return h
+      cmd_spec
     end
-
-    private
 
     def self.version_opts
       opts = Slop::Options.new
       opts.banner = "version -- print version information"
-      help = <<EOS
-NAME
-   #{opts.banner}
+      help = <<-EOS
+        NAME
+          #{opts.banner}
 
-SYNOPSYS
-   #{opts.to_s}
+        SYNOPSYS
+          #{opts.to_s}
 
-DESCRIPTION
-   return version information
+        DESCRIPTION
+          return version information
 
-EXAMPLES
-   # resme version
-   resme version #{VERSION}
-EOS
-      return { :version => [opts, :version, help] }
+        EXAMPLES
+          # resme version
+          resme version #{VERSION}
+      EOS
+      { version: [opts, :version, help.gsub("        ", "")] }
     end
 
     def self.console_opts
       opts = Slop::Options.new
       opts.banner = "console [options] -- Enter the console"
-      help = <<EOS
-NAME
-   #{opts.banner}
+      help = <<-EOS
+        NAME
+          #{opts.banner}
 
-SYNOPSYS
-   #{opts.to_s}
+        SYNOPSYS
+          #{opts.to_s}
 
-DESCRIPTION
-   Invoke a console, from which you can more easily run
-   resme commands.
+        DESCRIPTION
+          Invoke a console, from which you can more easily run
+          resme commands.
 
-EXAMPLES
-   resme console
-   resme:000> 
-   resme:001> 
-   resme:002>
-EOS
-       return { :console => [opts, :console, help] } 
+        EXAMPLES
+          resme console
+          resme:000> check
+          resme:001> generate -t md
+          resme:002>
+      EOS
+      { console: [opts, :console, help.gsub("        ", "")] }
     end
 
     def self.man_opts
       opts = Slop::Options.new
       opts.banner = "man -- print a manual page"
-      help = <<EOS
-NAME
-   #{opts.banner}
+      help = <<-EOS
+        NAME
+          #{opts.banner}
 
-SYNOPSYS
-   #{opts.to_s}
+        SYNOPSYS
+          #{opts.to_s}
 
-DESCRIPTION
-   Print the README file of this gem
+        DESCRIPTION
+          Print the README file of this gem
 
-EXAMPLES
-   resme man
-EOS
-      return { :man => [opts, :man, help] }
+        EXAMPLES
+          resme man
+      EOS
+      { man: [opts, :man, help.gsub("        ", "")] }
     end
 
     def self.help_opts
       opts = Slop::Options.new
       opts.banner = "help [command] -- print usage string"
-      help = <<EOS
-NAME
-   #{opts.banner}
+      help = <<-EOS
+        NAME
+          #{opts.banner}
 
-SYNOPSYS
-   #{opts.to_s}
+        SYNOPSYS
+          #{opts.to_s}
 
-DESCRIPTION
-   Print help about a command
+        DESCRIPTION
+          Print help about a command
 
-EXAMPLES
-   resme help
-   resme help generate
-EOS
-      return { :help => [opts, :help, help] }
-    end
-
-    def self.check_opts
-      opts = Slop::Options.new
-      opts.banner = "check -- Check whether a YAML file conforms with the RESME syntax"
-      help = <<EOS
-NAME
-   #{opts.banner}
-
-SYNOPSYS
-   #{opts.to_s}
-
-DESCRIPTION
-   Check whether a YAML file conforms with the RESME syntax.
-
-
-EXAMPLES
-   resme file.yml
-EOS
-       return { :check => [opts, :check, help] } 
+        EXAMPLES
+          resme help
+          resme help generate
+      EOS
+      { help: [opts, :help, help.gsub("        ", "")] }
     end
 
     def self.init_opts
@@ -122,113 +100,63 @@ EOS
       opts.banner = "init [-o output_filename]"
       opts.string "-o", "--output", "Output filename"
       opts.boolean "-f", "--force", "Overwrite existing file (if present)"
-      help = <<EOS
-NAME
-   #{opts.banner}
+      help = <<-EOS
+        NAME
+          #{opts.banner}
 
-SYNOPSYS
-   #{opts.to_s}
+        SYNOPSYS
+          #{opts.to_s}
 
-DESCRIPTION
+        DESCRIPTION
+          Generate a YAML template for your resume in the current directory.
 
-   Generate a YAML template for your resume in the current directory.
-
-EXAMPLES
-       
-   resme init
-   resme -o r.yml
-   resme -o r.yml --force
-EOS
-      return { init: [opts, :init, help] }
-    end    
-
-    def self.md_opts
-      opts = Slop::Options.new
-      opts.banner = "md [-o output_filename] file.yml ..."
-      opts.string "-o", "--output", "Output filename"
-      help = <<EOS
-NAME
-   #{opts.banner}
-
-SYNOPSYS
-   #{opts.to_s}
-
-DESCRIPTION
-
-   Generate a markdown resume from the YAML input files.
-
-EXAMPLES
-       
-   resme md -o r.md resume.yml
-EOS
-      return { md: [opts, :md, help] }
-    end    
-
-    def self.org_opts
-      opts = Slop::Options.new
-      opts.banner = "org [-o output_filename] file.yml ..."
-      opts.string "-o", "--output", "Output filename"
-      help = <<EOS
-NAME
-   #{opts.banner}
-
-SYNOPSYS
-   #{opts.to_s}
-
-DESCRIPTION
-
-   Generate an org-mode resume from the YAML input files.
-
-EXAMPLES
-       
-   resme md -o r.md resume.yml
-EOS
-      return { org: [opts, :org, help] }
-    end    
-
-    def self.json_opts
-      opts = Slop::Options.new
-      opts.banner = "json [-o output_filename] file.yml ..."
-      opts.string "-o", "--output", "Output filename"
-      help = <<EOS
-NAME
-   #{opts.banner}
-
-SYNOPSYS
-   #{opts.to_s}
-
-DESCRIPTION
-
-   Generate a JSON resume from the YAML input files.
-
-EXAMPLES
-       
-   resme json -o r.md resume.yml
-EOS
-      return { json: [opts, :json, help] }
+        EXAMPLES
+          resme init
+          resme init -o r.yml
+          resme init -o r.yml --force
+      EOS
+      { init: [opts, :init, help.gsub("        ", "")] }
     end
 
-    def self.europass_opts
+    def self.check_opts
       opts = Slop::Options.new
-      opts.banner = "europass [-o output_filename] file.yml ..."
+      opts.banner = "check -- Check if file conforms with RESME syntax"
+      help = <<-EOS
+        NAME
+          #{opts.banner}
+
+        SYNOPSYS
+          #{opts.to_s}
+
+        DESCRIPTION
+          Check whether a YAML file conforms with the RESME syntax.
+
+        EXAMPLES
+          resme check file.yml
+      EOS
+      { check: [opts, :check, help.gsub("        ", "")] }
+    end
+
+    def self.generate_opts
+      opts = Slop::Options.new
+      opts.banner = "generate [-t format] [-o output_filename] file.yml ..."
+      opts.string "-t", "--to", "Output format (one of md, org, json, europass)"
       opts.string "-o", "--output", "Output filename"
-      help = <<EOS
-NAME
-   #{opts.banner}
+      help = <<-EOS
+        NAME
+          #{opts.banner}
 
-SYNOPSYS
-   #{opts.to_s}
+        SYNOPSYS
+          #{opts.to_s}
 
-DESCRIPTION
+        DESCRIPTION
+          Generate a resume from the YAML input files.
 
-   Generate a Europass XML resume from the YAML input files.
-
-EXAMPLES
-       
-   resme europass -o r.md resume.yml
-EOS
-      return { europass: [opts, :europass, help] }
-    end 
-
+        EXAMPLES
+          resme generate -t org -o r.org resume.yml
+          resme generate -t md -o r.md section-1.yml section-2.yml
+      EOS
+      { generate: [opts, :generate, help.gsub("        ", "")] }
+    end
   end
 end

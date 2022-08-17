@@ -1,65 +1,61 @@
-require 'resme/version'
-require 'readline'
-require 'fileutils'
-require 'date'
-require 'yaml'
-require 'erb'
-require 'json'
-require 'kwalify'
+require "resme/version"
+require "readline"
+require "fileutils"
+require "date"
+require "yaml"
+require "erb"
+require "json"
+require "kwalify"
 
 module Resme
   module CommandSemantics
-    APPNAME = 'resme'
+    APPNAME = "resme"
     VERSION = Resme::VERSION
 
     #
     # Main App Starts Here!
     #
-    def self.version opts = nil, argv = []
+    def self.version(opts = nil, argv = [])
       puts "#{APPNAME} version #{VERSION}"
     end
 
-    def self.man opts = nil, argv = []
-      path = File.join(File.dirname(__FILE__), "/../../../README.md")
+    def self.man(opts = nil, argv = [])
+      path = File.join(File.dirname(__FILE__), "/../../../README.org")
       file = File.open(path, "r")
-      contents = file.read
-      puts contents
+      puts file.read
     end
 
-    def self.help opts = nil, argv = []
+    def self.help(opts = nil, argv = [])
       all_commands = CommandSyntax.commands
       
       if argv != []
         argv.map { |x| puts all_commands[x.to_sym][2] }
       else
-        puts "#{APPNAME} command [options] [args]"
-        puts ""
-        puts "Available commands:"
-        puts ""
-        all_commands.keys.each do |key|
-          puts "  " + all_commands[key][0].banner
+        puts "#{APPNAME} command [options] [args]\n"
+        puts "Available commands:\n"
+        all_commands.each_key do |key|
+          puts "  #{all_commands[key][0].banner}"
         end
       end
     end
 
-    def self.console opts, argv = []
+    def self.console(opts, argv = [])
       all_commands = CommandSyntax.commands
       all_commands.delete(:console)
       
       i = 0
       while true
         string = Readline.readline("#{APPNAME}:%03d> " % i, true)
-        string.gsub!(/^#{APPNAME} /, "") # as a courtesy, remove any leading appname string
-        if string == "exit" or string == "quit" or string == "." then
-          exit 0
-        end
-        reps all_commands, string.split(' ')
+        # as a courtesy, remove any leading appname string
+        string.gsub!(/^#{APPNAME} /, "")
+        exit 0 if %w[exit quit .].include? string
+        reps all_commands, string.split(" ")
         i = i + 1
       end
     end
 
     # read-eval-print step
-    def self.reps all_commands, argv
+    def self.reps(all_commands, argv)
       if argv == [] or argv[0] == "--help" or argv[0] == "-h"
         CommandSemantics.help
         exit 0
@@ -84,7 +80,7 @@ module Resme
             puts e
           end
         else
-          puts "#{APPNAME}: '#{command}' is not a valid command. See '#{APPNAME} help'"
+          puts "#{APPNAME}: "#{command}" is not a valid command. See "#{APPNAME} help""
         end
       end
     end
@@ -92,23 +88,18 @@ module Resme
     #
     # APP SPECIFIC COMMANDS
     #
-    def self.check opts, argv
-      schema = Kwalify::Yaml.load_file(File.join(File.dirname(__FILE__), "/../templates/schema.yml"))
-      ## or
-      # schema = YAML.load_file('schema.yaml')
+    def self.check(opts, argv)
+      path = File.join(File.dirname(__FILE__), "/../templates/schema.yml")
+      schema = Kwalify::Yaml.load_file(path)
 
-      ## create validator
+      # create validator
       validator = Kwalify::Validator.new(schema)
-
-      ## load document
+      # load document
       document = Kwalify::Yaml.load_file(argv[0])
-      ## or
-      #document = YAML.load_file('document.yaml')
-
-      ## validate
+      # validate
       errors = validator.validate(document)
 
-      ## show errors
+      # show errors
       if errors && !errors.empty?
         for e in errors
           puts "[#{e.path}] #{e.message}"
@@ -118,13 +109,14 @@ module Resme
       end
     end
 
-    def self.init opts, argv
+    def self.init(opts, argv)
       output = opts[:output] || "resume.yml"
       force = opts[:force]
-      template = File.join(File.dirname(__FILE__), "/../templates/resume.yml")
+      path = File.dirname(__FILE__), "/../templates/resume.yml"
+      template = File.join(path)
 
-      # avoid catastrophy
-      if File.exist?(output) and not force
+      # avoid catastrophe
+      if File.exist?(output) && !force
         puts "Error: file #{output} already exists.  Use --force if you want to overwrite it"
       else
         content = File.read(template)
@@ -133,60 +125,43 @@ module Resme
       end
     end
 
-    def self.md opts, argv
-      output = opts[:output] || "resume-#{Date.today}.md"
-      template = File.join(File.dirname(__FILE__), "/../templates/resume.md.erb")
+    def self.generate(opts, argv)
+      format = opts[:to] == "europass" ? "xml" : opts[:to]
+      output = opts[:output] || "resume-#{Date.today}.#{format}"
+      template = File.join(File.dirname(__FILE__), "/../templates/resume.#{format}.erb")
+      if !File.exists?(template)
+        puts "Error: format #{format} is not supported."
+      end
 
       render argv, template, output
       puts "Resume generated in #{output}"
-    end
 
-    def self.org opts, argv
-      output = opts[:output] || "resume-#{Date.today}.org"
-      template = File.join(File.dirname(__FILE__), "/../templates/resume.org.erb")
-
-      render argv, template, output
-      puts "Resume generated in #{output}"
-    end
-
-    def self.json opts, argv
-      output = opts[:output] || "resume-#{Date.today}.json"
-      template = File.join(File.dirname(__FILE__), "/../templates/resume.json.erb")
-
-      render argv, template, output
-      puts "Resume generated in #{output}"
-    end
-
-    def self.europass opts, argv
-      output = opts[:output] || "resume-#{Date.today}.xml"
-      template = File.join(File.dirname(__FILE__), "/../templates/europass/eu.xml.erb")
-
-      render argv, template, output
-      puts "Resume generated in #{output}"
-      puts "Render via, e.g., http://interop.europass.cedefop.europa.eu/web-services/remote-upload/"
+      if format == "xml" then
+        puts "Europass XML generated. Render via, e.g., http://interop.europass.cedefop.europa.eu/web-services/remote-upload/"
+      end
     end
 
     private
 
-    def self.render yml_files, template_filename, output_filename
-      data = Hash.new
+    def self.render(yml_files, template_filename, output_filename)
+      data = {}
       yml_files.each do |file|
-        data = data.merge(YAML.load_file(file))
+        data = data.merge(YAML.load_file(file, permitted_classes: [Date]))
       end
       template = File.read(template_filename)
-      output = ERB.new(template, nil, '-').result(binding)
+      output = ERB.new(template, trim_mode: "-").result(binding)
       # it is difficult to write readable ERBs with no empty lines...
       # we use gsub to replace multiple empty lines with \n\n in the final output
       output.gsub!(/([\t ]*\n){3,}/, "\n\n")
       backup_and_write output_filename, output
     end
 
-    def self.backup filename
+    def self.backup(filename)
       FileUtils::cp filename, filename + "~"
       puts "Backup copy #{filename} created in #{filename}~."
     end
 
-    def self.backup_and_write filename, content
+    def self.backup_and_write(filename, content)
       backup(filename) if File.exist?(filename)
       File.open(filename, "w") { |f| f.puts content }
     end

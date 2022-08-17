@@ -1,5 +1,4 @@
 <%
-require 'date'
 email = data.contacts.select { |x| x.label == "email" }.first
 phones = data.contacts.select { |x|
   ["phone", "mobile", "cell"].include?(x.label)
@@ -11,9 +10,9 @@ address = data.addresses.select { |x| x.label == "home" }.first
 
 # make a period (2015, 2015-10, 2015-01-01 into the xml attributes day, month, year for a date tag
 def self.period_tod period
-    el = period.to_s.split("-")
-    fields = ["year=\"%d\"", "month=\"--%02d\"", "day=\"---%02d\""]
-    el.each_with_index.map { |x, i| fields[i] % x.to_i }.join(" ")
+  el = period.to_s.split("-")
+  fields = ["year=\"%d\"", "month=\"--%02d\"", "day=\"---%02d\""]
+  el.each_with_index.map { |x, i| fields[i] % x.to_i }.join(" ")
 end
 
 

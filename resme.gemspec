@@ -1,4 +1,4 @@
-require_relative 'lib/resme/version'
+require_relative "lib/resme/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "resme"
@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["adolfo.villafiorita@ict4g.net"]
 
   spec.summary       = %q{Write a resume in YML and export to various formats, including json and europass XML.}
-  spec.description   = %q{This gem allows you to manage your resume in yaml, while providing different backends for publishings.  Supported backends: markdown, json resume, and Europass XML.  Custom templates can be defined using ERB.}
+  spec.description   = %q{This gem allows you to manage your resume in yaml, while providing different backends for publishings.  Supported backends: Org Mode, Markdown, JSON resume, and Europass XML.  Custom templates can be defined using ERB.}
   spec.homepage      = "http://github.io/avillafiorita/resme"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
