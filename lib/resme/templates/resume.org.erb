@@ -1,6 +1,6 @@
 #+TITLE: Curriculum Vitae
-#+AUTHOR: <%= full_name data %>, <%= data.basics.title %>
-#+EMAIL: <%= data.contacts.select { |x| x.label == "email" }.first.value %>
+#+AUTHOR: <%= full_name data %>, <%= data.basics&.title %>
+#+EMAIL: <%= (data.contacts || []).select { |x| x.label == "email" }.first.value %>
 #+DATE: <<%= Date.today %>>
 #+STARTUP: showall
 #+OPTIONS: toc:nil num:nil
@@ -9,15 +9,15 @@
 
 * Contacts
   :PROPERTIES:
-<% data.addresses.each do |x| -%>
+<% (data.addresses || []).each do |x| -%>
   <%= ":#{x.label.upcase}: #{x.street}, #{x.zip_code} #{x.city}" %>
 <% end -%>
-<% data.contacts.each do |x| -%>
+<% (data.contacts || []).each do |x| -%>
   <%= ":#{x.label.upcase}: #{x.value}" %>
 <% end -%>
   :END:
 
-<% data.contacts.each do |x| -%>
+<% (data.contacts || []).each do |x| -%>
 | <%= "%-30s" % x.label %> | <%= "%-40s" % x.value %> |
 <% end -%>
 

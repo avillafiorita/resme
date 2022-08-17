@@ -1,4 +1,4 @@
-require "slop"
+require "optparse"
 
 module Resme
   module CommandSyntax
@@ -14,8 +14,10 @@ module Resme
     end
 
     def self.version_opts
-      opts = Slop::Options.new
-      opts.banner = "version -- print version information"
+      opts = OptionParser.new do |opts|
+        opts.banner = "version -- print version information"
+      end
+      
       help = <<-EOS
         NAME
           #{opts.banner}
@@ -30,6 +32,7 @@ module Resme
           # resme version
           resme version #{VERSION}
       EOS
+      
       {
         version: {
           name: :version,
@@ -40,8 +43,10 @@ module Resme
     end
 
     def self.console_opts
-      opts = Slop::Options.new
-      opts.banner = "console [options] -- Enter the console"
+      opts = OptionParser.new do |opts|
+        opts.banner = "console -- enter the console"
+      end
+      
       help = <<-EOS
         NAME
           #{opts.banner}
@@ -59,6 +64,7 @@ module Resme
           resme:001> generate -t md
           resme:002>
       EOS
+      
       {
         console: {
           name: :console,
@@ -69,8 +75,10 @@ module Resme
     end
 
     def self.man_opts
-      opts = Slop::Options.new
-      opts.banner = "man -- print a manual page"
+      opts = OptionParser.new do |opts|
+        opts.banner = "man -- print resme manual page"
+      end
+      
       help = <<-EOS
         NAME
           #{opts.banner}
@@ -84,6 +92,7 @@ module Resme
         EXAMPLES
           resme man
       EOS
+      
       {
         man: {
           name: :man,
@@ -94,8 +103,10 @@ module Resme
     end
 
     def self.help_opts
-      opts = Slop::Options.new
-      opts.banner = "help [command] -- print usage string"
+      opts = OptionParser.new do |opts|
+        opts.banner = "help [command] -- print command usage"
+      end
+
       help = <<-EOS
         NAME
           #{opts.banner}
@@ -120,10 +131,12 @@ module Resme
     end
 
     def self.init_opts
-      opts = Slop::Options.new
-      opts.banner = "init [-o output_filename]"
-      opts.string "-o", "--output", "Output filename"
-      opts.boolean "-f", "--force", "Overwrite existing file (if present)"
+      opts = OptionParser.new do |opts|
+        opts.banner = "init [options] -- generate an empty resume.yml file"
+        opts.on("-o", "--output FILENAME", String, "Output filename")
+        opts.on("-f", "--force", FalseClass, "Overwrite existing file (if present)")
+      end
+      
       help = <<-EOS
         NAME
           #{opts.banner}
@@ -149,8 +162,10 @@ module Resme
     end
 
     def self.check_opts
-      opts = Slop::Options.new
-      opts.banner = "check -- Check if file conforms with RESME syntax"
+      opts = OptionParser.new do |opts|
+        opts.banner = "check resume.yml -- Check syntax of resume.yml"
+      end
+
       help = <<-EOS
         NAME
           #{opts.banner}
@@ -164,6 +179,7 @@ module Resme
         EXAMPLES
           resme check file.yml
       EOS
+      
       {
         check: {
           name: :check,
@@ -173,11 +189,43 @@ module Resme
       }
     end
 
+    def self.list_opts
+      opts = OptionParser.new do |opts|
+        opts.banner = "list resume.yml -- List main sections in resume.yml"
+      end
+
+      help = <<-EOS
+        NAME
+          #{opts.banner}
+
+        SYNOPSYS
+          #{opts.to_s}
+
+        DESCRIPTION
+          List main sections in resume.yml.
+
+        EXAMPLES
+          resme list file.yml
+      EOS
+      
+      {
+        list: {
+          name: :list,
+          options: opts,
+          help: help.gsub("        ", "")
+        }
+      }
+    end
+
     def self.generate_opts
-      opts = Slop::Options.new
-      opts.banner = "generate [-t format] [-o output_filename] file.yml ..."
-      opts.string "-t", "--to", "Output format (one of md, org, json, europass)"
-      opts.string "-o", "--output", "Output filename"
+      opts = OptionParser.new do |o|
+        o.banner = "generate [options] resume.yml ... -- output resume"
+        o.on("-e", "--erb FILENAME", String, "Template to use")
+        o.on("-t", "--to FORMAT", String, "Output format")
+        o.on("-o", "--output FILENAME", String, "Output filename")
+        o.on("-s", "--skip SECTION,SECTION", Array, "Sections to skip")
+      end
+
       help = <<-EOS
         NAME
           #{opts.banner}
@@ -189,9 +237,10 @@ module Resme
           Generate a resume from the YAML input files.
 
         EXAMPLES
-          resme generate -t org -o r.org resume.yml
+          resme generate -t org resume.yml
           resme generate -t md -o r.md section-1.yml section-2.yml
       EOS
+      
       {
         generate: {
           name: :generate,

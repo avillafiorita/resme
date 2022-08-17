@@ -52,38 +52,39 @@ module Resme
         # as a courtesy, remove any leading appname string
         string.gsub!(/^#{APPNAME} /, "")
         exit 0 if %w[exit quit .].include? string
-        reps all_commands, string.split(" ")
+        execute all_commands, string.split(" ")
         i = i + 1
       end
     end
 
     # read-eval-print step
-    def self.reps(all_commands, argv)
+    # check if argv is in any of all_commands, parse options
+    # according to the specification in all_commands and invoke
+    # a function in this class to actually do the work
+    def self.execute(all_commands, argv)
       if argv == [] or argv[0] == "--help" or argv[0] == "-h"
-        CommandSemantics.help
+        help
         exit 0
       else
         command = argv[0]
-        syntax_and_semantics = all_commands[command.to_sym]
-        if syntax_and_semantics
-          function = syntax_and_semantics[:name]
-          opts = syntax_and_semantics[:options]
-          
+        command_spec = all_commands[command.to_sym]
+
+        if command_spec
+          command_name = command_spec[:name]
+          option_parser = command_spec[:options]
+
           begin
-            parser = Slop::Parser.new(opts)
-
-            result = parser.parse(argv[1..-1])
-            options = result.to_hash
-            arguments = result.arguments
-
-            eval "CommandSemantics::#{function}(options, arguments)"
-          rescue Slop::Error => e
-            puts "#{APPNAME}: #{e}"
+            argv.shift # remove command name from ARGV
+            options = {}
+            parser = option_parser.parse!(into: options)
+            eval "CommandSemantics::#{command_name}(options, argv)"
           rescue Exception => e
-            puts e
+            puts "#{APPNAME} error: #{e}"
+            puts "Help with \"#{APPNAME} help #{command_name}\""
           end
         else
-          puts "#{APPNAME}: "#{command}" is not a valid command. See "#{APPNAME} help""
+          puts "#{APPNAME} error: "#{command}" is not a valid command."
+          puts "List commands with \"#{APPNAME} help\"."
         end
       end
     end
@@ -120,7 +121,8 @@ module Resme
 
       # avoid catastrophe
       if File.exist?(output) && !force
-        puts "Error: file #{output} already exists.  Use --force if you want to overwrite it"
+        puts "#{APPNAME} error: file #{output} already exists."
+        puts "Use --force if you want to overwrite it."
       else
         content = File.read(template)
         backup_and_write output, content
@@ -128,15 +130,28 @@ module Resme
       end
     end
 
+    def self.list(opts, argv)
+      data = {}
+      argv.each do |file|
+        data = data.merge(YAML.load_file(file, permitted_classes: [Date]))
+      end
+      puts "Sections included in #{argv.join(", ")}:"
+      data.keys.each do |key|
+        puts "- #{key}: #{(data[key] || []).size} entries"
+      end
+    end
+
     def self.generate(opts, argv)
       format = opts[:to] == "europass" ? "xml" : opts[:to]
       output = opts[:output] || "resume-#{Date.today}.#{format}"
       template = File.join(File.dirname(__FILE__), "/../templates/resume.#{format}.erb")
+      skipped_sections = opts[:skip] || []
+
       if !File.exists?(template)
-        puts "Error: format #{format} is not supported."
+        puts "#{APPNAME} error: format #{format} is not understood."
       end
 
-      render argv, template, output
+      render argv, template, output, skipped_sections
       puts "Resume generated in #{output}"
 
       if format == "xml" then
@@ -146,17 +161,20 @@ module Resme
 
     private
 
-    def self.render(yml_files, template_filename, output_filename)
+    def self.render(yml_files, template_name, output_name, skipped_sections)
       data = {}
       yml_files.each do |file|
         data = data.merge(YAML.load_file(file, permitted_classes: [Date]))
       end
-      template = File.read(template_filename)
+      skipped_sections.each do |section|
+        data.reject! { |k| k == section } 
+      end
+      template = File.read(template_name)
       output = ERB.new(template, trim_mode: "-").result(binding)
       # it is difficult to write readable ERBs with no empty lines...
       # we use gsub to replace multiple empty lines with \n\n in the final output
       output.gsub!(/([\t ]*\n){3,}/, "\n\n")
-      backup_and_write output_filename, output
+      backup_and_write output_name, output
     end
 
     def self.backup(filename)

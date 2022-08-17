@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'resme'
+require "resme"
 
 # read-eval-print-step passing all commands and the argument
-Resme::CommandSemantics.reps Resme::CommandSyntax.commands, ARGV
+Resme::CommandSemantics.execute Resme::CommandSyntax.commands, ARGV

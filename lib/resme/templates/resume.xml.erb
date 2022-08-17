@@ -1,12 +1,12 @@
 <%
-email = data.contacts.select { |x| x.label == "email" }.first
-phones = data.contacts.select { |x|
+email = (data.contacts || []).select { |x| x.label == "email" }.first
+phones = (data.contacts || []).select { |x|
   ["phone", "mobile", "cell"].include?(x.label)
 }
-messaging = data.contacts.select { |x|
+messaging = (data.contacts || []).select { |x|
   ["skype", "gtalk", "telegram", "whatsup"].include?(x.label)
 }
-address = data.addresses.select { |x| x.label == "home" }.first
+address = (data.addresses || []).select { |x| x.label == "home" }.first || {}
 
 # make a period (2015, 2015-10, 2015-01-01 into the xml attributes day, month, year for a date tag
 def self.period_tod period
@@ -19,7 +19,7 @@ end
 -%>
 <?xml version="1.0" encoding="UTF-8"?>
 <SkillsPassport xmlns="http://europass.cedefop.europa.eu/Europass" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://europass.cedefop.europa.eu/Europass http://europass.cedefop.europa.eu/xml/v3.3.0/EuropassSchema.xsd" locale="en">
-<DocumentInfo>
+  <DocumentInfo>
     <DocumentType>ECV</DocumentType>
     <Bundle></Bundle>
     <CreationDate><%= DateTime.now.iso8601 %></CreationDate>
@@ -29,463 +29,467 @@ end
     <Comment></Comment>
     <Copyright>© European Communities | http://europass.cedefop.europa.eu</Copyright>
     <EuropassLogo>false</EuropassLogo>
-</DocumentInfo>
-<!-- <PrintingPreferences> </PrintingPreferences> -->
-<LearnerInfo>
+  </DocumentInfo>
+  <!-- <PrintingPreferences> </PrintingPreferences> -->
+  <LearnerInfo>
     <Identification>
-        <PersonName>
-            <Title>
-                <Code>dr</Code>
-                <Label><%= data.basics.title %></Label>
-            </Title>
-            <FirstName><%= data.basics.first_name %></FirstName>
-            <Surname><%= data.basics.last_name %></Surname>
-        </PersonName>
-        <ContactInfo>
-            <Address>
-                <Contact>
-                    <AddressLine><%= address.street %></AddressLine>
-                    <PostalCode><%= address.zip_code %></PostalCode>
-                    <Municipality><%= address.city %></Municipality>
-                    <Country>
-                        <Code><%= address.country[0..1].upcase %></Code>
-                        <Label><%= address.country %></Label>
-                    </Country>
-                </Contact>
-            </Address>
-            <Email>
-                <Contact><%= email.value %></Contact>
-            </Email>
-            <% if phones %>
-            <TelephoneList>
-                <% phones.each do |phone| %>
-                    <Telephone>
-                        <Contact><%= phone.value %></Contact>
-                        <Use>
-                            <Code><%= phone.label %></Code>
-                            <Label><%= phone.value %></Label>
-                        </Use>
-                    </Telephone>
-                <% end %>
-            </TelephoneList>
+      <PersonName>
+        <Title>
+          <Code>dr</Code>
+          <Label><%= data.basics&.title %></Label>
+        </Title>
+        <FirstName><%= data.basics.first_name %></FirstName>
+        <Surname><%= data.basics.last_name %></Surname>
+      </PersonName>
+      <ContactInfo>
+        <Address>
+          <Contact>
+            <AddressLine><%= address.street %></AddressLine>
+            <PostalCode><%= address.zip_code %></PostalCode>
+            <Municipality><%= address.city %></Municipality>
+            <Country>
+              <Code><%= address.country[0..1].upcase %></Code>
+              <Label><%= address.country %></Label>
+            </Country>
+          </Contact>
+        </Address>
+        <Email>
+          <Contact><%= email.value %></Contact>
+        </Email>
+        <% if phones %>
+          <TelephoneList>
+            <% phones.each do |phone| %>
+              <Telephone>
+                <Contact><%= phone.value %></Contact>
+                <Use>
+                  <Code><%= phone.label %></Code>
+                  <Label><%= phone.value %></Label>
+                </Use>
+              </Telephone>
             <% end %>
-            <% if data.web_presence %>
-            <WebsiteList>
-                <% data.web_presence.each do |web| %>
-                    <Website>
-                        <Contact><%= web.value %></Contact>
-                        <Use>
-                            <!-- <Code><%= web.label %></Code> -->
-                            <Label><%= web.label.capitalize %></Label>
-                        </Use>
-                    </Website>
-                <% end %>
-            </WebsiteList>
+          </TelephoneList>
+        <% end %>
+        <% if data.web_presence and not data.web_presence.empty? %>
+          <WebsiteList>
+            <% data.web_presence.each do |web| %>
+              <Website>
+                <Contact><%= web.value %></Contact>
+                <Use>
+                  <!-- <Code><%= web.label %></Code> -->
+                  <Label><%= web.label.capitalize %></Label>
+                </Use>
+              </Website>
             <% end %>
-            <% if messaging and not messaging.empty? %>
-            <InstantMessagingList>
-                <% messaging.each do |im| %>
-                    <InstantMessaging>
-                        <Contact><%= im.value %></Contact>
-                        <Use>
-                            <!-- <Code><%= im.label %></Code> -->
-                            <Label><%= im.label.capitalize %></Label>
-                        </Use>
-                    </InstantMessaging>
-                <% end %>
-            </InstantMessagingList>
+          </WebsiteList>
+        <% end %>
+        <% if messaging and not messaging.empty? %>
+          <InstantMessagingList>
+            <% messaging.each do |im| %>
+              <InstantMessaging>
+                <Contact><%= im.value %></Contact>
+                <Use>
+                  <!-- <Code><%= im.label %></Code> -->
+                  <Label><%= im.label.capitalize %></Label>
+                </Use>
+              </InstantMessaging>
             <% end %>
-            <ContactMethodList>
-                <!-- other contacts not defined above -->
-            </ContactMethodList>
-        </ContactInfo>
-        <Demographics>
-            <Birthdate day="---<%= "%02d" % data.basics.birthdate.day %>" month="--<%= "%02d" % data.basics.birthdate.month %>" year="<%= data.basics.birthdate.year %>" />
-            <%# ["gender"] in place of .gender, so that the code does not complain about gender not being defined (being nil) %>
-            <% if data.basics["gender"] == "M" or data.basics["gender"] == "F" %>
-                <Gender>
-                    <Code><%= data.basics.gender %></Code>
-                    <Label><%= data.basics.gender == "M" ? "Male" : "Female" %></Label>
-                </Gender>
-            <% end %>
-            <NationalityList>
-                <Nationality>
-                    <Label><%= data.basics.nationality %></Label>
-                </Nationality>
-            </NationalityList>
-            <!--
-                 <Photo>
-                 <MimeType>image/jpeg</MimeType>
-                 <Data></Data>
-                 <MetadataList>
-                 <Metadata key="photo-dimensions" value="100x110"/>
-                 </MetadataList>
-                 </Photo>
-                 <Signature>
-                 <MimeType>image/jpeg</MimeType>
-                 <Data></Data>
-                 <MetadataList>
-                 <Metadata key="signature-dimensions" value="250x150" />
-                 </MetadataList>
-                 </Signature>
-               -->
-        </Demographics>
+          </InstantMessagingList>
+        <% end %>
+        <ContactMethodList>
+          <!-- other contacts not defined above -->
+        </ContactMethodList>
+      </ContactInfo>
+      <Demographics>
+        <% if data.basics.birthdate and not data.basics.birthdate.empty? %>
+          <Birthdate day="---<%= "%02d" % data.basics.birthdate.day %>"
+                     month="--<%= "%02d" % data.basics.birthdate.month %>"
+                     year="<%= data.basics.birthdate.year %>" />
+        <% end %>
+        <%# ["gender"] in place of .gender, so that the code does not complain about gender not being defined (being nil) %>
+        <% if data.basics["gender"] == "M" or data.basics["gender"] == "F" %>
+          <Gender>
+            <Code><%= data.basics.gender %></Code>
+            <Label><%= data.basics.gender == "M" ? "Male" : "Female" %></Label>
+          </Gender>
+        <% end %>
+        <NationalityList>
+          <Nationality>
+            <Label><%= data.basics&.nationality %></Label>
+          </Nationality>
+        </NationalityList>
+        <!--
+             <Photo>
+             <MimeType>image/jpeg</MimeType>
+             <Data></Data>
+             <MetadataList>
+             <Metadata key="photo-dimensions" value="100x110"/>
+             </MetadataList>
+             </Photo>
+             <Signature>
+             <MimeType>image/jpeg</MimeType>
+             <Data></Data>
+             <MetadataList>
+             <Metadata key="signature-dimensions" value="250x150" />
+             </MetadataList>
+             </Signature>
+        -->
+      </Demographics>
     </Identification>
     <Headline>
-        <Description><Label><%= data.summary %></Label></Description>
+      <Description><Label><%= data.summary %></Label></Description>
     </Headline>
     <WorkExperienceList>
-        <% data.work.each do |pos| %>
+      <% (data.work || []).each do |pos| %>
         <WorkExperience>
+          <Period>
+            <From <%= self.period_tod pos.from %>/>
+            <% if pos.till and pos.till != "" %>
+              <To <%= self.period_tod pos.till %>/>
+            <% else %>
+              <Current>true</Current>
+            <% end %>
+          </Period>
+          <!-- 
+               <Documentation>
+               <ReferenceTo idref="ATT_1"/>
+               </Documentation>
+          -->
+          <Position>
+            <Label><%= pos.role %></Label>
+          </Position>
+          <Activities>
+            <%= pos.summary %>
+          </Activities>
+          <Employer>
+            <Name><%= pos["who"] ? pos.who : "" %></Name>
+            <% if pos["address"] %>
+              <ContactInfo>
+                <Address>
+                  <Contact>
+                    <AddressLine><%= pos.address %></AddressLine>
+                    <!-- <Country>
+                         <Code></Code>
+                         <Label></Label>
+                         </Country> -->
+                  </Contact>
+                </Address>
+                <Website>
+                  <Contact><%= pos.website %></Contact>
+                </Website>
+              </ContactInfo>
+              <!--
+                   <Sector>
+                   <Code></Code>
+                   <Label></Label>
+                   </Sector>
+              -->
+            <% end %>
+          </Employer>
+        </WorkExperience>
+      <% end %>
+      <% if data.teaching and not data.teaching.empty? %>
+        <% data.teaching.each do |pos| %>
+          <WorkExperience>
             <Period>
+              <% if pos.from and pos.from != "" %>
                 <From <%= self.period_tod pos.from %>/>
-                <% if pos.till and pos.till != "" %>
+              <% end %>
+              <% if pos.till and pos.till != "" %>
                 <To <%= self.period_tod pos.till %>/>
-                <% else %>
+              <% else %>
                 <Current>true</Current>
-                <% end %>
+              <% end %>
             </Period>
             <!-- 
-            <Documentation>
-                <ReferenceTo idref="ATT_1"/>
-            </Documentation>
+                 <nation>
+                 <ReferenceTo idref="ATT_1"/>
+                 </Documentation>
             -->
             <Position>
-                <Label><%= pos.role %></Label>
+              <Label><%= pos.role %></Label>
             </Position>
             <Activities>
-                <%= pos.summary %>
+              <%= pos.summary %>
             </Activities>
             <Employer>
-                <Name><%= pos["who"] ? pos.who : "" %></Name>
-                <% if pos["address"] %>
+              <Name><%= "#{pos.who} #{pos['school'] ? pos.school : ''}" %></Name>
+              <% if pos["address"] %>
                 <ContactInfo>
-                    <Address>
-                        <Contact>
-                            <AddressLine><%= pos.address %></AddressLine>
-                            <!-- <Country>
-                                <Code></Code>
-                                <Label></Label>
-                                </Country> -->
-                        </Contact>
-                    </Address>
-                    <Website>
-                        <Contact><%= pos.website %></Contact>
-                    </Website>
+                  <Address>
+                    <Contact>
+                      <AddressLine><%= pos.address %></AddressLine>
+                      <!-- <Country>
+                           <Code></Code>
+                           <Label></Label>
+                           </Country> -->
+                    </Contact>
+                  </Address>
+                  <Website>
+                    <Contact><%= pos["website"] %></Contact>
+                  </Website>
                 </ContactInfo>
                 <!--
-                  <Sector>
-                    <Code></Code>
-                    <Label></Label>
-                  </Sector>
+                     <Sector>
+                     <Code></Code>
+                     <Label></Label>
+                     </Sector>
                 -->
-               <% end %>
+              <% end %>
             </Employer>
-        </WorkExperience>
+          </WorkExperience>
         <% end %>
-        <% if data.teaching and not data.teaching.empty? %>
-        <% data.teaching.each do |pos| %>
-            <WorkExperience>
-                <Period>
-                    <% if pos.from and pos.from != "" %>
-                        <From <%= self.period_tod pos.from %>/>
-                    <% end %>
-                    <% if pos.till and pos.till != "" %>
-                        <To <%= self.period_tod pos.till %>/>
-                    <% else %>
-                        <Current>true</Current>
-                    <% end %>
-                </Period>
-                <!-- 
-                     <nation>
-                     <ReferenceTo idref="ATT_1"/>
-                     </Documentation>
-                   -->
-                <Position>
-                    <Label><%= pos.role %></Label>
-                </Position>
-                <Activities>
-                    <%= pos.summary %>
-                </Activities>
-                <Employer>
-                    <Name><%= "#{pos.who} #{pos['school'] ? pos.school : ''}" %></Name>
-                    <% if pos["address"] %>
-                        <ContactInfo>
-                            <Address>
-                                <Contact>
-                                    <AddressLine><%= pos.address %></AddressLine>
-                                    <!-- <Country>
-                                         <Code></Code>
-                                         <Label></Label>
-                                         </Country> -->
-                                </Contact>
-                            </Address>
-                            <Website>
-                                <Contact><%= pos["website"] %></Contact>
-                            </Website>
-                        </ContactInfo>
-                        <!--
-                             <Sector>
-                             <Code></Code>
-                             <Label></Label>
-                             </Sector>
-                           -->
-                    <% end %>
-                </Employer>
-            </WorkExperience>
-        <% end %>
-        <% end %>
-        <% if data.volunteer and not data.volunteer.empty? %>
-            <% data.volunteer.each do |pos| %>
-                <WorkExperience>
-                    <% if pos["date"] %>
-                        <Period>
-                            <From <%= self.period_tod pos.date.strftime("%Y-%m-%d") %>/>
-                            <To <%= self.period_tod pos.date.strftime("%Y-%m-%d") %>/>
-                        </Period>
-                    <% elsif pos.from or (pos.till and pos.till != "") %>
-                        <Period>
-                            <% if pos.from %>
-                                <From <%= self.period_tod pos.from %>/>
-                            <% end %>
-                            <% if pos.till and pos.till != "" %>
-                                <To <%= self.period_tod pos.till %>/>
-                            <% else %>
-                                <Current>true</Current>
-                            <% end %>
-                        </Period>
-                    <% end %>
-                    <!-- 
-                         <ntation>
-                         <ReferenceTo idref="ATT_1"/>
-                         </Documentation>
-                       -->
-                    <Position>
-                        <Label><%= pos.role %></Label>
-                    </Position>
-                    <Activities>
-                        <%= pos.summary %>
-                    </Activities>
-                    <Employer>
-                        <Name><%= pos.who %></Name>
-                        <% if pos["address"] %>
-                            <ContactInfo>
-                                <Address>
-                                    <Contact>
-                                        <AddressLine><%= pos.address %></AddressLine>
-                                        <!-- <Country>
-                                             <Code></Code>
-                                             <Label></Label>
-                                             </Country> -->
-                                    </Contact>
-                                </Address>
-                                <Website>
-                                    <Contact><%= pos["website"] %></Contact>
-                                </Website>
-                            </ContactInfo>
-                            <!--
-                                 <Sector>
-                                 <Code></Code>
-                                 <Label></Label>
-                                 </Sector>
-                               -->
-                        <% end %>
-                    </Employer>
-                </WorkExperience>
+      <% end %>
+      <% if data.volunteer and not data.volunteer.empty? %>
+        <% data.volunteer.each do |pos| %>
+          <WorkExperience>
+            <% if pos["date"] %>
+              <Period>
+                <From <%= self.period_tod pos.date.strftime("%Y-%m-%d") %>/>
+                <To <%= self.period_tod pos.date.strftime("%Y-%m-%d") %>/>
+              </Period>
+            <% elsif pos.from or (pos.till and pos.till != "") %>
+              <Period>
+                <% if pos.from %>
+                  <From <%= self.period_tod pos.from %>/>
+                <% end %>
+                <% if pos.till and pos.till != "" %>
+                  <To <%= self.period_tod pos.till %>/>
+                <% else %>
+                  <Current>true</Current>
+                <% end %>
+              </Period>
             <% end %>
+            <!-- 
+                 <ntation>
+                 <ReferenceTo idref="ATT_1"/>
+                 </Documentation>
+            -->
+            <Position>
+              <Label><%= pos.role %></Label>
+            </Position>
+            <Activities>
+              <%= pos.summary %>
+            </Activities>
+            <Employer>
+              <Name><%= pos.who %></Name>
+              <% if pos["address"] %>
+                <ContactInfo>
+                  <Address>
+                    <Contact>
+                      <AddressLine><%= pos.address %></AddressLine>
+                      <!-- <Country>
+                           <Code></Code>
+                           <Label></Label>
+                           </Country> -->
+                    </Contact>
+                  </Address>
+                  <Website>
+                    <Contact><%= pos["website"] %></Contact>
+                  </Website>
+                </ContactInfo>
+                <!--
+                     <Sector>
+                     <Code></Code>
+                     <Label></Label>
+                     </Sector>
+                -->
+              <% end %>
+            </Employer>
+          </WorkExperience>
         <% end %>
+      <% end %>
     </WorkExperienceList>
     <% if data.education and not data.education.empty? %>
-    <EducationList>
+      <EducationList>
         <% data.education.select { |x| x.publish }.each do |edu| %>
-         <Education>
-             <Period>
-                 <% if edu.from and not edu.from == "" %>
-                     <From <%= self.period_tod edu.from %>/>
-                 <% end %>
-                 <% if edu.till and not edu.till == "" %>
-                     <To <%= self.period_tod edu.till %>/>
-                 <% end %>
-             </Period>
-             <!-- 
-                  <Documentation>
-                  <ReferenceTo idref="ATT_1"/>
-                  <ReferenceTo idref="ATT_2"/>
-                  </Documentation>
-                -->
-             <Title><%= edu.degree %></Title>
-             <Activities></Activities>
-             <Organisation>
-                 <Name><%= edu["school"] %></Name>
-                 <ContactInfo>
-                     <Address>
-                         <Contact>
-                             <AddressLine><%= edu.address %></AddressLine>
-                             <!-- <Country>
-                                  <Code>US</Code>
-                                  <Label>United States</Label>
-                                  </Country>
-                                -->
-                         </Contact>
-                     </Address>
-                 </ContactInfo>
-             </Organisation>
-         </Education>
+          <Education>
+            <Period>
+              <% if edu.from and not edu.from == "" %>
+                <From <%= self.period_tod edu.from %>/>
+              <% end %>
+              <% if edu.till and not edu.till == "" %>
+                <To <%= self.period_tod edu.till %>/>
+              <% end %>
+            </Period>
+            <!-- 
+                 <Documentation>
+                 <ReferenceTo idref="ATT_1"/>
+                 <ReferenceTo idref="ATT_2"/>
+                 </Documentation>
+            -->
+            <Title><%= edu.degree %></Title>
+            <Activities></Activities>
+            <Organisation>
+              <Name><%= edu["school"] %></Name>
+              <ContactInfo>
+                <Address>
+                  <Contact>
+                    <AddressLine><%= edu.address %></AddressLine>
+                    <!-- <Country>
+                         <Code>US</Code>
+                         <Label>United States</Label>
+                         </Country>
+                    -->
+                  </Contact>
+                </Address>
+              </ContactInfo>
+            </Organisation>
+          </Education>
         <% end %>
-    </EducationList>
+      </EducationList>
     <% end %>
     <Skills>
-        <% if data.languages %>
+      <% if data.languages %>
         <Linguistic>
-            <% if data.languages.mother_tongues and not data.languages.mother_tongues.empty? %>
+          <% if data.languages.mother_tongues and not data.languages.mother_tongues.empty? %>
             <MotherTongueList>
-                <% data.languages.mother_tongues.each do |mt| %>
+              <% data.languages.mother_tongues.each do |mt| %>
                 <MotherTongue>
-                    <Description>
-                        <Code><%= mt.code %></Code>
-                        <Label><% mt.language %></Label>
-                    </Description>
+                  <Description>
+                    <Code><%= mt.code %></Code>
+                    <Label><% mt.language %></Label>
+                  </Description>
                 </MotherTongue>
-                <% end %>
+              <% end %>
             </MotherTongueList>
-            <% end %>
-            <% if data.languages.foreign and not data.languages.foreign.empty? %>
+          <% end %>
+          <% if data.languages.foreign and not data.languages.foreign.empty? %>
             <ForeignLanguageList>
-                <% data.languages.foreign.each do |language| %>
+              <% data.languages.foreign.each do |language| %>
                 <ForeignLanguage>
-                    <Description>
-                        <Code><%= language.code %></Code>
-                        <Label><%= language.language %></Label>
-                    </Description>
-                    <ProficiencyLevel>
-                        <Listening>
-                            <%= language.listening.upcase %>
-                        </Listening>
-                        <Reading>
-                            <%= language.reading.upcase %>
-                        </Reading>
-                        <SpokenInteraction>
-                            <%= language.spoken_interaction.upcase %>
-                        </SpokenInteraction>
-                        <SpokenProduction>
-                            <%= language.spoken_production.upcase %>
-                        </SpokenProduction>
-                        <Writing>
-                            <%= language.writing.upcase %>
-                        </Writing>
-                    </ProficiencyLevel>
+                  <Description>
+                    <Code><%= language.code %></Code>
+                    <Label><%= language.language %></Label>
+                  </Description>
+                  <ProficiencyLevel>
+                    <Listening>
+                      <%= language.listening.upcase %>
+                    </Listening>
+                    <Reading>
+                      <%= language.reading.upcase %>
+                    </Reading>
+                    <SpokenInteraction>
+                      <%= language.spoken_interaction.upcase %>
+                    </SpokenInteraction>
+                    <SpokenProduction>
+                      <%= language.spoken_production.upcase %>
+                    </SpokenProduction>
+                    <Writing>
+                      <%= language.writing.upcase %>
+                    </Writing>
+                  </ProficiencyLevel>
                 </ForeignLanguage>
-                <% end %>
+              <% end %>
             </ForeignLanguageList>
-            <% end %>
+          <% end %>
         </Linguistic>
-        <% end %>
-        <!--
-        <Communication>
-            <Description></Description>
-            <Documentation></Documentation>
-        </Communication>
-        <Organisational>
-            <Description></Description>
-            <Documentation></Documentation>
-        </Organisational>
-        <JobRelated>
-            <Description></Description>
-            <Documentation></Documentation>
-        </JobRelated>
-        <Computer>
-            <Description></Description>
-            <ProficiencyLevel></ProficiencyLevel>
-            <VerifiedBy>
-                <Certificate><Title></Title></Certificate>
-            </VerifiedBy>
-            <Documentation></Documentation>
-        </Computer>
-        -->
-        <% if data.driving and not data.driving.empty? %>
+      <% end %>
+      <!--
+           <Communication>
+           <Description></Description>
+           <Documentation></Documentation>
+           </Communication>
+           <Organisational>
+           <Description></Description>
+           <Documentation></Documentation>
+           </Organisational>
+           <JobRelated>
+           <Description></Description>
+           <Documentation></Documentation>
+           </JobRelated>
+           <Computer>
+           <Description></Description>
+           <ProficiencyLevel></ProficiencyLevel>
+           <VerifiedBy>
+           <Certificate><Title></Title></Certificate>
+           </VerifiedBy>
+           <Documentation></Documentation>
+           </Computer>
+      -->
+      <% if data.driving and not data.driving.empty? %>
         <Driving>
-            <Description>
-                <% data.driving.each do |license| %>
-                <Licence><%= license.license %></Licence>
-                <% end %>
-            </Description>
+          <Description>
+            <% data.driving.each do |license| %>
+              <Licence><%= license.license %></Licence>
+            <% end %>
+          </Description>
         </Driving>
-        <% end %>
-        <Other>
-            <Description>
-                <% if data.interests and not data.interests.empty? %>
-                    &lt;ul&gt;
-                    <% data.interests do |x| %>
-                    &lt;li&gt;<%= "#{x.name || ""}: #{x.level || ""}, #{x.summary || ""}; " %>&lt;/li&gt;
-                    <% end %>
-                    &lt;/ul&gt;
-                <% end %>
-            </Description>
-        </Other>
+      <% end %>
+      <Other>
+        <Description>
+          <% if data.interests and not data.interests.empty? %>
+            &lt;ul&gt;
+            <% data.interests do |x| %>
+              &lt;li&gt;<%= "#{x.name || ""}: #{x.level || ""}, #{x.summary || ""}; " %>&lt;/li&gt;
+            <% end %>
+            &lt;/ul&gt;
+          <% end %>
+        </Description>
+      </Other>
     </Skills>
     <AchievementList>
-        <% if data.awards and not data.awards.empty? %>
+      <% if data.awards and not data.awards.empty? %>
         <% data.awards.each do |award| %>
-            <Achievement>
-                <Title>
-                    <Label><%= award.title %></Label>
-                </Title>
-                <Description>
-                    <%= award.summary %> 
-                    (<%= achievement.who %>, <%= achievement.where %>, <%= achievement.date %>)
-                </Description>
-            </Achievement>
-        <% end %>
-        <% end %>
-        <% if data.achievements and not data.achievements.empty? %>
-        <% data.achievements.each do |achievement| %>
-            <Achievement>
-                <Title>
-                    <Label><%= achievement.title %></Label>
-                </Title>
-                <Description>
-                    <%= achievement.summary %> 
-                    (<%= achievement.who %>, <%= achievement.where %>, <%= achievement.date %>)
-                </Description>
-            </Achievement>
-        <% end %>
-        <% end %>
-        <% if data.projects and not data.projects.empty? %>
-            <Achievement>
-                <Title>
-                    <Code>projects</Code>
-                    <Label>Projects</Label>
-                </Title>
-                <Description>
-                    &lt;ul&gt;
-                    <% data.projects.each do |x| %>
-                        &lt;/li&gt; <%= "#{x.name} (#{x.who}): #{x.role} (#{x.from}--#{x.till})" %> &lt;/li&gt;
-                    <% end %>
-                    &lt;/ul&gt;
-                </Description>
-            </Achievement>
-        <% end %>
-        <% if data.publications and not data.publications.empty? %>
-        <Achievement>
+          <Achievement>
             <Title>
-                <Code>publications</Code>
-                <Label>Publications</Label>
+              <Label><%= award.title %></Label>
             </Title>
             <Description>
-                &lt;ul&gt;
-                <% data.publications.each do |x| %>
-                    &lt;li&gt; <%= "#{x.title}, #{x.authors}, #{x.publisher}, #{x.date}" %> &lt;/li&gt;
-                <% end %>
-                &lt;/ul&gt;
+              <%= award.summary %> 
+              (<%= achievement.who %>, <%= achievement.where %>, <%= achievement.date %>)
             </Description>
-        </Achievement>
+          </Achievement>
         <% end %>
+      <% end %>
+      <% if data.achievements and not data.achievements.empty? %>
+        <% data.achievements.each do |achievement| %>
+          <Achievement>
+            <Title>
+              <Label><%= achievement.title %></Label>
+            </Title>
+            <Description>
+              <%= achievement.summary %> 
+              (<%= achievement.who %>, <%= achievement.where %>, <%= achievement.date %>)
+            </Description>
+          </Achievement>
+        <% end %>
+      <% end %>
+      <% if data.projects and not data.projects.empty? %>
+        <Achievement>
+          <Title>
+            <Code>projects</Code>
+            <Label>Projects</Label>
+          </Title>
+          <Description>
+            &lt;ul&gt;
+            <% data.projects.each do |x| %>
+              &lt;/li&gt; <%= "#{x.name} (#{x.who}): #{x.role} (#{x.from}--#{x.till})" %> &lt;/li&gt;
+            <% end %>
+            &lt;/ul&gt;
+          </Description>
+        </Achievement>
+      <% end %>
+      <% if data.publications and not data.publications.empty? %>
+        <Achievement>
+          <Title>
+            <Code>publications</Code>
+            <Label>Publications</Label>
+          </Title>
+          <Description>
+            &lt;ul&gt;
+            <% data.publications.each do |x| %>
+              &lt;li&gt; <%= "#{x.title}, #{x.authors}, #{x.publisher}, #{x.date}" %> &lt;/li&gt;
+            <% end %>
+            &lt;/ul&gt;
+          </Description>
+        </Achievement>
+      <% end %>
     </AchievementList>
     <Documentation>
     </Documentation>
-</LearnerInfo>
-<!--
-<AttachmentList>
-</AttachmentList>
--->
+  </LearnerInfo>
+  <!--
+       <AttachmentList>
+       </AttachmentList>
+  -->
 </SkillsPassport>
