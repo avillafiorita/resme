@@ -140,6 +140,12 @@ module Resme
       end
     end
 
+    def self.view(opts, argv)
+      format = opts[:template] == "europass" ? "xml" : opts[:template]
+      template = File.join(File.dirname(__FILE__), "/../templates/resume.#{format}.erb")
+      puts File.read template
+    end
+
     def self.generate(opts, argv)
       format = opts[:to] == "europass" ? "xml" : opts[:to]
       output = opts[:output] || "resume-#{Date.today}.#{format}"

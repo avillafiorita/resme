@@ -217,6 +217,35 @@ module Resme
       }
     end
 
+    def self.view_opts
+      opts = OptionParser.new do |o|
+        o.banner = "view --template FORMAT # Print template used for format"
+        o.on("-t", "--template FORMAT", String, "View template for FORMAT")
+      end
+
+      help = <<-EOS
+        NAME
+          #{opts.banner}
+
+        SYNOPSYS
+          #{opts.to_s}
+
+        DESCRIPTION
+          Print template used for FORMAT
+
+        EXAMPLES
+          resme view --template md
+      EOS
+      
+      {
+        view: {
+          name: :view,
+          options: opts,
+          help: help.gsub("        ", "")
+        }
+      }
+    end
+
     def self.generate_opts
       opts = OptionParser.new do |o|
         o.banner = "generate [options] resume.yml ... # output resume"
