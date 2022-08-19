@@ -4,10 +4,10 @@ Gem::Specification.new do |spec|
   spec.name          = "resme"
   spec.version       = Resme::VERSION
   spec.authors       = ["Adolfo Villafiorita"]
-  spec.email         = ["adolfo.villafiorita@ict4g.net"]
+  spec.email         = ["adolfo@shair.tech"]
 
   spec.summary       = %q{Write a resume in YML and export to various formats, including json and europass XML.}
-  spec.description   = %q{This gem allows you to manage your resume in yaml, while providing different backends for publishings.  Supported backends: Org Mode, Markdown, JSON resume, and Europass XML.  Custom templates can be defined using ERB.}
+  spec.description   = %q{This gem allows you to manage your resume in YAML, while providing different backends for publishings.  Supported backends: Org Mode, Markdown, JSON resume, and Europass XML.  Custom templates can be defined using ERB.}
   spec.homepage      = "http://github.io/avillafiorita/resme"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "http://github.io/avillafiorita/resme"
-  spec.metadata["changelog_uri"] = "http://github.io/avillafiorita/resme"
+  spec.metadata["changelog_uri"] = "http://github.io/avillafiorita/resme/CHANGELOG.org"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.

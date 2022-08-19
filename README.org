@@ -64,18 +64,33 @@ Supported formats include:
 - =json=: JSON format (https://jsonresume.org/)
 
 If you are not satisfied with the provided templates, you can write
-your own (see below).  In this case, however, =resme= is mainly an ERB
-renderer.
+your own (see below).
 
-Remarks:
+Notice that you can specify more than one YML file in input. This allows you to
+store data about your resume in different files, if you like to do so
+(e.g., work experiences could be in one file and talks in another).
+The YML files are merged before processing them.
 
-- You can specify more than one YML file in input. This allows you to
-  store data about your resume in different files, if you like to do so
-  (e.g., work experiences could be in one file and talks in another).
-  The YML files are merged before processing them.
-- The output filename is optional. If you do not specify one, the resume
-  is generated to =resume-YYYY.MM.DD.format=, where =YYYY-MM-DD= is
-  today's date and =format= is the chosen output format
+Full syntax:
+
+#+begin_src shell :results raw output :wrap example
+resme help
+#+end_src
+
+#+RESULTS:
+#+begin_example
+resme command [options] [args]
+Available commands:
+  view --template FORMAT # Print template used for format
+  console # enter the console
+  man # print resme manual page
+  help [command] # print command usage
+  init [options] # generate an empty resume.yml file
+  check resume.yml # Check syntax of resume.yml
+  list resume.yml # List main sections in resume.yml
+  version # print version information
+  generate [options] resume.yml ... # output resume
+#+end_example
 
 ** Checking validity
    :PROPERTIES:
@@ -110,24 +125,32 @@ The third and the forth format allows you to enter "partial" dates
    :END:
 
 The resumes are generated from the YML matter using ERB templates. The
-provided output formats should support different back ends (Org Mode
-and Markdown easily allow for generation of PDFs, HTML, and ODT, to
-mention a few).
+provided output formats should support different back ends.  Org Mode
+and Markdown, for instance, easily allow for generation of PDFs, HTML,
+and ODT, to mention a few.
 
-However, if you want, you can define your own templates.  All the data
-in the resume is made available in the =data= variable.  Thus, for
-instance, the following code snippets generates a list of all the work
-experiences:
+However, if you want, you can define your own templates.
+
+Use the command =view= to print one of the templates used by =resme=
+and build from that.
+
+#+begin_example
+resme view --template md
+#+end_example
+
+Notice that all the data in the resume is made available in the =data=
+variable.  Thus, for instance, the following code snippets generates a
+list of all the work experiences:
 
 #+BEGIN_EXAMPLE
-  <% data.work each do |exp| %>
-  - <%= exp.who %>
-    From: <%=  exp.from %> till: <%= exp.till %>
+  <% data["work"] each do |exp| %>
+  - <%= exp["who"] %>
+    From: <%=  exp["from"] %> till: <%= exp["till"] %>
   <% end %>
 #+END_EXAMPLE
 
-To specify your own ERB template use the option =-e= (=--erb=). Thus,
-for instance:
+To specify your own ERB template to build your resume use the option
+=-e= (=--erb=). Thus, for instance:
 
 #+BEGIN_EXAMPLE
   $ resme render -e template.md.erb [-o output_filename] file.yaml ...
@@ -199,6 +222,10 @@ https://github.com/avillafiorita/resme.
 
 The gem is available as open source under the terms of the
 [[http://opensource.org/licenses/MIT][MIT License]].
+
+** Change Log
+
+In =doc/changelog.org=
 
 ** Roadmap
    :PROPERTIES:

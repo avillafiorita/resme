@@ -1,0 +1,19 @@
+#+TITLE: CHANGELOG
+#+AUTHOR: Adolfo Villafiorita
+
+* Version 1.5.0
+  - [user] New command =view= allows to view the template used
+    for generating a resume in a specific format
+  - [user] Check command is now based on ClassyHash
+  - [code] Various changes to the code
+
+* Version 1.4.0
+  - [user] New option =--skip= allows to skip some top-level sections.
+    You mileage might vary, as some formats might require the
+    information you are trying to skip
+  - [user] New command =generate= is now used to generate the Resume
+    in different formats.
+  - [user] New option =--erb= allows to specify a custom template for
+    generating the resume. Use it in conjunction with =view= (released
+    in version 1.5.0) to jump-start your layout.
+  
