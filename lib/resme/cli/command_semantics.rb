@@ -100,16 +100,16 @@ module Resme
         exit 1
       end
         
-      errors = ResumeStructureValidator.validate(document)
-      # show errors
-      if errors.size > 0
+      begin
+        errors = ResumeStructureValidator.validate(document)
+      rescue Exception => ex
         puts "The files #{argv[0]} does not validate"
-        errors.each do |error|
+        ex.entries.each do |error|
           puts "#{error[:full_path]}: #{error[:message]}"
         end
-      else
-        puts "The file #{argv[0]} has a valid structure."
+        exit 1
       end
+      puts "The file #{argv[0]} has a valid structure."
     end
 
     def self.init(opts, argv)
