@@ -1,8 +1,8 @@
-# <%= full_name data %>, <%= data.basics&.title %>
+# <%= full_name data %>, <%= data["basics"]["title"] %>
 
 <%
-addresses = (data["addresses"] || []).map { |x| "**#{x.label}**: #{x.street}, #{x.zip_code} #{x.city}" }
-presence = (data["contacts"] || []).map { |x| "**#{x.label}:** #{x.value}" } + (data["web_presence"] || []).map { |x| "<" + x.value + ">" }
+addresses = (data["addresses"] || []).map { |x| "**#{x['label']}**: #{x['street']}, #{x['zip_code']} #{x['city']}" }
+presence = (data["contacts"] || []).map { |x| "**#{x['label']}:** #{x['value']}" } + (data["web_presence"] || []).map { |x| "<" + x["value"] + ">" }
 -%>
 <%= presence.map { |x| "* #{x}" }.join("\n") %>
 <%= addresses.map { |x| "* #{x}" }.join("\n") %>
@@ -10,21 +10,21 @@ presence = (data["contacts"] || []).map { |x| "**#{x.label}:** #{x.value}" } + (
 <% if data["summary"] -%>
 ## Summary
 
-<%= reflow_to_string data.summary, 78 -%>
+<%= reflow_to_string data["summary"], 78 -%>
 <% end -%>
 
 <% if data["skills"] -%>
 ## Skills
 
-<% (data.skills || []).each do |item| -%>
-- **<%= item.name %>:** <%= item.level %>
+<% (data["skills"] || []).each do |item| -%>
+- **<%= item["name"] %>:** <%= item["level"] %>
 <% end -%>
 <% end -%>
 
 <% if data["work"] -%>
 ## Work Experience
 
-<% (data.work || []).each do |item| -%>
+<% (data["work"] || []).each do |item| -%>
 <%= itemize item -%>
 <% end -%>
 <% end -%>
@@ -32,7 +32,7 @@ presence = (data["contacts"] || []).map { |x| "**#{x.label}:** #{x.value}" } + (
 <% if data["teaching"] -%>
 ## Teaching
 
-<% (data.teaching || []).each do |item| -%>
+<% (data["teaching"] || []).each do |item| -%>
 <%= itemize item, ["subject", "role"] -%>
 <% end -%>
 <% end -%>
@@ -40,7 +40,7 @@ presence = (data["contacts"] || []).map { |x| "**#{x.label}:** #{x.value}" } + (
 <% if data["projects"] -%>
 ## Projects
 
-<% (data.projects || []).each do |item| -%>
+<% (data["projects"] || []).each do |item| -%>
 <%= itemize item, ["name", "role"] -%>
 <% end -%>
 <% end -%>
@@ -48,7 +48,7 @@ presence = (data["contacts"] || []).map { |x| "**#{x.label}:** #{x.value}" } + (
 <% if data["other"] -%>
 ## Other Initiatives
 
-<% (data.other || []).each do |item| -%>
+<% (data["other"] || []).each do |item| -%>
 <%= itemize item -%>
 <% end -%>
 <% end -%>
@@ -56,16 +56,16 @@ presence = (data["contacts"] || []).map { |x| "**#{x.label}:** #{x.value}" } + (
 <% if data["committees"] -%>
 ## Committees
 
-<% (data.committees || []).each do |item| -%>
-- <%= item.role %> (<%= item.url %>)
-  <%= item.editions %>
+<% (data["committees"] || []).each do |item| -%>
+- <%= item["role"] %> (<%= item["url"] %>)
+  <%= item["editions"] %>
 <% end -%>
 <% end -%>
 
 <% if data["volunteer"] -%>
 ## Volunteer
 
-<% (data.volunteer || []).each do |item| -%>
+<% (data["volunteer"] || []).each do |item| -%>
 <%= itemize item -%>
 <% end -%>
 <% end -%>
@@ -73,24 +73,24 @@ presence = (data["contacts"] || []).map { |x| "**#{x.label}:** #{x.value}" } + (
 <% if data["publications"] -%>
 ## Publications
 
-<% (data.publications || []).each do |item| -%>
-- <%= item.authors %>, *"<%= item.title %>"* <%= item.publisher %>, <%= item.date %>
+<% (data["publications"] || []).each do |item| -%>
+- <%= item["authors"] %>, *"<%= item["title"] %>"* <%= item["publisher"] %>, <%= item["date"] %>
 <% end -%>
 <% end -%>
 
 <% if data["talks"] -%>
 ## Talks
 
-<% (data.talks || []).each do |item| -%>
-- *<%= item.title %>*
-  <%= item.venue %>, <%= item.date %>
+<% (data["talks"] || []).each do |item| -%>
+- *<%= item["title"] %>*
+  <%= item["venue"] %>, <%= item["date"] %>
 <% end -%>
 <% end -%>
 
 <% if data["visits"] -%>
 ## Visits
 
-<% (data.visits || []).each do |item| -%>
+<% (data["visits"] || []).each do |item| -%>
 <%= itemize item -%>
 <% end -%>
 <% end -%>
@@ -98,10 +98,10 @@ presence = (data["contacts"] || []).map { |x| "**#{x.label}:** #{x.value}" } + (
 <% if data["education"] -%>
 ## Education
 
-<% data.education.select { |x| x.publish }.each do |school| -%>
+<% data["education"].select { |x| x["publish"] }.each do |school| -%>
 <%= year(school["till"]) %>
-: <%= [school["degree"], school.school].join(", ") %>
-  <%= school.address if school.address %>
+: <%= [school["degree"], school["school"]].join(", ") %>
+  <%= school["address"] if school["address"] %>
 <% end -%>
 <% end -%>
 
@@ -119,31 +119,31 @@ presence = (data["contacts"] || []).map { |x| "**#{x.label}:** #{x.value}" } + (
 <% if data["software"] %>
 ## Software
 
-<% (data.software || []).each do |item| -%>
-- <%= item.title %> (<%= item.role %>)
-  <%= item.url %>
+<% (data["software"] || []).each do |item| -%>
+- <%= item["title"] %> (<%= item["role"] %>)
+  <%= item["url"] %>
 <% end -%>
 <% end -%>
 
 <% if data["interests"] -%>
 ## Interests
 
-<% (data.interests || []).each do |item| -%>
-- <%= item.name %> <%= reflow_to_string item.summary, 72, "  " %>
+<% (data["interests"] || []).each do |item| -%>
+- <%= item["name"] %> <%= reflow_to_string item["summary"], 72, "  " %>
 <% end -%>
 <% end -%>
 
 <% if data["languages"] %>
 ## Languages
 
-<% if data["languages"] and data.languages["mother_tongues"] -%>
-Mother Tongue(s): <%= data.languages.mother_tongues.map { |x| x.language }.join(",") %>
+<% if data["languages"] and data["languages"]["mother_tongues"] -%>
+Mother Tongue(s): <%= data["languages"]["mother_tongues"].map { |x| x["language"] }.join(",") %>
 <% end -%>
 
-<% if data["languages"] and data.languages["foreign"] -%>
+<% if data["languages"] and data["languages"]["foreign"] -%>
 Other Language(s):
-<% data.languages.foreign.each do |x| -%>
-    - <%= x.language %>: <%= x.level %>
+<% data["languages"]["foreign"].each do |x| -%>
+    - <%= x["language"] %>: <%= x["level"] %>
 <% end -%>
 <% end -%>
 <% end -%>
@@ -151,9 +151,9 @@ Other Language(s):
 <% if data["references"] %>
 ## References
 
-<% (data.references || []).each do |item| -%>
-<%= item.name %>:
-<%= reflow_to_string item.reference, 72, "  " %>
+<% (data["references"] || []).each do |item| -%>
+<%= item["name"] %>:
+<%= reflow_to_string item["reference"], 72, "  " %>
 <% end -%>
 <% end -%>
 

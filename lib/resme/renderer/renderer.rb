@@ -10,7 +10,7 @@ def clean string
 end
 
 def full_name data
-  [data.basics["first_name"], data.basics["middle_name"], data.basics["last_name"]].join(" ")
+  [data["basics"]["first_name"], data["basics"]["middle_name"], data["basics"]["last_name"]].join(" ")
 end
 
 # break a string into substrings of length chars breaking at spaces
@@ -59,13 +59,13 @@ end
 # abstract dates at the year level, taking care of periods if from and
 # till are in two different years
 def period entry
-  if entry["date"] then
+  if entry["date"]
     "#{year entry.date}"
   else
-    from_year = entry["from"] ? year(entry.from.to_s) : nil
-    till_year = entry["till"] ? year(entry.till.to_s) : nil
+    from_year = entry["from"] ? year(entry["from"].to_s) : nil
+    till_year = entry["till"] ? year(entry["till"].to_s) : nil
 
-    if from_year and till_year and from_year == till_year then
+    if from_year && till_year && from_year == till_year
       from_year
     else
       "#{from_year} -- #{till_year ? till_year : "today"}"
@@ -132,49 +132,3 @@ def has_day input
     input.size == 10
   end
 end
-
-# Access hash keys like they were class methods (hash["key"] -> hash.key) and
-# report errors if key is missing
-class Hash
-  def method_missing(m)
-    key = m.to_s
-
-    # we put a bit of info about the top level structure of a resume to avoid
-    # extra-long error messages I don't want to print detailed information
-    # about top-level entries missing in the resume
-    top_level_entries = %w[
-      contacts addresses web_presence summary work teaching projects other
-      committees volunteer visits education publications talks awards
-      achievements software skills languages driving interests references
-    ]
-
-    # error: nil value
-    if self.has_key? key and self[key] == nil
-      $stderr.puts "[W] The value of key '#{key}' is nil in the following entry:"
-
-      unless top_level_entries.include?(key)
-        # $stderr.puts self.to_s
-        self.keys.each do |k|
-          $stderr.puts "  #{k}: #{self[k]}"
-        end
-        $stderr.puts ""
-      end
-    end
-
-    return self[key] if self.has_key? key
-
-    # we get here if the key is not found we report an error, return
-    # "" and continue the actual mileage might vary
-
-    $stderr.puts "[E] Key '#{key}' not found in the following entry:"
-    unless top_level_entries.include?(key)
-      self.keys.each do |k|
-        $stderr.puts "  #{k}: #{self[k]}"
-      end
-      $stderr.puts ""
-    end
-    
-    return ""
-  end
-end
-

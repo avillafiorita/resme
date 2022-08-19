@@ -1,5 +1,6 @@
 <%
-email = (data["contacts"] || []).select { |x| x.label == "email" }.first
+# provide sensible defaults, so that hash and array indexing won't fail on nil
+email = (data["contacts"] || []).select { |x| x.label == "email" }.first || {}
 phones = (data["contacts"] || []).select { |x|
   ["phone", "mobile", "cell"].include?(x.label)
 }
@@ -36,42 +37,42 @@ end
       <PersonName>
         <Title>
           <Code>dr</Code>
-          <Label><%= data.basics&.title %></Label>
+          <Label><%= data["basics"]["title"] %></Label>
         </Title>
-        <FirstName><%= data.basics.first_name %></FirstName>
-        <Surname><%= data.basics.last_name %></Surname>
+        <FirstName><%= data["basics"]["first_name"] %></FirstName>
+        <Surname><%= data["basics"]["last_name"] %></Surname>
       </PersonName>
       <ContactInfo>
         <Address>
           <Contact>
-            <AddressLine><%= address.street %></AddressLine>
-            <PostalCode><%= address.zip_code %></PostalCode>
-            <Municipality><%= address.city %></Municipality>
+            <AddressLine><%= address["street"] %></AddressLine>
+            <PostalCode><%= address["zip_code"] %></PostalCode>
+            <Municipality><%= address["city"] %></Municipality>
             <Country>
-              <Code><%= address.country[0..1]&.upcase %></Code>
-              <Label><%= address.country %></Label>
+              <Code><%= (address["country"] || "")[0..1]&.upcase %></Code>
+              <Label><%= address["country"] %></Label>
             </Country>
           </Contact>
         </Address>
         <Email>
-          <Contact><%= email&.value %></Contact>
+          <Contact><%= email["value"] %></Contact>
         </Email>
         <% if phones %>
           <TelephoneList>
             <% phones.each do |phone| %>
               <Telephone>
-                <Contact><%= phone.value %></Contact>
+                <Contact><%= phone["value"] %></Contact>
                 <Use>
-                  <Code><%= phone.label %></Code>
-                  <Label><%= phone.value %></Label>
+                  <Code><%= phone["label"] %></Code>
+                  <Label><%= phone["value"] %></Label>
                 </Use>
               </Telephone>
             <% end %>
           </TelephoneList>
         <% end %>
-        <% if data.web_presence and not data.web_presence.empty? %>
+        <% if data["web_presence"] && !data["web_presence"].empty? %>
           <WebsiteList>
-            <% data.web_presence.each do |web| %>
+            <% data["web_presence"].each do |web| %>
               <Website>
                 <Contact><%= web.value %></Contact>
                 <Use>
@@ -82,7 +83,7 @@ end
             <% end %>
           </WebsiteList>
         <% end %>
-        <% if messaging and not messaging.empty? %>
+        <% if messaging && !messaging.empty? %>
           <InstantMessagingList>
             <% messaging.each do |im| %>
               <InstantMessaging>
@@ -100,21 +101,21 @@ end
         </ContactMethodList>
       </ContactInfo>
       <Demographics>
-        <% if data.basics.birthdate %>
-          <Birthdate day="---<%= "%02d" % data.basics.birthdate.day %>"
-                     month="--<%= "%02d" % data.basics.birthdate.month %>"
-                     year="<%= data.basics.birthdate.year %>" />
+        <% if data["basics"]["birthdate"] %>
+          <Birthdate day="---<%= "%02d" % data["basics"]["birthdate"].day %>"
+                     month="--<%= "%02d" % data["basics"]["birthdate"].month %>"
+                     year="<%= data["basics"]["birthdate"].year %>" />
         <% end %>
         <%# ["gender"] in place of .gender, so that the code does not complain about gender not being defined (being nil) %>
-        <% if data.basics["gender"] == "M" or data.basics["gender"] == "F" %>
+        <% if data["basics"]["gender"] == "M" or data["basics"]["gender"] == "F" %>
           <Gender>
-            <Code><%= data.basics.gender %></Code>
-            <Label><%= data.basics.gender == "M" ? "Male" : "Female" %></Label>
+            <Code><%= data["basics"]["gender"] %></Code>
+            <Label><%= data["basics"]["gender"] == "M" ? "Male" : "Female" %></Label>
           </Gender>
         <% end %>
         <NationalityList>
           <Nationality>
-            <Label><%= data.basics&.nationality %></Label>
+            <Label><%= data["basics"]["nationality"] %></Label>
           </Nationality>
         </NationalityList>
         <!--
@@ -142,9 +143,9 @@ end
       <% (data["work"] || []).each do |pos| %>
         <WorkExperience>
           <Period>
-            <From <%= self.period_tod pos.from %>/>
+            <From <%= self.period_tod pos["from"] %>/>
             <% if pos.till and pos.till != "" %>
-              <To <%= self.period_tod pos.till %>/>
+              <To <%= self.period_tod pos["till"] %>/>
             <% else %>
               <Current>true</Current>
             <% end %>
@@ -155,18 +156,18 @@ end
                </Documentation>
           -->
           <Position>
-            <Label><%= pos.role %></Label>
+            <Label><%= pos["role"] %></Label>
           </Position>
           <Activities>
-            <%= pos.summary %>
+            <%= pos["summary"] %>
           </Activities>
           <Employer>
-            <Name><%= pos["who"] ? pos.who : "" %></Name>
+            <Name><%= pos["who"] ? pos["who"] : "" %></Name>
             <% if pos["address"] %>
               <ContactInfo>
                 <Address>
                   <Contact>
-                    <AddressLine><%= pos.address %></AddressLine>
+                    <AddressLine><%= pos["address"] %></AddressLine>
                     <!-- <Country>
                          <Code></Code>
                          <Label></Label>
@@ -174,7 +175,7 @@ end
                   </Contact>
                 </Address>
                 <Website>
-                  <Contact><%= pos.website %></Contact>
+                  <Contact><%= pos["website"] %></Contact>
                 </Website>
               </ContactInfo>
               <!--
@@ -187,15 +188,15 @@ end
           </Employer>
         </WorkExperience>
       <% end %>
-      <% if data["teaching"] and not data.teaching.empty? %>
-        <% data.teaching.each do |pos| %>
+      <% if data["teaching"] && !data["teaching"].empty? %>
+        <% data["teaching"].each do |pos| %>
           <WorkExperience>
             <Period>
-              <% if pos.from and pos.from != "" %>
-                <From <%= self.period_tod pos.from %>/>
+              <% if pos["from"] && pos["from"] != "" %>
+                <From <%= self.period_tod pos["from"] %>/>
               <% end %>
-              <% if pos.till and pos.till != "" %>
-                <To <%= self.period_tod pos.till %>/>
+              <% if pos["till"] and pos["till"] != "" %>
+                <To <%= self.period_tod pos["till"] %>/>
               <% else %>
                 <Current>true</Current>
               <% end %>
@@ -206,18 +207,18 @@ end
                  </Documentation>
             -->
             <Position>
-              <Label><%= pos.role %></Label>
+              <Label><%= pos["role"] %></Label>
             </Position>
             <Activities>
-              <%= pos.summary %>
+              <%= pos["summary"] %>
             </Activities>
             <Employer>
-              <Name><%= "#{pos.who} #{pos['school'] ? pos.school : ''}" %></Name>
+              <Name><%= "#{pos['who']} #{pos['school'] ? pos['school'] : ''}" %></Name>
               <% if pos["address"] %>
                 <ContactInfo>
                   <Address>
                     <Contact>
-                      <AddressLine><%= pos.address %></AddressLine>
+                      <AddressLine><%= pos.["address"] %></AddressLine>
                       <!-- <Country>
                            <Code></Code>
                            <Label></Label>
@@ -239,21 +240,21 @@ end
           </WorkExperience>
         <% end %>
       <% end %>
-      <% if data["volunteer"] and not data.volunteer.empty? %>
-        <% data.volunteer.each do |pos| %>
+      <% if data["volunteer"] && !data["volunteer"].empty? %>
+        <% data["volunteer"].each do |pos| %>
           <WorkExperience>
             <% if pos["date"] %>
               <Period>
-                <From <%= self.period_tod pos.date.strftime("%Y-%m-%d") %>/>
-                <To <%= self.period_tod pos.date.strftime("%Y-%m-%d") %>/>
+                <From <%= self.period_tod pos["date"].strftime("%Y-%m-%d") %>/>
+                <To <%= self.period_tod pos["date"].strftime("%Y-%m-%d") %>/>
               </Period>
-            <% elsif pos.from or (pos.till and pos.till != "") %>
+            <% elsif pos["from"] or (pos["till"] and pos["till"] != "") %>
               <Period>
-                <% if pos.from %>
-                  <From <%= self.period_tod pos.from %>/>
+                <% if pos["from"] %>
+                  <From <%= self.period_tod pos["from"] %>/>
                 <% end %>
-                <% if pos.till and pos.till != "" %>
-                  <To <%= self.period_tod pos.till %>/>
+                <% if pos["till"] and pos["till"] != "" %>
+                  <To <%= self.period_tod pos["till"] %>/>
                 <% else %>
                   <Current>true</Current>
                 <% end %>
@@ -265,18 +266,18 @@ end
                  </Documentation>
             -->
             <Position>
-              <Label><%= pos.role %></Label>
+              <Label><%= pos["role"] %></Label>
             </Position>
             <Activities>
-              <%= pos.summary %>
+              <%= pos["summary"] %>
             </Activities>
             <Employer>
-              <Name><%= pos.who %></Name>
+              <Name><%= pos["who"] %></Name>
               <% if pos["address"] %>
                 <ContactInfo>
                   <Address>
                     <Contact>
-                      <AddressLine><%= pos.address %></AddressLine>
+                      <AddressLine><%= pos["address"] %></AddressLine>
                       <!-- <Country>
                            <Code></Code>
                            <Label></Label>
@@ -299,16 +300,16 @@ end
         <% end %>
       <% end %>
     </WorkExperienceList>
-    <% if data["education"] and not data.education.empty? %>
+    <% if data["education"] && !data["education"].empty? %>
       <EducationList>
-        <% data.education.select { |x| x.publish }.each do |edu| %>
+        <% data["education"].select { |x| x["publish"] }.each do |edu| %>
           <Education>
             <Period>
-              <% if edu.from and not edu.from == "" %>
-                <From <%= self.period_tod edu.from %>/>
+              <% if edu["from"] && !edu["from"] == "" %>
+                <From <%= self.period_tod edu["from"] %>/>
               <% end %>
-              <% if edu.till and not edu.till == "" %>
-                <To <%= self.period_tod edu.till %>/>
+              <% if edu["till"] && !edu["till"] == "" %>
+                <To <%= self.period_tod edu["till"] %>/>
               <% end %>
             </Period>
             <!-- 
@@ -317,14 +318,14 @@ end
                  <ReferenceTo idref="ATT_2"/>
                  </Documentation>
             -->
-            <Title><%= edu.degree %></Title>
+            <Title><%= edu["degree"] %></Title>
             <Activities></Activities>
             <Organisation>
               <Name><%= edu["school"] %></Name>
               <ContactInfo>
                 <Address>
                   <Contact>
-                    <AddressLine><%= edu.address %></AddressLine>
+                    <AddressLine><%= edu["address"] %></AddressLine>
                     <!-- <Country>
                          <Code>US</Code>
                          <Label>United States</Label>
@@ -341,41 +342,41 @@ end
     <Skills>
       <% if data["languages"] %>
         <Linguistic>
-          <% if data.languages.mother_tongues and not data.languages.mother_tongues.empty? %>
+          <% if data["languages"]["mother_tongues"] && !data["languages"]["mother_tongues"].empty? %>
             <MotherTongueList>
-              <% data.languages.mother_tongues.each do |mt| %>
+              <% data["languages"]["mother_tongues"].each do |mt| %>
                 <MotherTongue>
                   <Description>
-                    <Code><%= mt.code %></Code>
-                    <Label><% mt.language %></Label>
+                    <Code><%= mt["code"] %></Code>
+                    <Label><% mt["language"] %></Label>
                   </Description>
                 </MotherTongue>
               <% end %>
             </MotherTongueList>
           <% end %>
-          <% if data.languages.foreign and not data.languages.foreign.empty? %>
+          <% if data["languages"]["foreign"] && !data["languages"]["foreign"].empty? %>
             <ForeignLanguageList>
-              <% data.languages.foreign.each do |language| %>
+              <% data["languages"]["foreign"].each do |language| %>
                 <ForeignLanguage>
                   <Description>
-                    <Code><%= language.code %></Code>
-                    <Label><%= language.language %></Label>
+                    <Code><%= language["code"] %></Code>
+                    <Label><%= language["language"] %></Label>
                   </Description>
                   <ProficiencyLevel>
                     <Listening>
-                      <%= language.listening.upcase %>
+                      <%= language["listening"].upcase %>
                     </Listening>
                     <Reading>
-                      <%= language.reading.upcase %>
+                      <%= language["reading"].upcase %>
                     </Reading>
                     <SpokenInteraction>
-                      <%= language.spoken_interaction.upcase %>
+                      <%= language["spoken_interaction"].upcase %>
                     </SpokenInteraction>
                     <SpokenProduction>
-                      <%= language.spoken_production.upcase %>
+                      <%= language["spoken_production"].upcase %>
                     </SpokenProduction>
                     <Writing>
-                      <%= language.writing.upcase %>
+                      <%= language["writing"].upcase %>
                     </Writing>
                   </ProficiencyLevel>
                 </ForeignLanguage>
@@ -406,21 +407,21 @@ end
            <Documentation></Documentation>
            </Computer>
       -->
-      <% if data["driving"] and not data.driving.empty? %>
+      <% if data["driving"] && !data["driving"].empty? %>
         <Driving>
           <Description>
-            <% data.driving.each do |license| %>
-              <Licence><%= license.license %></Licence>
+            <% data["driving"].each do |license| %>
+              <Licence><%= license["license"] %></Licence>
             <% end %>
           </Description>
         </Driving>
       <% end %>
       <Other>
         <Description>
-          <% if data["interests"] and not data.interests.empty? %>
+          <% if data["interests"] && !data["interests"].empty? %>
             &lt;ul&gt;
-            <% data.interests do |x| %>
-              &lt;li&gt;<%= "#{x.name || ""}: #{x.level || ""}, #{x.summary || ""}; " %>&lt;/li&gt;
+            <% data["interests"] do |x| %>
+              &lt;li&gt;<%= "#{x['name'] || ""}: #{x['level'] || ""}, #{x['summary'] || ""}; " %>&lt;/li&gt;
             <% end %>
             &lt;/ul&gt;
           <% end %>
@@ -428,33 +429,33 @@ end
       </Other>
     </Skills>
     <AchievementList>
-      <% if data["awards"] and not data.awards.empty? %>
-        <% data.awards.each do |award| %>
+      <% if data["awards"] && !data["awards"].empty? %>
+        <% data["awards"].each do |award| %>
           <Achievement>
             <Title>
-              <Label><%= award.title %></Label>
+              <Label><%= award["title"] %></Label>
             </Title>
             <Description>
-              <%= award.summary %> 
-              (<%= achievement.who %>, <%= achievement.where %>, <%= achievement.date %>)
+              <%= award["summary"] %> 
+              (<%= award["who"] %>, <%= award["where"] %>, <%= award["date"] %>)
             </Description>
           </Achievement>
         <% end %>
       <% end %>
-      <% if data["achievements"] and not data.achievements.empty? %>
-        <% data.achievements.each do |achievement| %>
+      <% if data["achievements"] && !data["achievements"].empty? %>
+        <% data["achievements"].each do |achievement| %>
           <Achievement>
             <Title>
-              <Label><%= achievement.title %></Label>
+              <Label><%= achievement["title"] %></Label>
             </Title>
             <Description>
-              <%= achievement.summary %> 
-              (<%= achievement.who %>, <%= achievement.where %>, <%= achievement.date %>)
+              <%= achievement["summary"] %> 
+              (<%= achievement["who"] %>, <%= achievement["where"] %>, <%= achievement["date"] %>)
             </Description>
           </Achievement>
         <% end %>
       <% end %>
-      <% if data["projects"] and not data.projects.empty? %>
+      <% if data["projects"] && !data["projects"].empty? %>
         <Achievement>
           <Title>
             <Code>projects</Code>
@@ -462,14 +463,14 @@ end
           </Title>
           <Description>
             &lt;ul&gt;
-            <% data.projects.each do |x| %>
-              &lt;/li&gt; <%= "#{x.name} (#{x.who}): #{x.role} (#{x.from}--#{x.till})" %> &lt;/li&gt;
+            <% data["projects"].each do |x| %>
+              &lt;/li&gt; <%= "#{x['name']} (#{x['who']}): #{x['role']} (#{x['from']}--#{x['till']})" %> &lt;/li&gt;
             <% end %>
             &lt;/ul&gt;
           </Description>
         </Achievement>
       <% end %>
-      <% if data["publications"] and not data.publications.empty? %>
+      <% if data["publications"] && !data["publications"].empty? %>
         <Achievement>
           <Title>
             <Code>publications</Code>
@@ -477,8 +478,8 @@ end
           </Title>
           <Description>
             &lt;ul&gt;
-            <% data.publications.each do |x| %>
-              &lt;li&gt; <%= "#{x.title}, #{x.authors}, #{x.publisher}, #{x.date}" %> &lt;/li&gt;
+            <% data["publications"].each do |x| %>
+              &lt;li&gt; <%= "#{x['title']}, #{x['authors']}, #{x['publisher']}, #{x['date']}" %> &lt;/li&gt;
             <% end %>
             &lt;/ul&gt;
           </Description>
