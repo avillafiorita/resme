@@ -5,7 +5,6 @@ require "date"
 require "yaml"
 require "erb"
 require "json"
-require "kwalify"
 
 module Resme
   module CommandSemantics
@@ -93,23 +92,23 @@ module Resme
     # APP SPECIFIC COMMANDS
     #
     def self.check(opts, argv)
-      path = File.join(File.dirname(__FILE__), "/../templates/schema.yml")
-      schema = Kwalify::Yaml.load_file(path)
-
-      # create validator
-      validator = Kwalify::Validator.new(schema)
-      # load document
-      document = Kwalify::Yaml.load_file(argv[0])
-      # validate
-      errors = validator.validate(document)
-
+      begin
+        document = YAML.load_file(argv[0], permitted_classes: [Date])
+      rescue Psych::SyntaxError => ex
+        puts "The file #{argv[0]} has an invalid structure."
+        puts ex.message
+        exit 1
+      end
+        
+      errors = ResumeStructureValidator.validate(document)
       # show errors
-      if errors && !errors.empty?
-        for e in errors
-          puts "[#{e.path}] #{e.message}"
+      if errors.size > 0
+        puts "The files #{argv[0]} does not validate"
+        errors.each do |error|
+          puts "#{error[:full_path]}: #{error[:message]}"
         end
       else
-        puts "The file #{argv[0]} validates."
+        puts "The file #{argv[0]} has a valid structure."
       end
     end
 
