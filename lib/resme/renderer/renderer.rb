@@ -60,7 +60,7 @@ end
 # till are in two different years
 def period entry
   if entry["date"]
-    "#{year entry.date}"
+    "#{year entry["date"]}"
   else
     from_year = entry["from"] ? year(entry["from"].to_s) : nil
     till_year = entry["till"] ? year(entry["till"].to_s) : nil

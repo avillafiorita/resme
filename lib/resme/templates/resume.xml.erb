@@ -1,13 +1,13 @@
 <%
 # provide sensible defaults, so that hash and array indexing won't fail on nil
-email = (data["contacts"] || []).select { |x| x.label == "email" }.first || {}
+email = (data["contacts"] || []).select { |x| x["label"] == "email" }.first || {}
 phones = (data["contacts"] || []).select { |x|
-  ["phone", "mobile", "cell"].include?(x.label)
+  ["phone", "mobile", "cell"].include?(x["label"])
 }
 messaging = (data["contacts"] || []).select { |x|
-  ["skype", "gtalk", "telegram", "whatsup"].include?(x.label)
+  ["skype", "gtalk", "telegram", "whatsup"].include?(x["label"])
 }
-address = (data["addresses"] || []).select { |x| x.label == "home" }.first || {}
+address = (data["addresses"] || []).select { |x| x["label"] == "home" }.first || {}
 
 # make a period (2015, 2015-10, 2015-01-01 into the xml attributes day, month, year for a date tag
 def self.period_tod period
@@ -74,10 +74,10 @@ end
           <WebsiteList>
             <% data["web_presence"].each do |web| %>
               <Website>
-                <Contact><%= web.value %></Contact>
+                <Contact><%= web["value"] %></Contact>
                 <Use>
-                  <!-- <Code><%= web.label %></Code> -->
-                  <Label><%= web.label.capitalize %></Label>
+                  <!-- <Code><%= web["label"] %></Code> -->
+                  <Label><%= web["label"].capitalize %></Label>
                 </Use>
               </Website>
             <% end %>
@@ -87,10 +87,10 @@ end
           <InstantMessagingList>
             <% messaging.each do |im| %>
               <InstantMessaging>
-                <Contact><%= im.value %></Contact>
+                <Contact><%= im["value"] %></Contact>
                 <Use>
-                  <!-- <Code><%= im.label %></Code> -->
-                  <Label><%= im.label.capitalize %></Label>
+                  <!-- <Code><%= im["label"] %></Code> -->
+                  <Label><%= im["label"].capitalize %></Label>
                 </Use>
               </InstantMessaging>
             <% end %>
@@ -144,7 +144,7 @@ end
         <WorkExperience>
           <Period>
             <From <%= self.period_tod pos["from"] %>/>
-            <% if pos.till and pos.till != "" %>
+            <% if pos["till"] and pos["till"] != "" %>
               <To <%= self.period_tod pos["till"] %>/>
             <% else %>
               <Current>true</Current>
@@ -218,7 +218,7 @@ end
                 <ContactInfo>
                   <Address>
                     <Contact>
-                      <AddressLine><%= pos.["address"] %></AddressLine>
+                      <AddressLine><%= pos["address"] %></AddressLine>
                       <!-- <Country>
                            <Code></Code>
                            <Label></Label>

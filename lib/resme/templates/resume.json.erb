@@ -1,137 +1,155 @@
 {
- "basics": {
-   "name": "<%= full_name(data).to_json %>",
-   "label": "<%= data["basics"]["title"].to_json %>",
-   "picture": "<%= data["basics"]["picture"] %>",
-   "email": "<%= e = data["contacts"].select { |x| x.label == "email" }.first; e.value if e %>",
-   "phone": "<%= p = data["contacts"].select { |x| x.label == "mobile" }.first; p.value if p %>",
-   "website": "<%= w = data["web_presence"].select { |x| x.label == "website" }.first; w.value if w %>",
-   "summary": "<%= data["summary"].to_json %>",
-   "location": {
-     "address": "<%= data["addresses"][0]["street"].to_json %>",
-     "postalCode": "<%= data["addresses"][0]["zip_code"] %>",
-     "city": "<%= data["addresses"][0]["city"] %>",
-     "countryCode": "<%= data["addresses"][0]["country"] %>",
-     "region": "<%= data["addresses"][0]["region"] %>"
-   },
-   "profiles": [
-   <% (data["web_presence"] || []).each_with_index do |profile, index| %>
-   {
-     "network": "<%= profile["label"] %>",
-     <%# "username": "", %>
-     "url": "<%= profile["value"] %>"
-   }
-   <%= "," unless index == sequence.size - 1 %>
-   <% end %>
-   ]
- },
- "work": [
-   <% (data["work"] || []).each_with_index do |job, index| %>
-   {
-     "company": "<%= job["who"].to_json %>",
-     "position": "<%= job["role"].to_json %>",
-     "website": "<%= job["website"] %>",
-     "startDate": "<%= job["from"] %>",
-     "endDate": "<%= job["till"] %>",
-     "summary": "<%= job["summary"].to_json %>"
-     <%# "highlights": [ "Started the company" ] %>
-   }
-   <%= "," unless index == sequence.size - 1 %>
-   <% end %>
- ],
- "volunteer": [
-   <% (data["volunteer"] || []).each_with_index do |job, index| %>
-   {
-     "organization": "<%= job["who"].to_json %>",
-     "position": "<%= job["role"].to_json %>",
-     "website": "<%= job["website"] %>",
-     "startDate": "<%= job["from"] %>",
-     "endDate": "<%= job["till"] %>",
-     "summary": "<%= job["summary"].to_json %>"
-     <%# "highlights": [ "Started the company" ] %>
-    }
-    <%= "," unless index == sequence.size - 1 %>
-    <% end %>
- ],
- "education": [
-    <% sequence = data["education"].select { |x| x["publish"] }; sequence.each_with_index do |edu, index| %>
-    {
-         "institution": "<%= edu["school"].to_json %>",
-         "area": "<%= edu["topic"].to_json %>",
-         "studyType": "<%= edu["degree"].to_json %>",
-         "startDate": "<%= edu["from"] %>",
-         "endDate": "<%= edu["till"] %>",
-         "gpa": "<%= edu["score"] %>"
-         <%# "courses": [ "DB1101 - Basic SQL" ] %>
-    }
-    <%= "," unless index == sequence.size - 1 %>
-    <% end %>
- ],
- "awards": [
-   <% (data["awards"] || []).each_with_index do |award, index| %>
-   {
-     "title": "<%= award["title"].to_json %>",
-     "date": "<%= award["date"] %>",
-     "awarder": "<%= award["who"].to_json %>"
-     "summary": "<%= award["summary"].to_json %>"
-   }
-   <%= "," unless index == sequence.size - 1 %>
-   <% end %>
- ],
- "publications": [
-   <% (data["publications"] || []).each_with_index do |pub, index| %>
-   {
-     "name": "<%= pub["title"].to_json %>",
-     "publisher": "<%= pub["publisher"].to_json %>",
-     "releaseDate": "<%= pub["date"] %>",
-     "website": "<%= pub["url"] %>",
-     "summary": "<%= pub["summary"].to_json %>"
-   }
-   <%= "," unless index == sequence.size - 1 %>
-   <% end %>
- ],
- "skills": [
-   <% (data["skills"] || []).each_with_index do |skill, index| %>
-   {
-     "name": "<%= skill["name"].to_json %>",
-     "level": "<%= skill["level"].to_json %>"
-     <%# "keywords": [...] %>
-   }
-   <%= "," unless index == sequence.size - 1 %>
-   <% end %>
- ],
- "languages": [
-    <% data["languages"]["mother_tongues"].each do |mt| %>
-    {
-      "name": "<%= mt["language"].to_json %>",
-      "level": "Native speaker"
-    }
-    <%= "," unless data["languages"]["foreign"] == nil %>
-    <% end %>
-    <% sequence = data["languages"]["foreign"] || []; sequence.each_with_index do |lang, index| %>
-    {
-      "name": "<%= lang["language"].to_json %>",
-      "level": "<%= lang["level"].to_json %>"
-    }
-    <%= "," unless index == sequence.size - 1 %>
-    <% end %>
- ],
- "interests": [
-    <% (data["interests"] || []).each_with_index do |interest, index| %>
-    {
-      "name": "<%= interest["name"].to_json %>",
-      <%# "keywords": [...] %>
+  "basics": {
+    "name": <%= full_name(data).to_json %>,
+    "label": <%= data["basics"]["title"].to_json %>,
+<% if data["basics"]["picture"] -%>
+    "picture": <%= data["basics"]["picture"] %>,
+<% end -%>
+<% if data["contacts"] -%>
+    "email": "<%= ((data["contacts"] || []).select { |x| x["label"] == "email" }.first || {})["value"]  %>",
+    "phone": "<%= ((data["contacts"] || []).select { |x| x["label"] == "mobile" }.first || {})["value"] %>",
+<% end %>
+<% if data["web_presence"] -%>
+    "website": "<%= ((data["web_presence"] || []).select { |x| x["label"] == "website" }.first || {})["value"] %>",
+<% end -%>
+<% if data["summary"] -%>
+    "summary": <%= data["summary"].to_json %>,
+<% end -%>
+<% if data["addresses"] -%>
+    "location": {
+      "address": <%= data["addresses"][0]["street"].to_json %>,
+      "postalCode": "<%= data["addresses"][0]["zip_code"] %>",
+      "city": "<%= data["addresses"][0]["city"] %>",
+      "countryCode": "<%= data["addresses"][0]["country"] %>",
+      "region": "<%= data["addresses"][0]["region"] %>"
     },
-    <%= "," unless index == sequence.size - 1 %>
-    <% end %>
- ],
- "references": [
-  <% (data["references"] || []).each_with_index do |reference, index| %>
-  {
-   "name": "<%= reference["name"].to_json %>",
-   "reference": "<%= reference["reference"].to_json %>"
-  }
-  <%= "," unless index == sequence.size - 1 %>
-  <% end %>
- ]
+<% end -%>
+<% if data["web_presence"] -%>
+    "profiles": [
+<% (data["web_presence"] || []).each do |profile| -%>
+      {
+        "network": "<%= profile["label"] %>",
+        "url": "<%= profile["value"] %>"
+      },
+<% end -%>
+    ]
+<% end -%>
+  },
+<% if data["work"] -%>
+  "work": [
+<% (data["work"] || []).each do |job| -%>
+    {
+      "company": <%= job["who"].to_json %>,
+      "position": <%= job["role"].to_json %>,
+      "website": "<%= job["website"] %>",
+      "startDate": "<%= job["from"] %>",
+      "endDate": "<%= job["till"] %>",
+      "summary": <%= job["summary"].to_json %>
+<%# "highlights": [ "Started the company" ] %>
+    },
+<% end -%>
+  ],
+<% end -%>
+<% if data["volunteer"] -%>
+  "volunteer": [
+<% (data["volunteer"] || []).each do |job| -%>
+    {
+      "organization": <%= job["who"].to_json %>,
+      "position": <%= job["role"].to_json %>,
+      "website": "<%= job["website"] %>",
+      "startDate": "<%= job["from"] %>",
+      "endDate": "<%= job["till"] %>",
+      "summary": <%= job["summary"].to_json %>
+<%# "highlights": [ "Started the company" ] %>
+    },
+<% end -%>
+  ],
+<% end %>
+<% if data["education"] %>
+  "education": [
+<% data["education"].select { |x| x["publish"] }.each do |edu| -%>
+     {
+          "institution": <%= edu["school"].to_json %>,
+          "area": <%= edu["topic"].to_json %>,
+          "studyType": <%= edu["degree"].to_json %>,
+          "startDate": "<%= edu["from"] %>",
+          "endDate": "<%= edu["till"] %>",
+          "gpa": "<%= edu["score"] %>"
+<%# "courses": [ "DB1101 - Basic SQL" ] %>
+     },
+<% end -%>
+  ],
+<% end -%>
+<% if data["awards"] -%>
+  "awards": [
+<% (data["awards"] || []).each do |award| -%>
+    {
+      "title": <%= award["title"].to_json %>,
+      "date": <%= award["date"] %>,
+      "awarder": <%= award["who"].to_json %>,
+      "summary": <%= award["summary"].to_json %>
+    },
+<% end -%>
+  ],
+<% end -%>
+<% if data["publications"] -%>
+  "publications": [
+<% (data["publications"] || []).each do |pub| -%>
+    {
+      "name": <%= pub["title"].to_json %>,
+      "publisher": <%= pub["publisher"].to_json %>,
+      "releaseDate": "<%= pub["date"] %>",
+      "website": "<%= pub["url"] %>",
+      "summary": <%= pub["summary"].to_json %>
+    },
+<% end -%>
+  ],
+<% end -%>
+<% if data["skills"] -%>
+  "skills": [
+<% (data["skills"] || []).each do |skill| -%>
+    {
+      "name": <%= skill["name"].to_json %>,
+      "level": <%= skill["level"].to_json %>
+<%# "keywords": [...] -%>
+    },
+<% end -%>
+  ],
+<% end -%>
+<% if data["languages"] -%>
+  "languages": [
+<% data["languages"]["mother_tongues"].each do |mt| -%>
+     {
+       "name": <%= mt["language"].to_json %>,
+       "level": "Native speaker"
+     },
+<% end -%>
+<% (data["languages"]["foreign"] || []).each do |lang| -%>
+     {
+       "name": <%= lang["language"].to_json %>,
+       "level": <%= lang["level"].to_json %>
+     },
+<% end -%>
+  ],
+<% end -%>
+<% if data["interests"] -%>
+  "interests": [
+<% (data["interests"] || []).each do |interest| -%>
+     {
+       "name": <%= interest["name"].to_json %>,
+<%# "keywords": [...] -%>
+     },
+<% end -%>
+  ],
+<% end -%>
+<% if data["references"] -%>
+  "references": [
+<% (data["references"] || []).each do |reference| -%>
+   {
+    "name": <%= reference["name"].to_json %>,
+    "reference": <%= reference["reference"].to_json %>
+   },
+<% end -%>
+  ]
+<% end %>
 }
