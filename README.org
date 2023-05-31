@@ -17,20 +17,20 @@ needs).
 
 Add this line to your application's Gemfile:
 
-#+BEGIN_SRC ruby
-      gem 'resme'
-#+END_SRC
+#+begin_example ruby
+  gem 'resme'
+#+end_example
 
 And then execute:
 
-#+BEGIN_EXAMPLE
-  $ bundle
-#+END_EXAMPLE
+#+begin_example sh
+  bundle
+#+end_example
 
 Or install it yourself as:
 
-#+BEGIN_EXAMPLE
-  $ gem install resme
+#+begin_example sh
+  gem install resme
 #+END_EXAMPLE
 
 ** Usage
@@ -40,9 +40,9 @@ Or install it yourself as:
 
 Start with:
 
-#+BEGIN_EXAMPLE
+#+begin_example sh
   resme init
-#+END_EXAMPLE
+#+end_example
 
 which generates a YML template for your resume in the current directory.
 Comments in the YML file should help you fill the various entries.
@@ -51,7 +51,7 @@ are not relevant for your resume.
 
 You can now generate a resume using one of the existing formats:
 
-#+begin_example
+#+begin_example sh
   resme --to org resume.yml
 #+end_example
 
@@ -81,15 +81,15 @@ resme help
 #+begin_example
 resme command [options] [args]
 Available commands:
+  check resume.yml # Check syntax of resume.yml
+  list resume.yml # List main sections in resume.yml
+  version # print version information
   view --template FORMAT # Print template used for format
+  generate [options] resume.yml ... # output resume
   console # enter the console
   man # print resme manual page
   help [command] # print command usage
   init [options] # generate an empty resume.yml file
-  check resume.yml # Check syntax of resume.yml
-  list resume.yml # List main sections in resume.yml
-  version # print version information
-  generate [options] resume.yml ... # output resume
 #+end_example
 
 ** Checking validity
@@ -100,9 +100,9 @@ Available commands:
 Use the =check= command to verify whether your YAML file conforms with
 the intended syntax.
 
-#+BEGIN_SRC ruby
+#+begin_example sh
   resme check resume.yaml
-#+END_SRC
+#+end_example
 
 ** Dates in the resume
    :PROPERTIES:
@@ -134,27 +134,27 @@ However, if you want, you can define your own templates.
 Use the command =view= to print one of the templates used by =resme=
 and build from that.
 
-#+begin_example
-resme view --template md
+#+begin_example sh
+  resme view --template md
 #+end_example
 
 Notice that all the data in the resume is made available in the =data=
 variable.  Thus, for instance, the following code snippets generates a
 list of all the work experiences:
 
-#+BEGIN_EXAMPLE
+#+begin_example xml
   <% data["work"] each do |exp| %>
   - <%= exp["who"] %>
     From: <%=  exp["from"] %> till: <%= exp["till"] %>
   <% end %>
-#+END_EXAMPLE
+#+end_example
 
 To specify your own ERB template to build your resume use the option
 =-e= (=--erb=). Thus, for instance:
 
-#+BEGIN_EXAMPLE
-  $ resme render -e template.md.erb [-o output_filename] file.yaml ...
-#+END_EXAMPLE
+#+begin_example sh
+  resme render -e template.md.erb [-o output_filename] file.yaml ...
+#+end_example
 
 uses =template.md.erb= to generate the resume.
 
@@ -225,14 +225,14 @@ The gem is available as open source under the terms of the
 
 ** Change Log
 
-In =doc/changelog.org=
+In [[file:./CHANGELOG.org][CHANGELOG.org]]
 
 ** Roadmap
    :PROPERTIES:
    :CUSTOM_ID: roadmap
    :END:
 
-In =doc/todo.org= ... guess what is my preferred editor!
+In [[file:./doc/todo.org][todo.org]] ... guess what is my preferred editor!
 
 ** Bugs
    :PROPERTIES:
@@ -255,18 +255,4 @@ Unknown number of unknown bugs.
    :CUSTOM_ID: release-history
    :END:
 
-- *0.4.0* refactors all generation commands under =generate=, provides
-  new filtering options, adds =-e= option (for custom templates), and
-  refactors various portions of code.  It also revises this document
-  and fixes some minor bugs.
-- *0.3.2* and *0.3.1* fix errors with the Europass format: lists of
-  projects, interests, ... are now properly formatted.
-- *0.3* introduces output to org-mode, introduces references for the CV,
-  improves output to JSON, adds a =check= command, removes useless blank
-  lines in the output, supports =-%>= in the ERB templates, fixes
-  various typos in the documentation, introduces various new formatting
-  functions, to simplify template generation
-- *0.2* improves output of volunteering activities and other information
-  in the Europass and *significantly improves error and warning
-  reporting*
-- *0.1* is the first release
+   Moved to [[file:./CHANGELOG.org][CHANGELOG.org]].
