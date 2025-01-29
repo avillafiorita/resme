@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "resme/version"
 require "readline"
 require "fileutils"
@@ -7,6 +9,7 @@ require "erb"
 require "json"
 
 module Resme
+  # Give e meaning to commands
   module CommandSemantics
     APPNAME = "resme"
     VERSION = Resme::VERSION
@@ -14,45 +17,45 @@ module Resme
     #
     # Main App Starts Here!
     #
-    def self.version(opts = nil, argv = [])
+    def self.version(_, _)
       puts "#{APPNAME} version #{VERSION}"
     end
 
-    def self.man(opts = nil, argv = [])
+    def self.man(_, _)
       path = File.join(File.dirname(__FILE__), "/../../../README.org")
       file = File.open(path, "r")
       puts file.read
     end
 
-    def self.help(opts = nil, argv = [])
+    def self.help(_, argv = [])
       all_commands = CommandSyntax.commands
-      
-      if argv != []
-        argv.map do |x|
-          puts all_commands[x.to_sym][:help]
-          puts "\n\n"
-        end
-      else
+
+      if argv == []
         puts "#{APPNAME} command [options] [args]\n"
         puts "Available commands:\n"
         all_commands.each_key do |key|
           puts "  #{all_commands[key][:options].banner}"
         end
+      else
+        argv.map do |x|
+          puts all_commands[x.to_sym][:help]
+          puts "\n\n"
+        end
       end
     end
 
-    def self.console(opts, argv = [])
+    def self.console(_, _)
       all_commands = CommandSyntax.commands
       all_commands.delete(:console)
-      
+
       i = 0
-      while true
+      loop do
         string = Readline.readline("#{APPNAME}:%03d> " % i, true)
         # as a courtesy, remove any leading appname string
         string.gsub!(/^#{APPNAME} /, "")
         exit 0 if %w[exit quit .].include? string
         execute all_commands, string.split(" ")
-        i = i + 1
+        i += 1
       end
     end
 
@@ -158,7 +161,7 @@ module Resme
 
       skipped_sections = opts[:skip] || []
 
-      if !File.exists?(template)
+      if !File.exist?(template)
         puts "#{APPNAME} error: format #{format} is not understood."
       end
 
@@ -170,30 +173,28 @@ module Resme
       end
     end
 
-    private
-
-    def self.render(yml_files, template_name, output_name, skipped_sections)
+    private_class_method def self.render(yml_files, template_name, output_name, skipped_sections)
       data = {}
       yml_files.each do |file|
         data = data.merge(YAML.load_file(file, permitted_classes: [Date]))
       end
       skipped_sections.each do |section|
-        data.reject! { |k| k == section } 
+        data.reject! { |k| k == section }
       end
       template = File.read(template_name)
       output = ERB.new(template, trim_mode: "-").result(binding)
-      # it is difficult to write readable ERBs with no empty lines...
-      # we use gsub to replace multiple empty lines with \n\n in the final output
+      # it is difficult to write readable ERBs with no empty lines...  we use
+      # gsub to replace multiple empty lines with \n\n in the final output
       output.gsub!(/([\t ]*\n){3,}/, "\n\n")
       backup_and_write output_name, output
     end
 
-    def self.backup(filename)
+    private_class_method def self.backup(filename)
       FileUtils::cp filename, filename + "~"
       puts "Backup copy #{filename} created in #{filename}~."
     end
 
-    def self.backup_and_write(filename, content)
+    private_class_method def self.backup_and_write(filename, content)
       backup(filename) if File.exist?(filename)
       File.open(filename, "w") { |f| f.puts content }
     end
