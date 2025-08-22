@@ -1,6 +1,18 @@
 #+TITLE: CHANGELOG
 #+AUTHOR: Adolfo Villafiorita
 
+* Version 1.0.1
+
+- Documentation updated
+
+* Version 1.0.0
+
+- Dropped support for the Europass XML format. The version currently generated
+  by resme (corresponding to the 3.3.0 version of the Europass schema) is no
+  longer supported by the Europass website.  Information about the required
+  changes to make to the format is difficult to retrieve.
+- Bug fixes
+
 * Version 0.5.1
 
   A bug-fixing release.
