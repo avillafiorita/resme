@@ -17,17 +17,17 @@ module Resme
     #
     # Main App Starts Here!
     #
-    def self.version(_, _)
+    def self.version(opts = nil, argv = [])
       puts "#{APPNAME} version #{VERSION}"
     end
 
-    def self.man(_, _)
+    def self.man(opts = nil, argv = [])
       path = File.join(File.dirname(__FILE__), "/../../../README.org")
       file = File.open(path, "r")
       puts file.read
     end
 
-    def self.help(_, argv = [])
+    def self.help(opts = nil, argv = [])
       all_commands = CommandSyntax.commands
 
       if argv == []
@@ -44,7 +44,7 @@ module Resme
       end
     end
 
-    def self.console(_, _)
+    def self.console(opts = nil, argv = [])
       all_commands = CommandSyntax.commands
       all_commands.delete(:console)
 
@@ -144,13 +144,13 @@ module Resme
     end
 
     def self.view(opts, argv)
-      format = opts[:template] == "europass" ? "xml" : opts[:template]
+      format = opts[:to]
       template = File.join(File.dirname(__FILE__), "/../templates/resume.#{format}.erb")
       puts File.read template
     end
 
     def self.generate(opts, argv)
-      format = opts[:to] == "europass" ? "xml" : opts[:to]
+      format = opts[:to]
       output = opts[:output] || "resume-#{Date.today}.#{format}"
 
       if opts[:erb]
@@ -167,10 +167,6 @@ module Resme
 
       render argv, template, output, skipped_sections
       puts "Resume generated in #{output}"
-
-      if format == "xml" then
-        puts "Europass XML generated. Render via, e.g., http://interop.europass.cedefop.europa.eu/web-services/remote-upload/"
-      end
     end
 
     private_class_method def self.render(yml_files, template_name, output_name, skipped_sections)
