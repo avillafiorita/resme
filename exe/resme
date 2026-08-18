@@ -2,5 +2,5 @@
 
 require "resme"
 
-# read-eval-print-step passing all commands and the argument
-Resme::CommandSemantics.execute Resme::CommandSyntax.commands, ARGV
+e = Resme::Executor.new(ARGV)
+e.execute

@@ -1,0 +1,217 @@
+#+TITLE: Curriculum Vitae
+#+AUTHOR: <%= full_name @data %>, <%= @data[:basics][:title] %>
+#+EMAIL: <%= select @data[:contacts], label: :email %>
+#+DATE: <<%= Date.today %>>
+#+STARTUP: showall
+#+OPTIONS: toc:nil num:nil
+#+OPTIONS: h:1
+#+OPTIONS: prop:nil
+
+<% if @data[:addresses] || @data[:contacts] || @data[:web_presence] %>
+* Contacts
+  :PROPERTIES:
+<% (@data[:addresses] || []).each do |x| -%>
+  <%= ":#{x[:label].upcase}: #{x[:street]}, #{x[:postal_code]} #{x[:city]}" %>
+<% end -%>
+<% (@data[:contacts] || []).each do |x| -%>
+  <%= ":#{x[:label].upcase}: #{x[:value]}" %>
+<% end -%>
+  :END:
+
+<% (@data[:contacts] || []).each do |x| -%>
+| <%= "%-30s" % x[:label] %> | <%= "%-40s" % x[:value] %> |
+<% end -%>
+<% (@data[:web_presence] || []).each do |x| -%>
+| <%= "%-30s" % x[:label] %> | <%= "%-40s" % x[:value] %> |
+<% end -%>
+<% end -%>
+
+<% if @data[:summary] -%>
+* Summary
+
+<%= reflow_s @data[:summary] -%>
+<% end -%>
+
+<% if @data[:skills] -%>
+* Skills
+
+<% (@data[:skills] || []).each do |item| -%>
+** <%= item[:name] %>: <%= item[:level] %>
+<%= propertify item %>
+
+<% end %>
+<% end -%>
+
+<% if @data[:work] -%>
+* Work Experience
+
+<% (@data[:work] || []).each do |item| -%>
+** <%= period item %>: <%= clean [item[:position], item[:name]].join(", ") %>
+<%= propertify item %>
+
+<%= reflow_s item[:summary] -%>
+
+<% end -%>
+<% end -%>
+
+<% if @data[:teaching] -%>
+* Teaching
+
+<% (@data[:teaching] || []).each do |item| -%>
+
+** <%= period item %>: <%= item[:subject] %>
+<%= propertify item %>
+
+<%- string = [item[:position], item[:school], item[:name]].compact.join(", ") %>
+<%= reflow_s string %>
+
+<% end -%>
+<% end -%>
+
+<% if @data[:projects] -%>
+* Projects
+
+<% (@data[:projects] || []).each do |item| -%>
+
+** <%= period item %>: <%= [item[:name], item[:position]].join(", ") %>
+<%= propertify item %>
+
+<%= reflow_s item[:summary] -%>
+
+<% end -%>
+<% end -%>
+
+<% if @data[:other] -%>
+* Other
+
+<% (@data[:other] || []).each do |item| -%>
+
+** <%= period item %>: <%= [item[:name], item[:position]].join(", ") %>
+<%= propertify item %>
+
+<%= reflow_s item[:summary] -%>
+
+<% end -%>
+<% end -%>
+
+<% if @data[:committees] -%>
+* Committees
+
+<% (@data[:committees] || []).each do |item| -%>
+
+** <%= item[:name] %>, <%= item[:position] %> <%= item[:editions] %>
+<%= propertify item %>
+
+<% end -%>
+<% end -%>
+
+<% if @data[:volunteer] -%>
+* Volunteer
+
+<% (@data[:volunteer] || []).each do |item| -%>
+
+** *<%= period item %>: <%= [item[:position], item[:name]].join(", ") %>*
+<%= propertify item %>
+
+<%= reflow_s item[:summary] -%>
+
+<% end -%>
+<% end -%>
+
+<% if @data[:publications] -%>
+* Publications
+
+<% (@data[:publications] || []).each do |item| -%>
+- <%= item[:authors] %>, *"<%= item[:title] %>"*
+  <%= item[:publisher] %>, <%= item[:date] %>
+<% end -%>
+<% end -%>
+
+<% if @data[:talks] -%>
+* Talks
+
+<% (@data[:talks] || []).each do |item| -%>
+- <%= item[:title] %>
+  <%= item[:venue] %>
+  (<%= item[:date] %>)
+<% end -%>
+<% end -%>
+
+<% if @data[:visits] -%>
+* Visits
+
+<% (@data[:visits] || []).each do |item| -%>
+
+** *<%= period item %>: <%= [item[:position], item[:name], item[:address]].join(", ") %>*
+<%= propertify item %>
+
+<%= reflow_s item[:summary] -%>
+
+<% end -%>
+<% end -%>
+
+<% if @data[:education] -%>
+* Education
+
+<% @data[:education].select { |x| x[:publish] }.each do |item| -%>
+
+** *<%= year(item[:end_date]) %>: <%= [item[:degree], item[:school], item[:address]].join(", ") %>*
+<%= propertify item %>
+
+<% end -%>
+<% end -%>
+
+<% [:awards, :achievements].each do |group| -%>
+<% if @data[group] -%>
+* <%= group.capitalize %>
+
+<% (group || []).each do |item| -%>
+
+** <%= item[:date] %>: <%= [item[:title], item[:name], item[:address]].join(", ") %>
+<%= propertify item %>
+
+<%= reflow_s item[:summary] -%>
+
+<% end -%>
+<% end -%>
+<% end -%>
+
+<% if @data[:software] %>
+* Software
+
+<% (@data[:software] || []).each do |item| -%>
+- <%= item[:title] %> (<%= item[:position] %>)
+  <%= item[:url] %>
+<% end -%>
+<% end -%>
+
+<% if @data[:interests] -%>
+* Interests
+
+<% (@data[:interests] || []).each do |item| -%>
+- *<%= item[:name] %>:* <%= reflow_s item[:summary] %>
+<% end -%>
+<% end -%>
+
+<% if @data[:languages] %>
+* Languages
+
+<% if @data[:languages] and @data[:languages][:mother_tongues] -%>
+- Mother Tongue(s): <%= @data[:languages][:mother_tongues].map { |x| x[:language] }.join(",") %>
+<% end -%>
+<% if @data[:languages] and @data[:languages][:foreign] -%>
+- Other Language(s):
+<% @data[:languages][:foreign].each do |x| -%>
+  + <%= x[:language] %>: <%= x[:level] %>
+<% end -%>
+<% end -%>
+<% end -%>
+
+<% if @data[:references] %>
+* References
+
+<% (@data[:references] || []).each do |item| -%>
+<%= item[:name] %>:
+<%= reflow_s item[:reference], indent: 0 %>
+<% end -%>
+<% end -%>

@@ -41,8 +41,10 @@ contacts:
 addresses:
   - label:
     street:
-    zip_code:
+    postal_code:
     city:
+    region:
+    country_code:
     country:
 
 # this is your presence on the net
@@ -56,6 +58,8 @@ web_presence:
 #
 # if you write a multi-line entry don't forget to use ">-" or "|-"
 # (see the YAML documentation for more information)
+#
+# |- has the advntage of preserving paragraphs.
 summary: 
 
 #
@@ -69,24 +73,24 @@ summary:
 
 # work experience
 work:
-  - who:
-    website:
+  - name:
+    url:
     address:
-    till:
-    from:
-    role:
+    end_date:
+    start_date:
+    position:
     summary:
     details:
 
 # teaching experience
 teaching:
-  - who:
+  - name:
     school:
     address:
-    role:
+    position:
     subject:
-    till:
-    from:
+    end_date:
+    start_date:
     summary:
     details:
 
@@ -94,42 +98,42 @@ teaching:
 projects:
   - name:
     size:
-    who:
-    role:
-    from:
-    till:
+    stakeholder:
+    position:
+    start_date:
+    end_date:
     summary:
 
 # other experiences
 other:
-  - who:
-    till:
-    from:
-    role:
+  - name:
+    end_date:
+    start_date:
+    position:
     summary:
 
 # participation to committees (e.g. program committees in conferences)
 committees:
-  - who:
-    role:
+  - name:
+    position:
     editions:
     url:
 
 # work as volunteer
 volunteer:
-  - who:
-    till:
-    from:
-    role:
+  - name:
+    end_date:
+    start_date:
+    position:
     summary:
 
 # mobility programs and other similar initiatives (e.g., Erasmus grants)
 visits:
-  - who:
+  - name:
     address:
-    role:
-    till:
-    from:
+    position:
+    end_date:
+    start_date:
     summary:
 
 # education and degrees
@@ -139,8 +143,9 @@ education:
     topic:
     school:
     address:
-    till:
-    from:
+    end_date:
+    start_date:
+    url:
     publish: yes
 
 # publications
@@ -160,7 +165,7 @@ talks:
 
 # any award
 awards:
-  - who:
+  - name:
     address:
     date:
     title:
@@ -168,7 +173,7 @@ awards:
     
 # any interesting achievement you want to highlight?
 achievements:
-  - who:
+  - name:
     address:
     date:
     title:
@@ -181,7 +186,7 @@ software:
     url:
     programming_language:
     license:
-    role:
+    position:
     summary:
 
 # what are your skills?
