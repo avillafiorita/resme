@@ -1,9 +1,9 @@
 #+TITLE: CHANGELOG
 #+AUTHOR: Adolfo Villafiorita
 
-* Version 2.0.0
+* Version 2.0.1 and 2.0.0
 
-- Fully rewritten code
+- Fully rewritten code (and rubocopped for most part)
 - Removed export to Markdown (which can be gotten from Org Mode)
 - Fixed JSON Resume export
 - Added new keys and renamed some existing keys to make them closer to JSON Resume.

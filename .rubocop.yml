@@ -1,0 +1,62 @@
+# plugins:
+#   - rubocop-rails
+#   - rubocop-performance
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.3
+  Exclude:
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'bin/{rails,rake}'
+    - !ruby/regexp /old_and_unused\.rb$/
+
+Style/EmptyMethod:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/Lambda:
+  Enabled: false
+
+# Style/Lambda:
+#   Enabled: true
+#   EnforcedStyle: lambda
+
+Metrics/ModuleLength:
+  Max: 200
+  CountAsOne: [
+    'array', 'hash', 'heredoc', 'method_call'
+  ]
+
+Metrics/ClassLength:
+  Max: 200
+  CountAsOne: [
+    'array', 'hash', 'heredoc', 'method_call'
+  ]
+
+Metrics/MethodLength:
+  Max: 25
+  CountAsOne: [
+    'array', 'hash', 'heredoc', 'method_call'
+  ]
+
+Layout/LineLength:
+  Max: 80
+
+# Layout:
+  # ArgumentAlignment: with_first_argument
+  # ArrayAlignment: with_first_argument
+  # BeginEndAlignment: start_of_line
+  # EnforcedStyleAlignWith: start_of_line
+  # FirstArrayElementIndentation: consistent
+  # FirstHashIndentation: consistent
+  #MultilineMethodCallIndentation:
+  #  EnforcedStyle: indented_relative_to_receiver

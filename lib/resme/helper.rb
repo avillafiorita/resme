@@ -30,6 +30,7 @@ module Resme
     # Special cases: if one line is longer than chars characters, then break at
     # the first space after chars
     #
+    # rubocop:disable Metrics/AbcSize
     def reflow_a(string, line_break: 78)
       # if the string is less than line_break chars, we are done
       return [clean(string)] if string.length < line_break
@@ -45,7 +46,7 @@ module Resme
                  reflow_a(string[(index + 1)..], line_break:)
         end
       end
-      
+
       # here the string does not have a space between 0 and line_break
       #
       # In this case we try to break at the first blank after the string and
@@ -57,18 +58,19 @@ module Resme
                  reflow_a(string[(index + 1)..], line_break:)
         end
       end
-      
+
       # here string is longer than line_break and it does not have spaces
       #
       # The only thing left to do is returning the string as it is
       #
       [clean(string)]
     end
+    # rubocop:enable Metrics/AbcSize
 
     def blank?(char)
       [" ", "\t", "\n"].include?(char)
     end
-       
+
     # Reflow at +line_break+, returning a string with each line delimited by
     # +delimiter+ (by default newline) and indented with +indent+ spaces.
     #
@@ -152,7 +154,7 @@ module Resme
     # Utility functions for managing dates in the form 2015-01-01 and partial
     # dates (e.g., 2015-05, 2015)
     #
-    
+
     # Format the input as a date, according to format.  If the input is not
     # a date, return it as it (assuming it represents a partial date (e.g.,
     # 2012-01, 2012
@@ -172,8 +174,6 @@ module Resme
         "#{incomplete_date}-01"
       elsif y?(incomplete_date.to_s)
         "#{incomplete_date}-01-01"
-      else
-        nil
       end
     end
 
@@ -191,7 +191,7 @@ module Resme
     def day(input)
       input.is_a?(Date) ? input.strftime("%d") : input.to_s[8..9]
     end
-    
+
     # Is the input in the form YYYY-MM(-..)
     def y?(input)
       input.is_a?(Date) || input.to_s.size == 4
@@ -208,4 +208,3 @@ module Resme
     end
   end
 end
-

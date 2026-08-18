@@ -23,19 +23,16 @@ module Resme
 
     private
 
+    # rubocop:disable Metrics
     def parser
       OptionParser.new do |parser|
         parser.banner = "resme [options] - Format and manage a resume in YAML"
-
-        # parser.on("-o", "--output FILENAME", String, "Output filename") do |v|
-        #   @options[:output] = v
-        # end
 
         parser.on("--format FORMAT", String, "Output format") do |v|
           @options[:format] = v
         end
 
-        parser.on("--init", "Init a new resume") do |v|
+        parser.on("--init", "Init a new resume") do |_|
           @options[:cmd] = :init
         end
 
@@ -54,12 +51,12 @@ module Resme
           @options[:filename] = v
         end
 
-        parser.on("--list", "List available templates") do |v|
+        parser.on("--list", "List available templates") do |_|
           @options[:cmd] = :list
         end
 
         parser.on("--except x,y,z", Array, "Excluded section") do |v|
-          @options[:except] = v.map { |x| x.to_sym }
+          @options[:except] = v.map(&:to_sym)
         end
 
         parser.on("--cat TEMPLATE", "View a template") do |v|
@@ -76,5 +73,6 @@ module Resme
         end
       end
     end
+    # rubocop:enable Metrics
   end
 end

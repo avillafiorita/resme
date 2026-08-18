@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Resme
+  #
+  # Execute!
+  # 
   class Executor
     # include all formatter helpers
     include Resme::Helper
@@ -11,12 +14,13 @@ module Resme
       @options.parse
     end
 
+    # rubocop:disable Metrics
     def execute
       case @options.command
       when :init
         resume_template = File.join __dir__, "../../templates/resume.yml"
         puts File.read resume_template
-        
+
       when :validate
         filename = @options.options[:filename]
         document = Document.new(filename)
@@ -26,7 +30,7 @@ module Resme
       when :sections
         filename = @options.options[:filename]
         keys = Document.new(filename).data.keys
-        puts keys 
+        puts keys
 
       when :build
         filename = @options.options[:filename]
@@ -44,7 +48,7 @@ module Resme
           js = JsonResume.new Document.new(filename)
           @json_resume = js.build
         end
-        
+
         output = ERB.new(template, trim_mode: "-").result(binding)
 
         # it is difficult to write readable ERBs with no empty lines...  we use
@@ -70,6 +74,7 @@ module Resme
 
       end
     end
+    # rubocop:enable Metrics
 
     private
 
@@ -78,7 +83,7 @@ module Resme
     end
 
     def backup(filename)
-      FileUtils::cp filename, filename + "~"
+      FileUtils.cp "filename, "#{filename}~"
       puts "Backup copy #{filename} created in #{filename}~."
     end
 

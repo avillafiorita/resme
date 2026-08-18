@@ -16,5 +16,3 @@ require_relative "resme/document"
 require_relative "resme/document_validator"
 require_relative "resme/json_resume"
 require_relative "resme/executor"
-require_relative "resme/version"
-

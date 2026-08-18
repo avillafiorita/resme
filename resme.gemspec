@@ -9,7 +9,10 @@ Gem::Specification.new do |spec|
   spec.email = ["adolfo@shair.tech"]
 
   spec.summary = "Keep your resume in YML and export to various formats"
-  spec.description = %q{This gem allows you to manage your resume in YAML, while providing different backends for publishings.  Supported backends: Org Mode, Markdown, JSON resume, and Europass XML.  Custom templates can be defined using ERB.}
+  spec.description =
+    "Manage your resume in YAML and publish with Org Mode or JSON resume." \
+    "Org Mode provides HTML, TXT, LaTeX, Markdown exports." \
+    "JSON Resume comes with many ready-made templates."
   spec.homepage = "https://github.com/avillafiorita/resme"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2.0"

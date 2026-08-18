@@ -12,26 +12,14 @@ module Resme
       @data = load
     end
 
-    # Access values references by *keys. Keys are Symbols or Strings
-    def dig(*keys)
-      @data.dig keys.map { |x| x.to_s }
-    end
-
-    # Access values references by *keys. Default to "default"
-    def fetch(*keys, default)
-      dig(*keys) || default
-    end
-
     private
 
     def load
-      begin
-        YAML.load_file @filename, permitted_classes: [Date], symbolize_names: true
-      rescue Psych::SyntaxError => ex
-        puts "#{@filename} has an invalid structure."
-        puts ex.message
-        exit 1
-      end
+      YAML.load_file @filename, permitted_classes: [Date], symbolize_names: true
+    rescue Psych::SyntaxError => e
+      puts "#{@filename} has an invalid structure."
+      puts e.message
+      exit 1
     end
   end
 end
