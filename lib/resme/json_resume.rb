@@ -12,7 +12,7 @@ module Resme
       @data = document.data
     end
 
-    # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize
+    # rubocop:disable Metrics
     def build
       address = @data[:addresses]&.first || {}
       education = @data[:education].select { |x| x[:publish] } || []
@@ -145,8 +145,7 @@ module Resme
         end
       }.compact
     end
-    # rubocop:enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize
-
+    # rubocop:enable Metrics
 
     private
 

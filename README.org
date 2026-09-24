@@ -3,8 +3,8 @@
 #+DATE: <2020-07-14 Tue>
 #+STARTUP: showall
 
-Keep your resume in YAML and output it Org Mode and JSON Resume formats.
-Org Mode is flexible enough to export to various other formats.
+Keep your resume in YAML and output it Org Mode and JSON Resume.  Org Mode is
+flexible enough to export to various other formats.
 
 The rendering engine is based on ERB. This simplifies the creation of
 new output formats (and extending/modifying the YML structure to one's

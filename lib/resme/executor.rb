@@ -3,7 +3,7 @@
 module Resme
   #
   # Execute!
-  # 
+  #
   class Executor
     # include all formatter helpers
     include Resme::Helper
@@ -50,11 +50,13 @@ module Resme
         end
 
         output = ERB.new(template, trim_mode: "-").result(binding)
-
         # it is difficult to write readable ERBs with no empty lines...  we use
         # gsub to replace multiple empty lines with \n\n in the final output
         output.gsub!(/([\t ]*\n){3,}/, "\n\n")
-        backup_and_write(output_filename(format), output)
+
+        output_filename = output_filename(format)
+        backup_and_write(output_filename, output)
+        puts "Resume generated and saved to #{output_filename}"
 
       when :list
         templates = File.join __dir__, "../../templates/*.erb"
