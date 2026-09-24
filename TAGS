@@ -12,13 +12,6 @@ class TestResme < Minitest::TestTestResme5,54
 
 /home/adolfo/Sources/ruby/resme/lib/resme.rb,0
 
-/home/adolfo/Sources/ruby/resme/lib/resme/json_resume.rb,196
-module ResmeResme3,31
-  class JsonResumeJsonResume7,78
-    def initialize(document)initialize10,117
-    def buildbuild16,307
-    def split_highlights(highlights)split_highlights154,4638
-
 /home/adolfo/Sources/ruby/resme/lib/resme/helper.rb,990
 module ResmeResme3,31
   module HelperHelper7,87
@@ -57,15 +50,6 @@ module ResmeResme3,31
     def backup(filename)backup85,2328
     def backup_and_write(filename, content)backup_and_write90,2469
 
-/home/adolfo/Sources/ruby/resme/lib/resme/cli.rb,218
-module ResmeResme3,31
-  class CliCli7,75
-    attr_reader :optionsoptions8,87
-    def initialize(arguments)initialize10,113
-    def parseparse15,257
-    def commandcommand20,332
-    def parserparser27,421
-
 /home/adolfo/Sources/ruby/resme/lib/resme/document_validator.rb,442
 module ResmeResme3,31
   class DocumentValidatorDocumentValidator7,76
@@ -79,3 +63,21 @@ module ResmeResme3,31
 /home/adolfo/Sources/ruby/resme/lib/resme/version.rb,57
 module ResmeResme3,31
   VERSION = "2.0.1"VERSION4,44
+
+lib/resme/cli.rb,218
+module ResmeResme3,31
+  class CliCli7,75
+    attr_reader :optionsoptions8,87
+    def initialize(arguments)initialize10,113
+    def parseparse15,257
+    def commandcommand20,332
+    def parserparser27,421
+
+lib/resme/json_resume.rb,196
+module ResmeResme3,31
+  class JsonResumeJsonResume7,78
+    def initialize(document)initialize10,117
+    def buildbuild16,240
+    def split_highlights(highlights)split_highlights153,4503
+
+templates/html.erb,0

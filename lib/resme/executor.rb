@@ -85,7 +85,7 @@ module Resme
     end
 
     def backup(filename)
-      FileUtils.cp "filename, "#{filename}~"
+      FileUtils.cp filename, "#{filename}~"
       puts "Backup copy #{filename} created in #{filename}~."
     end
 

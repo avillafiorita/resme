@@ -222,6 +222,7 @@ module Resme
                ],
       languages: [:optional,
                   {
+                    assessment: OPTIONAL_STRING,
                     mother_tongues: [[{
                                         code: OPTIONAL_STRING,
                                         language: String,

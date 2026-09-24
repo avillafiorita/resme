@@ -196,6 +196,10 @@
 <% if @data[:languages] %>
 * Languages
 
+<% if @data[:languages] and @data[:languages][:assessment] %>
+Assessment <%= @data[:languages][:assessment] %>
+<% end %>
+
 <% if @data[:languages] and @data[:languages][:mother_tongues] -%>
 - Mother Tongue(s): <%= @data[:languages][:mother_tongues].map { |x| x[:language] }.join(",") %>
 <% end -%>
