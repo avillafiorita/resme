@@ -1,83 +1,0 @@
-
-/home/adolfo/Sources/ruby/resme/test/test_helper.rb,0
-
-/home/adolfo/Sources/ruby/resme/test/test_resme.rb,200
-class TestResme < Minitest::TestTestResme5,54
-  def test_that_it_has_a_version_numbertest_that_it_has_a_version_number6,87
-  def test_it_does_something_usefultest_it_does_something_useful10,166
-
-/home/adolfo/Sources/ruby/resme/templates/org.erb,0
-
-/home/adolfo/Sources/ruby/resme/templates/json.erb,0
-
-/home/adolfo/Sources/ruby/resme/lib/resme.rb,0
-
-/home/adolfo/Sources/ruby/resme/lib/resme/helper.rb,990
-module ResmeResme3,31
-  module HelperHelper7,87
-    def clean(string)clean9,178
-    def full_name(data)full_name13,250
-    def reflow_a(string, line_break: 78)reflow_a34,893
-    def blank?(char)blank?70,2086
-    def reflow_s(string, line_break: 75, delimiter: "\n", indent: 3)reflow_s77,2312
-    def period(entry, date: :date, from: :start_date, to: :end_date, separator: "--")period102,3285
-    def itemize(entry, header: %i[role who address], summary_key: :summary)itemize127,4040
-    def propertify(entry, except: %i[summary details], indent: 3)propertify138,4486
-    def select(contacts, label: :email)select148,4787
-    def format_date(date, format: "%Y-%m-%d")format_date164,5314
-    def complete_date(incomplete_date, format: "%Y-%m-%d")complete_date168,5428
-    def year(input)year181,5813
-    def month(input)month186,5931
-    def day(input)day191,6048
-    def y?(input)y?196,6186
-    def ym?(input)ym?201,6305
-    def ymd?(input)ymd?206,6423
-
-/home/adolfo/Sources/ruby/resme/lib/resme/document.rb,219
-module ResmeResme3,31
-  class DocumentDocument7,88
-    attr_reader :filename, :datafilename8,105
-    attr_reader :filename, :datadata8,105
-    def initialize(filename)initialize10,139
-    def loadload17,236
-
-/home/adolfo/Sources/ruby/resme/lib/resme/executor.rb,295
-module ResmeResme3,31
-  class ExecutorExecutor7,66
-    def initialize(input)initialize11,146
-    def executeexecute18,286
-    def output_filename(format)output_filename81,2240
-    def backup(filename)backup85,2328
-    def backup_and_write(filename, content)backup_and_write90,2469
-
-/home/adolfo/Sources/ruby/resme/lib/resme/document_validator.rb,442
-module ResmeResme3,31
-  class DocumentValidatorDocumentValidator7,76
-    def initialize(document)initialize8,102
-    def validatevalidate12,167
-    OPTIONAL_STRING = [:optional, String, NilClass].freezeOPTIONAL_STRING30,576
-    OPTIONAL_PARTIAL_DATE = [:optional, Date, String, Integer, NilClass].freezeOPTIONAL_PARTIAL_DATE31,635
-    PARTIAL_DATE = [Date, String, Integer].freezePARTIAL_DATE32,715
-    SCHEMA = {SCHEMA38,862
-
-/home/adolfo/Sources/ruby/resme/lib/resme/version.rb,57
-module ResmeResme3,31
-  VERSION = "2.0.1"VERSION4,44
-
-lib/resme/cli.rb,218
-module ResmeResme3,31
-  class CliCli7,75
-    attr_reader :optionsoptions8,87
-    def initialize(arguments)initialize10,113
-    def parseparse15,257
-    def commandcommand20,332
-    def parserparser27,421
-
-lib/resme/json_resume.rb,196
-module ResmeResme3,31
-  class JsonResumeJsonResume7,78
-    def initialize(document)initialize10,117
-    def buildbuild16,240
-    def split_highlights(highlights)split_highlights153,4503
-
-templates/html.erb,0
