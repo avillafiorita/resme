@@ -1,0 +1,309 @@
+/* Europass "Progress" Template - Shair.Tech Theme with Official EU Flag */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&display=swap');
+
+:root {
+  /* Shair.Tech Brand Colors */
+  --shair-blue-dark: #0f2d4a;
+  --shair-blue-medium: #163a5f;
+  --shair-green-main: #22a06b;
+  --shair-green-dark: #1b7a52;
+  --shair-green-light: #e8f6f0;
+  --shair-bg-sidebar: #f4f8fa;
+  --shair-border: #d3dfeb;
+  
+  --text-dark: #232c33;
+  --text-muted: #5a6872;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-dark);
+  background-color: #e5ebf0;
+}
+
+/* Base Container */
+.container {
+  display: flex;
+  max-width: 960px;
+  margin: 30px auto;
+  background-color: var(--white);
+  box-shadow: 0 4px 20px rgba(15, 45, 74, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+/* Left Sidebar Layout */
+.contact-information {
+  width: 32%;
+  background-color: var(--shair-bg-sidebar);
+  padding: 30px 20px;
+  border-right: 1px solid var(--shair-border);
+  position: relative;
+}
+
+/* Embedded EU Flag + Europass Logo (Shair.Tech Blue & Green Palette) */
+.contact-information::before {
+  content: "";
+  display: block;
+  width: 180px;
+  height: 42px;
+  margin-bottom: 28px;
+  background-image: url("");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.contact-information .fullname-title {
+  display: none;
+}
+
+.contact-information h2 {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--shair-blue-dark);
+  letter-spacing: 0.6px;
+  border-bottom: 2px solid var(--shair-green-main);
+  padding-bottom: 4px;
+  margin-bottom: 15px;
+}
+
+.contact-information .section {
+  margin-bottom: 22px;
+}
+
+.contact-information .item {
+  margin-bottom: 10px;
+  word-break: break-word;
+}
+
+.contact-information .label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+  color: var(--shair-green-dark);
+}
+
+.contact-information .value {
+  font-size: 12.5px;
+  color: var(--text-dark);
+}
+
+.contact-information .value .street,
+.contact-information .value .postal-code,
+.contact-information .value .city {
+  display: block;
+}
+
+/* Right Main Content Area */
+.main {
+  width: 68%;
+  padding: 30px 35px;
+  background-color: var(--white);
+}
+
+.main .fullname-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--shair-blue-dark);
+  letter-spacing: 0.2px;
+  margin-bottom: 25px;
+  border-bottom: 3px solid var(--shair-green-main);
+  padding-bottom: 8px;
+}
+
+.main .section {
+  margin-bottom: 25px;
+}
+
+.main h2 {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--shair-blue-medium);
+  text-transform: uppercase;
+  border-bottom: 1.5px solid var(--shair-border);
+  padding-bottom: 4px;
+  margin-bottom: 14px;
+}
+
+/* Items formatting */
+.main .item, 
+.main .visit {
+  margin-bottom: 16px;
+}
+
+.period, 
+.year, 
+.date {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 11.5px;
+  color: var(--shair-green-dark);
+  background-color: var(--shair-green-light);
+  border: 1px solid rgba(34, 160, 107, 0.25);
+  padding: 1px 8px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+
+.position, 
+.degree, 
+.subject {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--shair-blue-dark);
+}
+
+.name, 
+.school, 
+.venue, 
+.publisher {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--shair-blue-medium);
+}
+
+.authors {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.address {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.summary {
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--text-dark);
+}
+
+.summary p {
+  margin-bottom: 6px;
+}
+
+.summary p:last-child {
+  margin-bottom: 0;
+}
+
+/* Language Table Styling */
+.languages .item {
+  margin-bottom: 10px;
+}
+
+.mother-tongue, 
+.foreign-language {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px dashed var(--shair-border);
+  padding: 4px 0;
+}
+
+.language {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.level {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--shair-green-dark);
+  background-color: var(--shair-green-light);
+  border: 1px solid rgba(34, 160, 107, 0.25);
+  padding: 1px 8px;
+  border-radius: 10px;
+}
+
+.level:empty {
+  display: none;
+}
+
+/* Committees section */
+.committee.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed var(--shair-border);
+  padding-bottom: 4px;
+}
+
+.committee .editions {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--shair-green-dark);
+}
+
+/* Print Optimization with White Background */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm 15mm;
+  }
+
+  body {
+    background-color: var(--white);
+    font-size: 11px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .container {
+    max-width: 100%;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    min-height: auto;
+  }
+
+  .contact-information {
+    width: 30%;
+    padding: 0 15px 0 0;
+    background-color: var(--white) !important;
+    border-right: 1px solid var(--shair-border);
+  }
+
+  .main {
+    width: 70%;
+    padding: 0 0 0 20px;
+  }
+
+  .main .fullname-title {
+    font-size: 21px;
+    margin-bottom: 15px;
+  }
+
+  .main .section {
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+  }
+
+  .main .item,
+  .main .visit {
+    page-break-inside: avoid;
+    margin-bottom: 10px;
+  }
+
+  .period, 
+  .year, 
+  .date,
+  .level {
+    background-color: var(--shair-green-light) !important;
+    border: 1px solid rgba(34, 160, 107, 0.25) !important;
+  }
+}

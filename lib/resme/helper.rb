@@ -14,7 +14,7 @@ module Resme
       [
         data.dig(:basics, :first_name),
         data.dig(:basics, :middle_name),
-        data.dig(:basics, :last_name),
+        data.dig(:basics, :last_name)
       ].compact.join(" ")
     end
 
@@ -148,6 +148,11 @@ module Resme
     def select(contacts, label: :email)
       contact = (contacts || []).find { |x| x[:label] == label.to_s }
       contact ? contact[:value] : nil
+    end
+
+    # break text into paragraphs and wrap in <p>
+    def html_summary(text)
+      text.split("\n\n").map { |x| "<p>#{x}</p>" }.join
     end
 
     #

@@ -6,320 +6,332 @@
     <meta name="created" content="<%= Date.today %>">
     <meta name="generator" content="resme">
 
-    <link rel="stylesheet" href="./resume.css">
+    <link rel="stylesheet" href="./<%= @data[:theme] %>">
   </head>
 
   <body>
     <div class="container">
-      <div class="title">
-        <%= full_name @data %>, <%= @data[:basics][:title] %>
-      </div>
+      <div class="contact-information">
+        <!-- this is also replicated in the main section, to simplify styling -->
+        <!-- you might want to set display:none for one or the other -->
+        <div class="fullname-title">
+          <%= full_name @data %>, <%= @data[:basics][:title] %>
+        </div>
 
-      <% if @data[:addresses] %>
-      <div class="addresses section">
-        <h2>Addresses</h2>
+        <% if @data[:addresses] %>
+        <div class="addresses section">
+          <h2>Addresses</h2>
 
-        <% (@data[:addresses] || []).each do |x| %>
-        <div class="address item">
-          <span class="label"><%= x[:label] %></span>
-          <span class="value">
-            <%= "#{x[:street]}, #{x[:postal_code]} #{x[:city]}" %>
-          </span>
+          <% (@data[:addresses] || []).each do |x| %>
+          <div class="address item">
+            <span class="label"><%= x[:label] %></span>
+            <span class="value">
+              <span class="street"><%= x[:street] %></span>
+              <span class="postal-code"><%= x[:postal_code] %></span>
+              <span class="city"><%= x[:city] %></span>
+            </span>
+          </div>
+          <% end %>
         </div>
         <% end %>
-      </div>
-      <% end %>
-      
-      <% if @data[:contacts] %>
-      <div class="contacts section">
-        <h2>Contacts</h2>
-
-        <% (@data[:contacts] || []).each do |x| %>
-        <div class="contact item">
-          <span class="label"><%= x[:label] %></span>
-          <span class="value"><%= x[:value] %></span>
-        </div>
-        <% end %>
-      </div>
-      <% end %>
-
-      <% if @data[:web_presence] %>
-      <div class="web-presence section">
-        <h2>Web</h2>
-
-        <% (@data[:web_presence] || []).each do |x| %>
-        <div class="web-presence-item item">
-          <span class="label"><%= x[:label] %></span>
-          <span class="value"><%= x[:value] %></span>
-        </div>
-        <% end %>
-      </div>
-      <% end %>
-
-      <% if @data[:summary] %>
-      <div class="summary section">
-        <h2>Summary</h2>
         
-        <%= @data[:summary] %>
-      </div>
-      <% end %>
+        <% if @data[:contacts] %>
+        <div class="contacts section">
+          <h2>Contacts</h2>
 
-      <% if @data[:skills] %>
-      <div class="skills section">
-        <h2>Skills</h2>
-
-        <% (@data[:skills] || []).each do |item| %>
-        <div class="skill item">
-          <span class="label"><%= item[:name] %></span>
-          <span class="value"><%= item[:level] %></span>
-        </div>
-        <% end %>
-      </div>
-      <% end %>
-
-      <% if @data[:work] %>
-      <div class="work-experiences section">
-        <h2>Work Experience</h2>
-
-        <% (@data[:work] || []).each do |item| %>
-        <div class="work-experience item">
-          <div class="period"><%= period item %></div>
-          <div class="position"><%= item[:position] %></div>
-          <div class="name"><%= item[:name] %></div>
-          <div class="summary"><%= item[:summary] %></div>
-        </div>
-        <% end %>
-      </div>
-      <% end %>
-
-      <% if @data[:teaching] %>
-      <div class="teachings section">
-        <h2>Teaching</h2>
-
-        <% (@data[:teaching] || []).each do |item| %>
-        <div class="teaching item">
-          <span class="period"><%= period item %></span>
-          <span class="subject"><%= item[:subject] %></span>
-          <span class="position"><%= item[:position] %></span>
-          <span class="school"><%= item[:school] %></span>
-          <span class="name"><%= item[:name] %></span>
-        </div>
-        <% end %>
-      </div>
-      <% end %>
-
-      <% if @data[:projects] %>
-      <div class="projects section">
-        <h2>Projects</h2>
-
-        <% (@data[:projects] || []).each do |item| %>
-        <div class="project item">
-          <div class="period"><%= period item %></div>
-          <div class="position"><%= item[:position] %></div>
-          <div class="name"><%= item[:name] %></div>
-          <div class="summary"><%= item[:summary] %></div>
-        </div>
-        <% end %>
-      </div>
-      <% end %>
-
-      <% if @data[:other] -%>
-      <div class="other section">
-        <h2>Other</h2>
-
-        <% (@data[:other] || []).each do |item| %>
-        <div class="other item">
-          <div class="period"><%= period item %></div>
-          <div class="position"><%= item[:position] %></div>
-          <div class="name"><%= item[:name] %></div>
-          <div class="summary"><%= item[:summary] %></div>
-        </div>
-        <% end %>
-      </div>
-      <% end %>
-
-      <% if @data[:committees] %>
-      <div class="committees section">
-        <h2>Committees</h2>
-
-        <% (@data[:committees] || []).each do |item| %>
-        <div class="committee item">
-          <div class="name"><%= item[:name] %></div>
-          <div class="position"><%= item[:position] %></div>
-          <div class="editions"><%= item[:editions] %></div>
-        </div>
-        <% end %>
-      </div>
-      <% end %>
-
-      <% if @data[:volunteer] -%>
-      <div class="volunteer section">
-        <h2>Volunteer</h2>
-
-        <% (@data[:volunteer] || []).each do |item| %>
-        <div class="volunteer-item item">
-          <div class="period"><%= period item %></div>
-          <div class="position"><%= item[:position] %></div>
-          <div class="name"><%= item[:name] %></div>
-          <div class="summary"><%= item[:summary] %></div>
-        </div>
-        <% end %>
-      </div>
-      <% end %>
-
-      <% if @data[:publications] %>
-      <div class="publications section">
-        <h2>Publications</h2>
-
-        <% (@data[:publications] || []).each do |item| %>
-        <div class="publication item">
-          <div class="authors"><%= item[:authors] %></div>
-          <div class="title"><%= item[:title] %></div>
-          <div class="publisher"><%= item[:publisher] %></div>
-          <div class="date"><%= item[:date] %></div>
-        </div>
-        <% end %>
-      </div>
-      <% end -%>
-
-      <% if @data[:talks] -%>
-      <div class="talks section">
-        <h2>Talks</h2>
-
-        <% (@data[:talks] || []).each do |item| -%>
-        <div class="talk item">
-          <div class="title"><%= item[:title] %></div>
-          <div class="venue"><%= item[:venue] %></div>
-          <div class="date"><%= item[:date] %></div>
-        </div>
-        <% end -%>
-      </div>
-      <% end -%>
-
-      <% if @data[:visits] -%>
-      <div class="visits section">
-        <h2>Visits</h2>
-
-        <% (@data[:visits] || []).each do |item| -%>
-        <div class="visit">
-          <div class="period"><%= period item %></div>
-          <div class="position"><%= item[:position] %></div>
-          <div class="name"><%= item[:name] %></div>
-          <div class="address"><%= item[:address] %></div>
-          <div class="summary"><%= item[:summary] %></div>
-        </div>          
-        <% end -%>
-      </div>
-      <% end -%>
-
-      <% if @data[:education] %>
-      <div class="education section">
-        <h2>Education</h2>
-        
-        <% @data[:education].select { |x| x[:publish] }.each do |item| -%>
-        <div class="education-item item">
-          <div class="year"><%= year(item[:end_date]) %></div>
-          <div class="degree"><%= item[:degree] %></div>
-          <div class="school"><%= item[:school] %></div>
-          <div class="address"><%= item[:address] %></div>
-        </div>
-        <% end %>
-      </div>
-      <% end %>
-
-      <% [:awards, :achievements].each do |group| %>
-      <% if @data[group] -%>
-      <div class="<%= group %> section">
-        <h2><%= group.capitalize %></h2>
-
-        <% (@data[group] || []).each do |item| %>
-        <div class="<%= group %>-item item">
-          <% %w[date title name address summary].each do |element| %>
-          <div class="<%= element %>"><%= item[element] %></div>
-          <% end %>
-        </div>
-        <% end %>
-      </div>
-      <% end %>
-      <% end %>
-
-      <% if @data[:software] %>
-      <div class="software section">
-        <h2>Software</h2>
-
-        <% (@data[:software] || []).each do |item| -%>
-        <div class="software-item item">
-          <div class="title">
-            <a href="<%= item[:url] %>"><%= item[:title] %></a>
-          </div>
-          <div class="position"><%= item[:position] %></div>
-        </div>
-        <% end -%>
-      </div>
-      <% end -%>
-
-      <% if @data[:interests] -%>
-      <div class="interests section">
-        <h2>Interests</h2>
-
-        <% (@data[:interests] || []).each do |item| -%>
-        <div class="interest item">
-          <div class="name"><%= item[:name] %></div>
-          <div class="summary"><%= item[:summary] %></div>
-        </div>
-        <% end -%>
-      </div>
-      <% end -%>
-
-      <% if @data[:languages] %>
-      <div class="languages section">
-        <h2>Languages</h2>
-
-        <% if @data[:languages] and @data[:languages][:assessment] %>
-        <div class="assessment item">
-          <span class="label">Assessment</span>
-          <span class="value"><%= @data[:languages][:assessment] %></span>
-        </div>
-        <% end %>
-
-        <% if @data[:languages] and @data[:languages][:mother_tongues] %>
-        <div class="mother-tongues item">
-          <span class="label">Mother Tongues</span>
-          <% @data[:languages][:mother_tongues].each do |x| %>
-          <div class="mother-tongue">
-            <div class="language"><%= x[:language] %></div>
-            <div class="level"><%= x[:level] %></div>
+          <% (@data[:contacts] || []).each do |x| %>
+          <div class="contact item">
+            <span class="label"><%= x[:label] %></span>
+            <span class="value"><%= x[:value] %></span>
           </div>
           <% end %>
         </div>
-        <% end -%>
+        <% end %>
 
-        <% if @data[:languages] and @data[:languages][:foreign] %>
-        <div class="foreign-languages item">
-          <span class="label">Foreign Languages</span>
-          <% @data[:languages][:foreign].each do |x| %>
-          <div class="foreign-language">
-            <div class="language"><%= x[:language] %></div>
-            <div class="level"><%= x[:level] %></div>
+        <% if @data[:web_presence] %>
+        <div class="web-presence section">
+          <h2>Web</h2>
+
+          <% (@data[:web_presence] || []).each do |x| %>
+          <div class="web-presence-item item">
+            <span class="label"><%= x[:label] %></span>
+            <span class="value"><%= x[:value] %></span>
           </div>
           <% end %>
         </div>
         <% end %>
       </div>
-      <% end %>
 
-      <% if @data[:references] %>
-      <div class="references">
-        <h2>References</h2>
+      <div class="main">
+        <div class="fullname-title">
+          <%= full_name @data %>, <%= @data[:basics][:title] %>
+        </div>
 
-        <% (@data[:references] || []).each do |item| -%>
-        <div class="reference item">
-          <div class="name"><%= item[:name] %></div>
-          <div class="reference"><%= item[:reference] %></div>
+        <% if @data[:summary] %>
+        <div class="summary section">
+          <h2>Summary</h2>
+          
+          <%= html_summary @data[:summary] %>
+        </div>
+        <% end %>
+
+        <% if @data[:skills] %>
+        <div class="skills section">
+          <h2>Skills</h2>
+
+          <% (@data[:skills] || []).each do |item| %>
+          <div class="skill item">
+            <span class="label"><%= item[:name] %></span>
+            <span class="value"><%= item[:level] %></span>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <% if @data[:work] %>
+        <div class="work-experiences section">
+          <h2>Work Experience</h2>
+
+          <% (@data[:work] || []).each do |item| %>
+          <div class="work-experience item">
+            <div class="period"><%= period item, separator: "&mdash;" %></div>
+            <div class="position"><%= item[:position] %></div>
+            <div class="name"><%= item[:name] %></div>
+            <div class="summary"><%= html_summary item[:summary] %></div>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <% if @data[:teaching] %>
+        <div class="teachings section">
+          <h2>Teaching</h2>
+
+          <% (@data[:teaching] || []).each do |item| %>
+          <div class="teaching item">
+            <div class="period"><%= period item, separator: "&mdash;" %></div>
+            <div class="subject"><%= item[:subject] %></div>
+            <div class="position"><%= item[:position] %></div>
+            <div class="school"><%= item[:school] %></div>
+            <div class="name"><%= item[:name] %></div>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <% if @data[:projects] %>
+        <div class="projects section">
+          <h2>Projects</h2>
+
+          <% (@data[:projects] || []).each do |item| %>
+          <div class="project item">
+            <div class="period"><%= period item, separator: "&mdash;" %></div>
+            <div class="position"><%= item[:position] %></div>
+            <div class="name"><%= item[:name] %></div>
+            <div class="summary"><%= html_summary item[:summary] %></div>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <% if @data[:other] -%>
+        <div class="other section">
+          <h2>Other</h2>
+
+          <% (@data[:other] || []).each do |item| %>
+          <div class="other item">
+            <div class="period"><%= period item, separator: "&mdash;" %></div>
+            <div class="position"><%= item[:position] %></div>
+            <div class="name"><%= item[:name] %></div>
+            <div class="summary"><%= html_summary item[:summary] %></div>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <% if @data[:committees] %>
+        <div class="committees section">
+          <h2>Committees</h2>
+
+          <% (@data[:committees] || []).each do |item| %>
+          <div class="committee item">
+            <div class="name"><%= item[:name] %></div>
+            <div class="position"><%= item[:position] %></div>
+            <div class="editions"><%= item[:editions] %></div>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <% if @data[:volunteer] -%>
+        <div class="volunteer section">
+          <h2>Volunteer</h2>
+
+          <% (@data[:volunteer] || []).each do |item| %>
+          <div class="volunteer-item item">
+            <div class="period"><%= period item, separator: "&mdash;" %></div>
+            <div class="position"><%= item[:position] %></div>
+            <div class="name"><%= item[:name] %></div>
+            <div class="summary"><%= html_summary item[:summary] %></div>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <% if @data[:publications] %>
+        <div class="publications section">
+          <h2>Publications</h2>
+
+          <% (@data[:publications] || []).each do |item| %>
+          <div class="publication item">
+            <div class="authors"><%= item[:authors] %></div>
+            <div class="title"><%= item[:title] %></div>
+            <div class="publisher"><%= item[:publisher] %></div>
+            <div class="date"><%= item[:date] %></div>
+          </div>
+          <% end %>
+        </div>
+        <% end -%>
+
+        <% if @data[:talks] -%>
+        <div class="talks section">
+          <h2>Talks</h2>
+
+          <% (@data[:talks] || []).each do |item| -%>
+          <div class="talk item">
+            <div class="title"><%= item[:title] %></div>
+            <div class="venue"><%= item[:venue] %></div>
+            <div class="date"><%= item[:date] %></div>
+          </div>
+          <% end -%>
+        </div>
+        <% end -%>
+
+        <% if @data[:visits] -%>
+        <div class="visits section">
+          <h2>Visits</h2>
+
+          <% (@data[:visits] || []).each do |item| -%>
+          <div class="visit">
+            <div class="period"><%= period item, separator: "&mdash;" %></div>
+            <div class="position"><%= item[:position] %></div>
+            <div class="name"><%= item[:name] %></div>
+            <div class="address"><%= item[:address] %></div>
+            <div class="summary"><%= html_summary item[:summary] %></div>
+          </div>          
+          <% end -%>
+        </div>
+        <% end -%>
+
+        <% if @data[:education] %>
+        <div class="education section">
+          <h2>Education</h2>
+          
+          <% @data[:education].select { |x| x[:publish] }.each do |item| -%>
+          <div class="education-item item">
+            <div class="year"><%= year(item[:end_date]) %></div>
+            <div class="degree"><%= item[:degree] %></div>
+            <div class="school"><%= item[:school] %></div>
+            <div class="address"><%= item[:address] %></div>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <% [:awards, :achievements].each do |group| %>
+        <% if @data[group] -%>
+        <div class="<%= group %> section">
+          <h2><%= group.capitalize %></h2>
+
+          <% (@data[group] || []).each do |item| %>
+          <div class="<%= group %>-item item">
+            <% %w[date title name address summary].each do |element| %>
+            <div class="<%= element %>"><%= item[element] %></div>
+            <% end %>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+        <% end %>
+
+        <% if @data[:software] %>
+        <div class="software section">
+          <h2>Software</h2>
+
+          <% (@data[:software] || []).each do |item| -%>
+          <div class="software-item item">
+            <div class="title">
+              <a href="<%= item[:url] %>"><%= item[:title] %></a>
+            </div>
+            <div class="position"><%= item[:position] %></div>
+          </div>
+          <% end -%>
+        </div>
+        <% end -%>
+
+        <% if @data[:interests] -%>
+        <div class="interests section">
+          <h2>Interests</h2>
+
+          <% (@data[:interests] || []).each do |item| -%>
+          <div class="interest item">
+            <div class="name"><%= item[:name] %></div>
+            <div class="summary"><%= html_summary item[:summary] %></div>
+          </div>
+          <% end -%>
+        </div>
+        <% end -%>
+
+        <% if @data[:languages] %>
+        <div class="languages section">
+          <h2>Languages</h2>
+
+          <% if @data[:languages] and @data[:languages][:assessment] %>
+          <div class="assessment item">
+            <span class="label">Assessment</span>
+            <span class="value"><%= @data[:languages][:assessment] %></span>
+          </div>
+          <% end %>
+
+          <% if @data[:languages] and @data[:languages][:mother_tongues] %>
+          <div class="mother-tongues item">
+            <span class="label">Mother Tongues</span>
+            <% @data[:languages][:mother_tongues].each do |x| %>
+            <div class="mother-tongue">
+              <div class="language"><%= x[:language] %></div>
+              <div class="level"><%= x[:level] %></div>
+            </div>
+            <% end %>
+          </div>
+          <% end -%>
+
+          <% if @data[:languages] and @data[:languages][:foreign] %>
+          <div class="foreign-languages item">
+            <span class="label">Foreign Languages</span>
+            <% @data[:languages][:foreign].each do |x| %>
+            <div class="foreign-language">
+              <div class="language"><%= x[:language] %></div>
+              <div class="level"><%= x[:level] %></div>
+            </div>
+            <% end %>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+
+        <% if @data[:references] %>
+        <div class="references">
+          <h2>References</h2>
+
+          <% (@data[:references] || []).each do |item| -%>
+          <div class="reference item">
+            <div class="name"><%= item[:name] %></div>
+            <div class="reference"><%= item[:reference] %></div>
+          </div>
+          <% end %>
         </div>
         <% end %>
       </div>
-      <% end %>
     </div>
   </body>
 </html>

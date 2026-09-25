@@ -44,9 +44,18 @@ module Resme
         template = File.read(template_name)
 
         # add the json format, if specified
-        if format.to_s == "json"
+        if format.to_s.downcase == "json"
           js = JsonResume.new Document.new(filename)
           @json_resume = js.build
+        end
+
+        # copy the theme and set it in data for the tempalte, if output is html
+        if format.to_s.downcase == "html"
+          css_filename = theme_css_file @options.options[:theme]
+          css_template = File.join __dir__, "../../templates/#{css_filename}"
+          FileUtils.cp css_template, css_filename
+
+          @data[:theme] = css_filename
         end
 
         output = ERB.new(template, trim_mode: "-").result(binding)
@@ -61,6 +70,13 @@ module Resme
       when :list
         templates = File.join __dir__, "../../templates/*.erb"
         files = Dir.glob(templates).map { |x| "#{File.basename(x)} => #{x}" }
+        puts files.join("\n")
+
+      when :themes
+        templates = File.join __dir__, "../../templates/*.css"
+        files = Dir.glob(templates).map do |x|
+          File.basename(x).gsub("resume-", "").gsub(".css", "")
+        end
         puts files.join("\n")
 
       when :cat
@@ -79,6 +95,10 @@ module Resme
     # rubocop:enable Metrics
 
     private
+
+    def theme_css_file(theme_name)
+      "resume-#{theme_name}.css"
+    end
 
     def output_filename(format)
       "resume-#{Date.today.iso8601}.#{format}"

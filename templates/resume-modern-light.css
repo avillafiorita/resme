@@ -1,0 +1,305 @@
+/* Europass "Progress" Template Stylesheet */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&display=swap');
+
+:root {
+  --europass-blue: #003399;
+  --europass-accent: #0056a1;
+  --europass-light-bg: #f3f6fa;
+  --europass-sidebar-bg: #f8fafc;
+  --europass-border: #d0d7de;
+  --text-dark: #222222;
+  --text-muted: #57606a;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-dark);
+  background-color: #eaedf1;
+}
+
+/* Base Container */
+.container {
+  display: flex;
+  max-width: 960px;
+  margin: 30px auto;
+  background-color: var(--white);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+/* Left Sidebar - Progress Style */
+.contact-information {
+  width: 32%;
+  background-color: var(--europass-sidebar-bg);
+  padding: 30px 20px;
+  border-right: 1px solid var(--europass-border);
+  position: relative;
+}
+
+/* Embed Europass Logo above sidebar */
+.contact-information::before {
+  content: "";
+  display: block;
+  width: 140px;
+  height: 35px;
+  margin-bottom: 30px;
+  background-image: url("");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.contact-information .fullname-title {
+  display: none;
+}
+
+.contact-information h2 {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--europass-blue);
+  letter-spacing: 0.6px;
+  border-bottom: 2px solid var(--europass-blue);
+  padding-bottom: 4px;
+  margin-bottom: 15px;
+}
+
+.contact-information .section {
+  margin-bottom: 22px;
+}
+
+.contact-information .item {
+  margin-bottom: 10px;
+  word-break: break-word;
+}
+
+.contact-information .label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+  color: var(--text-muted);
+}
+
+.contact-information .value {
+  font-size: 12.5px;
+  color: var(--text-dark);
+}
+
+.contact-information .value .street,
+.contact-information .value .postal-code,
+.contact-information .value .city {
+  display: block;
+}
+
+/* Right Main Content Area */
+.main {
+  width: 68%;
+  padding: 30px 35px;
+  background-color: var(--white);
+}
+
+.main .fullname-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--europass-blue);
+  letter-spacing: 0.2px;
+  margin-bottom: 25px;
+  border-bottom: 3px solid var(--europass-blue);
+  padding-bottom: 8px;
+}
+
+.main .section {
+  margin-bottom: 25px;
+}
+
+.main h2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--europass-blue);
+  text-transform: uppercase;
+  border-bottom: 1.5px solid var(--europass-border);
+  padding-bottom: 4px;
+  margin-bottom: 14px;
+}
+
+/* Items formatting */
+.main .item, 
+.main .visit {
+  margin-bottom: 16px;
+}
+
+.period, 
+.year, 
+.date {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 11.5px;
+  color: var(--europass-blue);
+  background-color: var(--europass-light-bg);
+  border: 1px solid #dbe3ed;
+  padding: 1px 8px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+
+.position, 
+.degree, 
+.subject {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.name, 
+.school, 
+.venue, 
+.publisher {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--europass-accent);
+}
+
+.authors {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.address {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.summary {
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--text-dark);
+}
+
+.summary p {
+  margin-bottom: 6px;
+}
+
+.summary p:last-child {
+  margin-bottom: 0;
+}
+
+/* Language Table Styling */
+.languages .item {
+  margin-bottom: 10px;
+}
+
+.mother-tongue, 
+.foreign-language {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px dashed var(--europass-border);
+  padding: 4px 0;
+}
+
+.language {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.level {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--europass-blue);
+  background-color: var(--europass-light-bg);
+  border: 1px solid #dbe3ed;
+  padding: 1px 8px;
+  border-radius: 10px;
+}
+
+.level:empty {
+  display: none;
+}
+
+/* Committees section */
+.committee.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed var(--europass-border);
+  padding-bottom: 4px;
+}
+
+.committee .editions {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--europass-blue);
+}
+
+/* Print Optimization with White Sidebar */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm 15mm;
+  }
+
+  body {
+    background-color: var(--white);
+    font-size: 11px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .container {
+    max-width: 100%;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    min-height: auto;
+  }
+
+  .contact-information {
+    width: 30%;
+    padding: 0 15px 0 0;
+    background-color: var(--white) !important;
+    border-right: 1px solid var(--europass-border);
+  }
+
+  .main {
+    width: 70%;
+    padding: 0 0 0 20px;
+  }
+
+  .main .fullname-title {
+    font-size: 21px;
+    margin-bottom: 15px;
+  }
+
+  .main .section {
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+  }
+
+  .main .item,
+  .main .visit {
+    page-break-inside: avoid;
+    margin-bottom: 10px;
+  }
+
+  .period, 
+  .year, 
+  .date,
+  .level {
+    background-color: var(--europass-light-bg) !important;
+    border: 1px solid #dbe3ed !important;
+  }
+}

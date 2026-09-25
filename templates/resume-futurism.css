@@ -1,0 +1,336 @@
+/* Europass Template - 1920s Futurism Avant-Garde Style */
+
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,700;1,700&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+:root {
+  /* Futurist Dynamic Palette */
+  --futurist-red: #d90429;        /* Speed Red */
+  --futurist-yellow: #ffb703;     /* Kinetic Yellow */
+  --futurist-blue: #023e8a;       /* Dynamic Deep Blue */
+  --futurist-dark: #111111;       /* Industrial Charcoal */
+  --futurist-cream: #f4f1de;      /* Vintage 1920s Paper Fill */
+  --futurist-gray: #e5e5e5;       /* Steel Divider Gray */
+  
+  --text-main: #111111;
+  --text-muted: #4a4a4a;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-main);
+  background-color: #2b2d42;
+  /* Dynamic Speed Stripes Background Pattern */
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #2b2d42,
+    #2b2d42 20px,
+    #212338 20px,
+    #212338 40px
+  );
+  padding: 20px 0;
+}
+
+/* Structural Container: Skewed, Geometric Asymmetry */
+.container {
+  display: flex;
+  flex-direction: column-reverse; /* Places Title Header on Top */
+  max-width: 880px;
+  margin: 30px auto;
+  background-color: var(--futurist-cream);
+  box-shadow: -15px 15px 0px var(--futurist-dark), -25px 25px 0px var(--futurist-red);
+  position: relative;
+  overflow: hidden;
+  border: 4px solid var(--futurist-dark);
+}
+
+/* Futurist Dynamic Header Block */
+.main {
+  width: 100%;
+  padding: 40px 40px 0 40px;
+}
+
+/* Bold Angular Title Typography */
+.main .fullname-title {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 38px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--futurist-cream);
+  background-color: var(--futurist-red);
+  padding: 12px 25px;
+  letter-spacing: 2px;
+  margin-bottom: 25px;
+  display: inline-block;
+  /* Dynamic Skew Angle */
+  transform: skewX(-12deg);
+  box-shadow: 6px 6px 0px var(--futurist-dark);
+  text-shadow: 2px 2px 0px var(--futurist-dark);
+}
+
+/* Angular Top Contact Box */
+.contact-information {
+  width: 100%;
+  background-color: var(--futurist-yellow);
+  border: 3px solid var(--futurist-dark);
+  padding: 22px;
+  margin-bottom: 35px;
+  position: relative;
+  /* Sharp Mechanical Clip Corner */
+  clip-path: polygon(0 0, 100% 0, 97% 100%, 0% 100%);
+  box-shadow: 5px 5px 0px var(--futurist-blue);
+}
+
+.contact-information .fullname-title {
+  display: none;
+}
+
+.contact-information h2 {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--white);
+  background-color: var(--futurist-dark);
+  padding: 4px 10px;
+  display: inline-block;
+  transform: skewX(-10deg);
+  margin-bottom: 15px;
+}
+
+.contact-information .section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 30px;
+}
+
+.contact-information .item {
+  min-width: 190px;
+  flex: 1 1 190px;
+}
+
+.contact-information .label {
+  display: block;
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--futurist-blue);
+  letter-spacing: 1px;
+}
+
+.contact-information .value {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--futurist-dark);
+}
+
+.contact-information .value .street,
+.contact-information .value .postal-code,
+.contact-information .value .city {
+  display: inline;
+  margin-right: 4px;
+}
+
+/* Futurist Kinetic Section Headings */
+.main .section {
+  margin-bottom: 35px;
+}
+
+.main h2 {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--white);
+  background-color: var(--futurist-blue);
+  padding: 8px 18px;
+  display: inline-block;
+  transform: skewX(-12deg);
+  border-left: 6px solid var(--futurist-yellow);
+  margin-bottom: 20px;
+  box-shadow: 4px 4px 0px var(--futurist-dark);
+}
+
+/* Item Formatting with Jagged / Diagonal Accents */
+.main .item, 
+.main .visit {
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--futurist-dark);
+  position: relative;
+}
+
+.main .item:last-child,
+.main .visit:last-child {
+  border-bottom: none;
+}
+
+/* Angular Date / Speed Badges */
+.period, 
+.year, 
+.date {
+  display: inline-block;
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  font-size: 11.5px;
+  color: var(--white);
+  background-color: var(--futurist-dark);
+  padding: 3px 12px;
+  transform: skewX(-10deg);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+  border-right: 3px solid var(--futurist-red);
+}
+
+.position, 
+.degree, 
+.subject {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--futurist-red);
+  letter-spacing: -0.2px;
+}
+
+.name, 
+.school, 
+.venue, 
+.publisher {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--futurist-blue);
+}
+
+.authors {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.address {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.summary {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-main);
+  border-left: 3px solid var(--futurist-yellow);
+  padding-left: 10px;
+}
+
+.summary p {
+  margin-bottom: 6px;
+}
+
+.summary p:last-child {
+  margin-bottom: 0;
+}
+
+/* Languages Block */
+.languages .item {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 10px;
+}
+
+.mother-tongue, 
+.foreign-language {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--white);
+  border: 2px solid var(--futurist-dark);
+  padding: 8px 14px;
+  margin-bottom: 8px;
+  transform: skewX(-6deg);
+}
+
+.language {
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--futurist-dark);
+}
+
+.level {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--white);
+  background-color: var(--futurist-red);
+  padding: 2px 10px;
+  transform: skewX(-6deg);
+}
+
+.level:empty {
+  display: none;
+}
+
+/* Committee Items */
+.committee.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--futurist-dark);
+  padding-bottom: 8px;
+}
+
+.committee .editions {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--futurist-red);
+}
+
+/* Print Optimization */
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  body {
+    background: none;
+    background-color: var(--white);
+    color: var(--futurist-dark);
+    font-size: 11px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .container {
+    max-width: 100%;
+    margin: 0;
+    box-shadow: none;
+    border: 2px solid var(--futurist-dark);
+  }
+
+  .main {
+    padding: 20px;
+  }
+
+  .fullname-title,
+  .main h2,
+  .period,
+  .year,
+  .date,
+  .level,
+  .contact-information {
+    transform: none !important; /* Flatten angles slightly for pristine print alignment */
+    clip-path: none !important;
+  }
+}

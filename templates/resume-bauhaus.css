@@ -1,0 +1,354 @@
+/* Europass Template - Bauhaus Modernist Art Movement Style */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+:root {
+  /* Bauhaus Primary Color Accents */
+  --bau-blue: #1d3557;          /* Primary Structural Blue */
+  --bau-red: #e63946;           /* Dynamic Focal Red */
+  --bau-yellow: #f4a261;        /* Warm Secondary Ochre */
+  --bau-dark: #1d1e22;          /* Off-Black Ink */
+  --bau-bg-light: #f8f9fa;      /* Clean Minimal Canvas */
+  --bau-surface: #edf2f4;       /* Geometric Header Block */
+  --bau-border: #d8e2dc;        /* Subtle Alignment Line */
+  
+  --text-main: #2b2d42;
+  --text-muted: #6c757d;
+  --white: #ffffff;
+  --radius-sharp: 2px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-main);
+  background-color: #d8e2dc;
+}
+
+/* Main Single-Column Container */
+.container {
+  display: flex;
+  flex-direction: column-reverse; /* Keeps Title top, Contact below, Main sections following */
+  max-width: 860px;
+  margin: 40px auto;
+  background-color: var(--white);
+  box-shadow: 0 12px 32px rgba(29, 30, 34, 0.08);
+  border-radius: var(--radius-sharp);
+  position: relative;
+  overflow: hidden;
+  border-top: 6px solid var(--bau-blue);
+}
+
+/* Europass Top Right Logo Alignment */
+.container::after {
+  content: "";
+  position: absolute;
+  top: 35px;
+  right: 40px;
+  width: 155px;
+  height: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 60'%3E%3Crect width='60' height='40' y='10' fill='%231d3557' rx='2'/%3E%3Cg fill='%23f4a261'%3E%3Cpolygon points='30,14 30.8,16.5 33.4,16.5 31.3,18 32.1,20.5 30,19 27.9,20.5 28.7,18 26.6,16.5 29.2,16.5'/%3E%3Cpolygon points='30,40 30.8,42.5 33.4,42.5 31.3,44 32.1,46.5 30,45 27.9,46.5 28.7,44 26.6,42.5 29.2,42.5'/%3E%3Cpolygon points='17,27 17.8,29.5 20.4,29.5 18.3,31 19.1,33.5 17,32 14.9,33.5 15.7,31 13.6,29.5 16.2,29.5'/%3E%3Cpolygon points='43,27 43.8,29.5 46.4,29.5 44.3,31 45.1,33.5 43,32 40.9,33.5 41.7,31 39.6,29.5 42.2,29.5'/%3E%3Cpolygon points='20.5,17.5 21.3,20 23.9,20 21.8,21.5 22.6,24 20.5,22.5 18.4,24 19.2,21.5 17.1,20 19.7,20'/%3E%3Cpolygon points='39.5,17.5 40.3,20 42.9,20 40.8,21.5 41.6,24 39.5,22.5 37.4,24 38.2,21.5 36.1,20 38.7,20'/%3E%3Cpolygon points='20.5,36.5 21.3,39 23.9,39 21.8,40.5 22.6,43 20.5,41.5 18.4,43 19.2,40.5 17.1,39 19.7,39'/%3E%3Cpolygon points='39.5,36.5 40.3,39 42.9,39 40.8,40.5 41.6,43 39.5,41.5 37.4,43 38.2,40.5 36.1,39 38.7,39'/%3E%3Cpolygon points='13.5,21 14.3,23.5 16.9,23.5 14.8,25 15.6,27.5 13.5,26 11.4,27.5 12.2,25 10.1,23.5 12.7,23.5'/%3E%3Cpolygon points='46.5,21 47.3,23.5 49.9,23.5 47.8,25 48.6,27.5 46.5,26 44.4,27.5 45.2,25 43.1,23.5 45.7,23.5'/%3E%3Cpolygon points='13.5,33 14.3,35.5 16.9,35.5 14.8,37 15.6,39.5 13.5,38 11.4,39.5 12.2,37 10.1,35.5 12.7,35.5'/%3E%3Cpolygon points='46.5,33 47.3,35.5 49.9,35.5 47.8,37 48.6,39.5 46.5,38 44.4,39.5 45.2,37 43.1,35.5 45.7,35.5'/%3E%3C/g%3E%3Cg transform='translate(75, 2)'%3E%3Cpath fill='%23e63946' d='M23.1 11.2C13.2 11.2 5 18.3 3.2 28h13.2c1.5-3.3 5-5.6 9-5.6 5.5 0 10 4.5 10 10s-4.5 10-10 10c-4 0-7.5-2.3-9-5.6H3.2c1.8 9.7 10 16.8 19.9 16.8 11.2 0 20.3-9.1 20.3-20.3S34.3 11.2 23.1 11.2z'/%3E%3Cpath fill='%231d3557' d='M62.4 12.1h-8.8v31.1h8.8V12.1zm21.3 0h-8.8v18.7c0 4.1-2.9 6.2-6.2 6.2s-6.2-2.1-6.2-6.2V12.1h-8.8v19.4c0 8.3 5.9 12.4 15 12.4s15-4.1 15-12.4V12.1zm17.9 11.7c-5.3 0-8.8 3.8-8.8 9.5s3.5 9.5 8.8 9.5 8.8-3.8 8.8-9.5zm0-6.6c10.1 0 17.6 7 17.6 16.1s-7.5 16.1-17.6 16.1S84 32.4 84 23.3s7.5-16.1 17.6-16.1zm29.8 6.6c-4.8 0-8 3.5-8 8.8s3.2 8.8 8 8.8 8-3.5 8-8.8-3.2-8.8-8-8.8zm-16.8-11.7h8.8v4.5c2.3-3.4 6.2-5.1 10.7-5.1 8.5 0 14.8 6.2 14.8 15.6s-6.3 15.6-14.8 15.6c-4.5 0-8.4-1.7-10.7-5.1v12h-8.8V12.1zm59.2 11.7c-4.8 0-8 3.5-8 8.8s3.2 8.8 8 8.8 8-3.5 8-8.8-3.2-8.8-8-8.8zm-16.8-11.7h8.8v4.5c2.3-3.4 6.2-5.1 10.7-5.1 8.5 0 14.8 6.2 14.8 15.6s-6.3 15.6-14.8 15.6c-4.5 0-8.4-1.7-10.7-5.1v4.5h-8.8V12.1z'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 10;
+}
+
+.main {
+  width: 100%;
+  padding: 40px 45px 0 45px;
+}
+
+/* Bold Architectural Title Header */
+.main .fullname-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--bau-dark);
+  letter-spacing: -0.5px;
+  padding-right: 180px;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+}
+
+.main .fullname-title::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 5px;
+  background-color: var(--bau-red);
+  margin-top: 10px;
+}
+
+/* Clean Structured Contact Block */
+.contact-information {
+  width: 100%;
+  background-color: var(--bau-surface);
+  border-left: 5px solid var(--bau-blue);
+  border-radius: var(--radius-sharp);
+  padding: 22px 26px;
+  margin-bottom: 32px;
+}
+
+.contact-information .fullname-title {
+  display: none;
+}
+
+.contact-information h2 {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--bau-blue);
+  margin-bottom: 14px;
+}
+
+.contact-information .section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  margin-bottom: 0;
+}
+
+.contact-information .item {
+  margin-bottom: 0;
+  min-width: 180px;
+  flex: 1 1 180px;
+}
+
+.contact-information .label {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--bau-red);
+  letter-spacing: 0.5px;
+}
+
+.contact-information .value {
+  font-size: 13px;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.contact-information .value .street,
+.contact-information .value .postal-code,
+.contact-information .value .city {
+  display: inline;
+  margin-right: 4px;
+}
+
+/* Section Structure */
+.main .section {
+  margin-bottom: 32px;
+}
+
+/* Geometric Bauhaus Section Headings */
+.main h2 {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--white);
+  background-color: var(--bau-blue);
+  padding: 7px 14px;
+  display: inline-block;
+  border-radius: var(--radius-sharp);
+  margin-bottom: 20px;
+  border-left: 4px solid var(--bau-yellow);
+}
+
+/* Clean Separators for Main Content Items */
+.main .item, 
+.main .visit {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--bau-border);
+}
+
+.main .item:last-child,
+.main .visit:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* Modern Date Badges */
+.period, 
+.year, 
+.date {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--bau-dark);
+  background-color: var(--bau-surface);
+  border-left: 3px solid var(--bau-red);
+  padding: 3px 10px;
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+}
+
+.position, 
+.degree, 
+.subject {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--bau-dark);
+}
+
+.name, 
+.school, 
+.venue, 
+.publisher {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--bau-blue);
+}
+
+.authors {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.address {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.summary {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-main);
+}
+
+.summary p {
+  margin-bottom: 6px;
+}
+
+.summary p:last-child {
+  margin-bottom: 0;
+}
+
+/* Structured Language Grid Row */
+.languages .item {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 8px;
+}
+
+.mother-tongue, 
+.foreign-language {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bau-bg-light);
+  border: 1px solid var(--bau-border);
+  border-left: 4px solid var(--bau-blue);
+  padding: 8px 14px;
+  margin-bottom: 6px;
+}
+
+.language {
+  font-weight: 700;
+  color: var(--bau-dark);
+  text-transform: capitalize;
+}
+
+.level {
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--white);
+  background-color: var(--bau-red);
+  padding: 2px 8px;
+  border-radius: var(--radius-sharp);
+}
+
+.level:empty {
+  display: none;
+}
+
+/* Committee Section */
+.committee.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--bau-border);
+  padding-bottom: 8px;
+}
+
+.committee .editions {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bau-blue);
+}
+
+/* Print Optimization */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm 15mm;
+  }
+
+  body {
+    background-color: var(--white);
+    font-size: 11px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .container {
+    max-width: 100%;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+    border-top: 4px solid var(--bau-blue);
+  }
+
+  .main {
+    padding: 0;
+  }
+
+  .contact-information {
+    background-color: var(--bau-surface) !important;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+  }
+
+  .main .fullname-title {
+    font-size: 22px;
+    padding-right: 140px;
+    margin-bottom: 18px;
+  }
+
+  .main h2 {
+    background-color: var(--bau-blue) !important;
+  }
+
+  .main .section {
+    margin-bottom: 16px;
+    page-break-inside: avoid;
+  }
+
+  .main .item,
+  .main .visit {
+    page-break-inside: avoid;
+    margin-bottom: 12px;
+  }
+
+  .period, 
+  .year, 
+  .date {
+    background-color: var(--bau-surface) !important;
+  }
+
+  .level {
+    background-color: var(--bau-red) !important;
+  }
+}

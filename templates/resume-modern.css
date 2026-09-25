@@ -1,0 +1,306 @@
+/* Europass Modern Template Stylesheet */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
+
+:root {
+  --europass-blue: #0e2d65;
+  --europass-accent: #0056a1;
+  --europass-light-bg: #f3f5f8;
+  --europass-border: #dcdcdc;
+  --text-dark: #333333;
+  --text-light: #555555;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-dark);
+  background-color: #e9ecef;
+}
+
+/* Base Layout Structure */
+.container {
+  display: flex;
+  max-width: 960px;
+  margin: 20px auto;
+  background-color: var(--white);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
+}
+
+/* Left Sidebar - Europass Blue Section Screen View */
+.contact-information {
+  width: 32%;
+  background-color: var(--europass-blue);
+  color: var(--white);
+  padding: 30px 20px;
+}
+
+.contact-information .fullname-title {
+  display: none; /* Replicated in main section */
+}
+
+.contact-information h2 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--white);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+.contact-information .section {
+  margin-bottom: 25px;
+}
+
+.contact-information .item {
+  margin-bottom: 12px;
+  word-break: break-word;
+}
+
+.contact-information .label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.contact-information .value {
+  font-size: 12px;
+  color: var(--white);
+}
+
+.contact-information .value .street,
+.contact-information .value .postal-code,
+.contact-information .value .city {
+  display: block;
+}
+
+/* Right Main Section */
+.main {
+  width: 68%;
+  padding: 30px 35px;
+  background-color: var(--white);
+}
+
+.main .fullname-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--europass-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 25px;
+  border-bottom: 2px solid var(--europass-blue);
+  padding-bottom: 10px;
+}
+
+.main .section {
+  margin-bottom: 25px;
+}
+
+.main h2 {
+  font-size: 15px;
+  color: var(--europass-accent);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--europass-border);
+  padding-bottom: 4px;
+}
+
+/* Item Content Layouts */
+.main .item, 
+.main .visit {
+  margin-bottom: 16px;
+  position: relative;
+}
+
+/* Period / Dates Styling */
+.period, 
+.year, 
+.date {
+  display: inline-block;
+  font-weight: 600;
+  color: var(--europass-accent);
+  font-size: 12px;
+  background-color: var(--europass-light-bg);
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-bottom: 4px;
+}
+
+.position, 
+.degree, 
+.subject {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.name, 
+.school, 
+.venue, 
+.publisher {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.authors {
+  font-style: italic;
+  color: var(--text-light);
+}
+
+.address {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.summary {
+  margin-top: 5px;
+  color: var(--text-dark);
+}
+
+.summary p {
+  margin-bottom: 6px;
+}
+
+.summary p:last-child {
+  margin-bottom: 0;
+}
+
+/* Language Section Specifics */
+.languages .item {
+  margin-bottom: 10px;
+}
+
+.mother-tongue, 
+.foreign-language {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--europass-light-bg);
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+.language {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.level {
+  font-size: 11px;
+  text-transform: uppercase;
+  background-color: var(--europass-accent);
+  color: var(--white);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.level:empty {
+  display: none;
+}
+
+/* Committee Section */
+.committee.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed var(--europass-border);
+  padding-bottom: 6px;
+}
+
+.committee .editions {
+  font-size: 12px;
+  color: var(--europass-accent);
+  font-weight: 600;
+}
+
+/* Print Styles with White Sidebar */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm 15mm;
+  }
+
+  body {
+    background-color: var(--white);
+    font-size: 11px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .container {
+    max-width: 100%;
+    margin: 0;
+    box-shadow: none;
+    min-height: auto;
+  }
+
+  /* Sidebar styling for print */
+  .contact-information {
+    width: 30%;
+    padding: 15px 15px 15px 0;
+    background-color: var(--white) !important;
+    color: var(--text-dark) !important;
+    border-right: 1px solid var(--europass-border);
+  }
+
+  .contact-information h2 {
+    color: var(--europass-blue) !important;
+    border-bottom: 2px solid var(--europass-blue) !important;
+  }
+
+  .contact-information .label {
+    color: var(--text-light) !important;
+  }
+
+  .contact-information .value {
+    color: var(--text-dark) !important;
+  }
+
+  .main {
+    width: 70%;
+    padding: 15px 0 15px 20px;
+  }
+
+  .main .fullname-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .main .section {
+    margin-bottom: 15px;
+    page-break-inside: avoid;
+  }
+
+  .main .item,
+  .main .visit {
+    page-break-inside: avoid;
+    margin-bottom: 10px;
+  }
+
+  .period, 
+  .year, 
+  .date {
+    background-color: var(--europass-light-bg) !important;
+  }
+
+  .level {
+    background-color: var(--europass-accent) !important;
+    color: var(--white) !important;
+  }
+}

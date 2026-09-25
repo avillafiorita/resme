@@ -13,7 +13,7 @@ module Resme
     end
 
     def parse
-      @options = {}
+      @options = default_values
       parser.parse!(@arguments)
     end
 
@@ -23,14 +23,26 @@ module Resme
 
     private
 
+    def default_values
+      { theme: "default" }
+    end
+
     # rubocop:disable Metrics
     def parser
       OptionParser.new do |parser|
-        parser.banner = "resme [options]" \
-                        "# Keep resume in YAML, output in Org Mode and JSON resume"
+        parser.banner = "resme [options] " \
+                        "# Keep resume in YML, output Org Mode, HTML, and JSON"
 
         parser.on("--format FORMAT", String, "Output format (json, org)") do |v|
           @options[:format] = v
+        end
+
+        parser.on("--theme THEME", String, "Choose a CSS theme") do |v|
+          @options[:theme] = v
+        end
+
+        parser.on("--themes", String, "List all available CSS theme") do |_|
+          @options[:cmd] = :themes
         end
 
         parser.on("--init", "Init a new resume") do |_|
