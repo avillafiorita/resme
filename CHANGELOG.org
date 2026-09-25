@@ -1,6 +1,10 @@
 #+TITLE: CHANGELOG
 #+AUTHOR: Adolfo Villafiorita
 
+* Version 2.1.1
+
+- Remove logos in CSS  
+
 * Version 2.1.0
 
 - Output to HTML
